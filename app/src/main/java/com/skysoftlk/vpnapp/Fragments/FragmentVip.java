@@ -135,19 +135,12 @@ public class FragmentVip extends Fragment {
             JSONArray manualArray = new JSONArray(Constants.MANUAL_SERVERS_JSON);
             for (int i = 0; i < manualArray.length(); i++) {
                 JSONObject obj = manualArray.getJSONObject(i);
-                String ovpnConfig = obj.getString("ovpnConfig");
-                if (ovpnConfig.endsWith(".ovpn")) {
-                    String assetContent = Constants.getAssetFileContent(getContext(), ovpnConfig);
-                    if (assetContent != null) {
-                        ovpnConfig = assetContent;
-                    }
-                }
                 servers.add(new Countries(
                         obj.getString("serverName"),
                         obj.getString("flagUrl"),
-                        ovpnConfig,
-                        Constants.encrypt(obj.getString("userName")),
-                        Constants.encrypt(obj.getString("password"))
+                        obj.getString("ovpnConfig"),
+                        obj.getString("userName"),
+                        obj.getString("password")
                 ));
             }
         } catch (JSONException e) {
