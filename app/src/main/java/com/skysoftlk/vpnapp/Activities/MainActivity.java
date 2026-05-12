@@ -210,6 +210,45 @@ public class MainActivity extends ContentsActivity {
             checkIfSubscribed();
         else
             billingSetup();
+
+        // Sync VPN status to ensure UI reflects actual connection
+        String currentStatus = getVpnStatus();
+        if (Utility.isVpnConnected(this)) {
+            if (currentStatus != null && currentStatus.equals("DISCONNECTED")) {
+                updateUI("CONNECTED");
+            }
+        } else {
+            if (currentStatus != null && !currentStatus.equals("DISCONNECTED") && !currentStatus.equals("LOAD")) {
+                updateUI("DISCONNECTED");
+            }
+        }
+
+        // Huawei battery optimization check
+        if (Utility.isHuawei() && !Utility.isIgnoringBatteryOptimizations(this)) {
+            showHuaweiBatteryDialog();
+        }
+    }
+
+    private void showHuaweiBatteryDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Huawei Battery Optimization")
+                .setMessage("To ensure a stable VPN connection on Huawei devices, please set this app to 'Manage manually' in App Launch settings.")
+                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                    try {
+                        Intent intent = new Intent();
+                        intent.setClassName("com.huawei.systemmanager", "com.huawei.systemmanager.appcontrol.activity.StartupAppControlActivity");
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        try {
+                            Intent intent = new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                            startActivity(intent);
+                        } catch (Exception e2) {
+                            Toast.makeText(this, "Please go to Battery settings manually", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Dismiss", null)
+                .show();
     }
 
     @Override

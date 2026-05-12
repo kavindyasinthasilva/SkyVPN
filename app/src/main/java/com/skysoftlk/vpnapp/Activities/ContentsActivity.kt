@@ -132,7 +132,11 @@ abstract class ContentsActivity : BaseDrawerActivity() {
     @JvmField
     var facebookInterstitialAd: InterstitialAd? = null
 
-    private var STATUS: String? = "DISCONNECTED"
+    protected var STATUS: String? = "DISCONNECTED"
+
+    fun getVpnStatus(): String? {
+        return STATUS
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
