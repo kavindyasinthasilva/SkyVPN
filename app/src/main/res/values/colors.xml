@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#E5C07B</color>           <color name="primary_dark">#0F140A</color>      <color name="colorAccent">#E5C07B</color>       <color name="white">#FFFFFF</color>
+
+    <color name="colorwhite">#FFFFFF</color>
+    <color name="textcolor">#E0E0E0</color>         <color name="greyLight">#4B5D3F</color>         <color name="splashscreencolor">#0F140A</color> <color name="colorPrimary">#E5C07B</color>      <color name="colorPrimaryDark">#0A0D07</color>  <color name="popUpBg">#1B2414</color>           <color name="primary_white_text">@android:color/white</color>
+    <color name="colorview">#32FFFFFF</color>       <color name="text_color">#E5C07B</color>        <color name="tab_background_selected">#E5C07B</color> <color name="colorlightgrey">#848585</color>
+    <color name="toolbarTitle">#E5C07B</color>      <color name="txt_blue">#D4AF37</color>          <color name="red">#F63030</color>               </resources>

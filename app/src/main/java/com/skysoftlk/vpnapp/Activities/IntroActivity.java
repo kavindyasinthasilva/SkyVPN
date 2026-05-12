@@ -1,0 +1,95 @@
+package com.skysoftlk.vpnapp.Activities;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+
+import com.skysoftlk.vpnapp.R;
+import com.skysoftlk.vpnapp.Utils.Constants;
+
+import java.io.IOException;
+
+import io.github.dreierf.materialintroscreen.MaterialIntroActivity;
+import io.github.dreierf.materialintroscreen.SlideFragmentBuilder;
+import top.oneconnectapi.app.api.OneConnect;
+
+public class IntroActivity extends MaterialIntroActivity {
+    SharedPreferences prefs;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    OneConnect oneConnect = new OneConnect();
+                    oneConnect.initialize(IntroActivity.this, "K.F.P5RToLk5TXNPi2.4P6edjtY0gyfhZUAO.CWkB1KYhs4I4w");  // Put Your OneConnect API key
+                    
+                    int retryCount = 0;
+                    int maxRetries = 3;
+                    boolean success = false;
+                    
+                    while (retryCount < maxRetries && !success) {
+                        try {
+                            Constants.FREE_SERVERS = oneConnect.fetch(true);
+                            Constants.PREMIUM_SERVERS = oneConnect.fetch(false);
+                            success = true;
+                        } catch (IOException e) {
+                            retryCount++;
+                            if (retryCount >= maxRetries) {
+                                e.printStackTrace();
+                            } else {
+                                try {
+                                    Thread.sleep(2000); // Wait 2 seconds before retry
+                                } catch (InterruptedException ie) {
+                                    ie.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!prefs.getBoolean("firstTime", true)) {
+            onFinish();
+        } else {
+//            To familiar the user with the basic requirements of the application...
+            addSlide(new SlideFragmentBuilder()
+                    .backgroundColor(R.color.colorPrimaryDark)
+                    .buttonsColor(R.color.colorPrimary)
+                    .image(R.drawable.intro)
+                    .title("Secure VPN Servers")
+                    .description("Premium VPN App is Very Fast & Secure. And Easy to Use")
+                    .build());
+            addSlide(new SlideFragmentBuilder()
+                    .backgroundColor(R.color.colorPrimaryDark)
+                    .buttonsColor(R.color.colorPrimary)
+                    .image(R.drawable.intro2)
+                    .title("Use Premium ")
+                    .description("Buy Premium Servers and get more Secure Servers ")
+                    .build());
+
+        }
+    }
+
+    @Override
+    public void onFinish() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("firstTime", false);
+        editor.apply();
+        super.onFinish();
+    }
+}
+
