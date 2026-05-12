@@ -39,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UnlockAllActivity extends AppCompatActivity {
+public class UnlockAllActivity extends BaseActivity {
 
     private Map<String, SkuDetails> skusWithSkuDetails = new HashMap<>();
     private final List<String> allSubs = new ArrayList<>(Arrays.asList(

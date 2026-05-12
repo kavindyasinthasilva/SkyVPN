@@ -2,12 +2,19 @@ package com.skysoftlk.vpnapp;
 
 
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.onesignal.OneSignal;
 import com.onesignal.debug.LogLevel;
 
 
 public class App extends Application {
+
+    private static final String TAG = "App";
 
     @Override
     public void onCreate() {
@@ -21,6 +28,22 @@ public class App extends Application {
         // OneSignal Initialization
         OneSignal.getDebug().setLogLevel(LogLevel.WARN);
         OneSignal.initWithContext(this, "6e0e45ef-fd88-45ab-a646-03a36237f0ce");
+    }
+
+    @Nullable
+    @Override
+    public Object getSystemService(@NonNull String name) {
+        // Fix for AccessibilityManagerService is dead (android.os.DeadObjectException)
+        // This occurs when the system accessibility service crashes and the app tries to access it.
+        if (Context.ACCESSIBILITY_SERVICE.equals(name)) {
+            try {
+                return super.getSystemService(name);
+            } catch (Throwable t) {
+                Log.e(TAG, "Failed to get AccessibilityManagerService, it might be dead.", t);
+                return null;
+            }
+        }
+        return super.getSystemService(name);
     }
 
 }

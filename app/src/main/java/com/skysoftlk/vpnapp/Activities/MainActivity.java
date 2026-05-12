@@ -344,7 +344,11 @@ public class MainActivity extends ContentsActivity {
     protected void startVpn() {
         try {
             ActiveServer.saveServer(MainActivity.selectedCountry, MainActivity.this);
-            OpenVpnApi.startVpn(this, selectedCountry.getOvpn(), selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
+            if (selectedCountry != null && selectedCountry.getOvpn() != null) {
+                OpenVpnApi.startVpn(this, selectedCountry.getOvpn(), selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
+            } else {
+                showMessage("Invalid server configuration", "error");
+            }
 
         } catch (RemoteException e) {
             e.printStackTrace();

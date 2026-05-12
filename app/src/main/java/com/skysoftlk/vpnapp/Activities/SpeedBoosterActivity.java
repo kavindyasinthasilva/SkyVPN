@@ -70,7 +70,7 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SpeedBoosterActivity extends AppCompatActivity {
+public class SpeedBoosterActivity extends BaseActivity {
     int mb = 1024 * 1024;
     DecoView arcView, arcView2;
     TextView scanning, centree, totalram, usedram, appused, appsfreed, processes, top, bottom, ramperct;

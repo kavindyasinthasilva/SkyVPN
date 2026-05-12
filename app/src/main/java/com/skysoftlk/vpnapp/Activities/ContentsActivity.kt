@@ -476,8 +476,8 @@ abstract class ContentsActivity : BaseDrawerActivity() {
 
     protected abstract fun checkRemainingTraffic()
 
-    protected fun updateUI(status:String) {
-
+    protected fun updateUI(status: String?) {
+        if (status == null) return
         when (status) {
             "CONNECTED" -> {
                 STATUS = "CONNECTED"

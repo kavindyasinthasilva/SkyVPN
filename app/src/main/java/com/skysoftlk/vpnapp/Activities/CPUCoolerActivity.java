@@ -62,7 +62,7 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 
-public class CPUCoolerActivity extends AppCompatActivity {
+public class CPUCoolerActivity extends BaseActivity {
     TextView batterytemp, showmain, showsec, nooverheating;
     float temp;
     ImageView coolbutton, tempimg,ivtemping;

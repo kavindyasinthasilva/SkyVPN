@@ -52,7 +52,7 @@ import java.util.List;
 
 import me.itangqi.waveloadingview.WaveLoadingView;
 
-public class BatteryActivity extends AppCompatActivity {
+public class BatteryActivity extends BaseActivity {
     WaveLoadingView mWaveLoadingView;
     ImageView powersaving, ultrasaving, normal;
     TextView hourn, minutes, hourp, minutep, houru, minutesu, hourmain, minutesmain;

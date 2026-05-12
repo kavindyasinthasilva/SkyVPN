@@ -12,7 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.skysoftlk.vpnapp.AdapterWrappers.TabAdapter;
 import com.skysoftlk.vpnapp.Fragments.FragmentVip;
 
-public class Servers extends AppCompatActivity {
+public class Servers extends BaseActivity {
 
     private TabAdapter adapter;
     private TabLayout tabLayout;

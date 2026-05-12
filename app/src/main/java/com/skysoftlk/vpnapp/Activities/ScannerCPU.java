@@ -61,7 +61,7 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class ScannerCPU extends AppCompatActivity {
+public class ScannerCPU extends BaseActivity {
     private static final String TAG = "ScannerCPU";
 
 

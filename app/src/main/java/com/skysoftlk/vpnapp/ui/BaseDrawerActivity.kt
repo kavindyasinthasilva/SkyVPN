@@ -1,10 +1,12 @@
 package com.skysoftlk.vpnapp.ui
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
@@ -129,6 +131,18 @@ abstract class BaseDrawerActivity : AppCompatActivity() {
                 rateUs()
             }
         }
+    }
+
+    override fun getSystemService(name: String): Any? {
+        if (Context.ACCESSIBILITY_SERVICE == name) {
+            return try {
+                super.getSystemService(name)
+            } catch (t: Throwable) {
+                Log.e("BaseDrawerActivity", "Failed to get AccessibilityManagerService", t)
+                null
+            }
+        }
+        return super.getSystemService(name)
     }
 
     private fun rateUs() {
