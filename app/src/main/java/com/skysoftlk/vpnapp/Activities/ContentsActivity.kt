@@ -26,6 +26,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -411,15 +412,47 @@ abstract class ContentsActivity : BaseDrawerActivity() {
     private val requestQueue by lazy { Volley.newRequestQueue(applicationContext) }
 
     private fun showIP() {
+        val urlip = "https://api.ipify.org"
+
+        val stringRequest =
+                StringRequest(Request.Method.GET, urlip, { response ->
+                    Log.d("IP_CHECK", "IP: $response")
+                    tvIpAddress?.setText(response)
+                })
+                { e ->
+                    Log.e("IP_CHECK", "Error fetching IP from $urlip: ${e.message}")
+                    // Fallback to second service if first fails
+                    showIPFallback()
+                }
+
+        stringRequest.retryPolicy = DefaultRetryPolicy(
+            15000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        requestQueue.add(stringRequest)
+    }
+
+    private fun showIPFallback() {
         val urlip = "https://checkip.amazonaws.com/"
 
         val stringRequest =
-                StringRequest(Request.Method.GET, urlip, { response -> tvIpAddress?.setText(response) })
-                { e ->
-                    run {
-                        tvIpAddress?.setText(getString(R.string.app_name))
-                    }
+            StringRequest(Request.Method.GET, urlip, { response ->
+                Log.d("IP_CHECK", "Fallback IP: $response")
+                tvIpAddress?.setText(response)
+            })
+            { e ->
+                Log.e("IP_CHECK", "Error fetching IP from fallback: ${e.message}")
+                run {
+                    tvIpAddress?.setText(getString(R.string.app_name))
                 }
+            }
+
+        stringRequest.retryPolicy = DefaultRetryPolicy(
+            15000,
+            1,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
         requestQueue.add(stringRequest)
     }
 
