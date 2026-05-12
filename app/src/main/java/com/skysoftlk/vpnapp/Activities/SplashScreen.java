@@ -326,29 +326,18 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (!Utility.isOnline(getApplicationContext())) {
-
-
-            Snackbar snackbar = Snackbar
-                    .make(coordinatorLayout, "Check internet connection", Snackbar.LENGTH_LONG);
-            snackbar.show();
-
-
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!Utility.isOnline(getApplicationContext())) {
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "Check internet connection", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
                     startActivity(new Intent(SplashScreen.this, IntroActivity.class));
                     finish();
                 }
-            },1000);
-
-        }
-
+            }
+        }, 4000);
     }
 }
