@@ -152,8 +152,30 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
     private void loadServers() {
         ArrayList<Countries> servers = new ArrayList<>();
 
+        // 1. Load Manual Servers from JSON
+        try {
+            JSONArray manualArray = new JSONArray(Constants.MANUAL_SERVERS_JSON);
+            for (int i = 0; i < manualArray.length(); i++) {
+                JSONObject obj = manualArray.getJSONObject(i);
+                servers.add(new Countries(
+                        obj.getString("serverName"),
+                        obj.getString("flagUrl"),
+                        obj.getString("ovpnConfig"),
+                        obj.getString("userName"),
+                        obj.getString("password")
+                ));
+            }
+        } catch (JSONException e) {
+            Log.e("FragmentFree", "Manual JSON error: " + e.getMessage());
+        }
+
         if (Constants.FREE_SERVERS == null || Constants.FREE_SERVERS.isEmpty()) {
-            animationHolder.setVisibility(View.GONE);
+            if (!servers.isEmpty()) {
+                animationHolder.setVisibility(View.GONE);
+                adapter.setData(servers);
+            } else {
+                animationHolder.setVisibility(View.GONE);
+            }
             return;
         }
 

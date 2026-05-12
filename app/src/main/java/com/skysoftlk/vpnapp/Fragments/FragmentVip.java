@@ -136,8 +136,30 @@ public class FragmentVip extends Fragment {
     private void loadServers() {
         ArrayList<Countries> servers = new ArrayList<>();
 
+        // Load Manual Servers from JSON
+        try {
+            JSONArray manualArray = new JSONArray(Constants.MANUAL_SERVERS_JSON);
+            for (int i = 0; i < manualArray.length(); i++) {
+                JSONObject obj = manualArray.getJSONObject(i);
+                servers.add(new Countries(
+                        obj.getString("serverName"),
+                        obj.getString("flagUrl"),
+                        obj.getString("ovpnConfig"),
+                        obj.getString("userName"),
+                        obj.getString("password")
+                ));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Manual JSON error: " + e.getMessage());
+        }
+
         if (Constants.PREMIUM_SERVERS == null || Constants.PREMIUM_SERVERS.isEmpty()) {
-            animationHolder.setVisibility(View.GONE);
+            if (!servers.isEmpty()) {
+                animationHolder.setVisibility(View.GONE);
+                adapter.setData(servers);
+            } else {
+                animationHolder.setVisibility(View.GONE);
+            }
             return;
         }
 

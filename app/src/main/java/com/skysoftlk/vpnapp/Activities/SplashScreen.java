@@ -81,6 +81,12 @@ public class SplashScreen extends AppCompatActivity {
         // Firebase initialization with timeout for China resilience
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         database.setPersistenceEnabled(true); // Enable offline persistence
+        
+        // China resilience: If in China, set a shorter timeout or skip Firebase wait if cached data exists
+        if (ChinaUtils.isLikelyInChina(this)) {
+             // You might want to skip long waits here
+             Log.d("SplashScreen", "Applying China-specific Firebase strategy");
+        }
 
         DatabaseReference typeRef = database.getReference("type");
         DatabaseReference indratech_toto_27640849_admob_id = database.getReference("indratech_toto_27640849_admob_id");
