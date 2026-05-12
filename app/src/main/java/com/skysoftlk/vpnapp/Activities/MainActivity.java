@@ -373,29 +373,36 @@ public class MainActivity extends ContentsActivity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isFinishing() || isDestroyed()) return;
+            if (isFinishing() || isDestroyed() || intent == null) return;
             try {
-                updateUI(intent.getStringExtra("state"));
-                Log.v("CHECKSTATE", intent.getStringExtra("state"));
+                String state = intent.getStringExtra("state");
+                if (state != null) {
+                    updateUI(state);
+                    Log.v("CHECKSTATE", state);
+                }
 
                 if (isFirst) {
-                    if (ActiveServer.getSavedServer(MainActivity.this).getCountry() != null) {
-                        selectedCountry = ActiveServer.getSavedServer(MainActivity.this);
+                    Countries saved = ActiveServer.getSavedServer(MainActivity.this);
+                    if (saved.getCountry() != null && !saved.getCountry().isEmpty()) {
+                        selectedCountry = saved;
 
-                        Glide.with(MainActivity.this)
-                                .load(selectedCountry.getFlagUrl())
-                                .into(imgFlag);
-                        flagName.setText(selectedCountry.getCountry());
+                        if (imgFlag != null) {
+                            Glide.with(MainActivity.this)
+                                    .load(selectedCountry.getFlagUrl())
+                                    .into(imgFlag);
+                        }
+                        if (flagName != null) {
+                            flagName.setText(selectedCountry.getCountry());
+                        }
                     }
 
                     isFirst = false;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("CHECKSTATE", "Error updating state UI: " + e.getMessage());
             }
 
             try {
-
                 String duration = intent.getStringExtra("duration");
                 String lastPacketReceive = intent.getStringExtra("lastPacketReceive");
                 String byteIn = intent.getStringExtra("byteIn");
@@ -408,7 +415,7 @@ public class MainActivity extends ContentsActivity {
 
                 updateConnectionStatus(duration, lastPacketReceive, byteIn, byteOut);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("CHECKSTATE", "Error updating traffic UI: " + e.getMessage());
             }
 
         }

@@ -70,7 +70,7 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SpeedBoosterActivity extends BaseActivity {
+public class SpeedBoosterActivity extends NavigationActivity {
     int mb = 1024 * 1024;
     DecoView arcView, arcView2;
     TextView scanning, centree, totalram, usedram, appused, appsfreed, processes, top, bottom, ramperct;
@@ -90,20 +90,14 @@ public class SpeedBoosterActivity extends BaseActivity {
     public com.facebook.ads.InterstitialAd facebookInterstitialAd;
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_speed_booster;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_speed_booster);
         // Initialize the Mobile Ads SDK
-        Toolbar toolbar = findViewById(R.id.toolbarr);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle(R.string.speed_booster);
-        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
-        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
-        actionBar.setHomeAsUpIndicator(upArrow);
-
         if (MainActivity.type.equals("ad")) {
             AdView mAdMobAdView = (AdView) findViewById(R.id.admob_adview);
             AdRequest adRequest2 = new AdRequest.Builder().build();

@@ -67,7 +67,7 @@ import es.dmoral.toasty.Toasty
 import ph.gemeaux.materialloadingindicator.MaterialCircularIndicator
 import pl.droidsonroids.gif.GifImageView
 
-abstract class ContentsActivity : BaseDrawerActivity() {
+abstract class ContentsActivity : NavigationActivity() {
 
     private var mLastRxBytes: Long = 0
     private var mLastTxBytes: Long = 0
@@ -208,30 +208,6 @@ abstract class ContentsActivity : BaseDrawerActivity() {
 
         btnAddTime.setOnClickListener {
             showRewardedAdDialog("Watch an ad to add more time to your connection or purchase VIP")
-        }
-
-        val bottomNavigation = findViewById<MeowBottomNavigation>(R.id.bottom_navigation)
-        bottomNavigation.add(MeowBottomNavigation.Model(1, R.drawable.ic_home))
-        bottomNavigation.add(MeowBottomNavigation.Model(2, R.drawable.computer))
-        bottomNavigation.add(MeowBottomNavigation.Model(3, R.drawable.battery))
-        bottomNavigation.add(MeowBottomNavigation.Model(4, R.drawable.cooling))
-
-        bottomNavigation.show(1)
-        bottomNavigation.setOnClickMenuListener {
-            when (it.id) {
-                1 -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                2 -> {
-                    loadAds(it.id)
-                }
-                3 -> {
-                    loadAds(it.id)
-                }
-                4 -> {
-                    loadAds(it.id)
-                }
-            }
         }
 
         AdSettings.addTestDevice("a8498a8c-111d-4c26-bc48-c9ba6d019845");

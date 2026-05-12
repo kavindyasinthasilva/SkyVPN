@@ -1,236 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.infideap.drawerbehavior.Advance3DDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_root_layout"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@id/top_bar"
-    android:background="#FFFFFF"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:scrollbars="none">
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator"
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_weight="6.35"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarr"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@drawable/h_bg"
-                android:visibility="visible"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/transparent"
-                android:gravity="center"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="normal"
-                android:visibility="visible" />
-
-            <RelativeLayout
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="start"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="-30dp"
-                android:layout_marginEnd="5dp">
-
-                <ImageView
-                    android:id="@+id/tempimg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_cpu_cooler_bg" />
-
-                <ImageView
-                    android:id="@+id/iv_tempimg"
-                    android:layout_width="match_parent"
-                    android:layout_height="166dp"
-                    android:layout_marginTop="-40dp"
-                    android:padding="65dp"
-                    android:src="@drawable/ic_before_cpu_cooler_icon"
-                    android:visibility="invisible" />
-
-                <com.skysoftlk.vpnapp.Utils.CustomTxtSemibold
-                    android:id="@+id/batterytemp"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:gravity="center"
-                    android:text="23.2"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/_20sdp"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="end"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="-100dp"
-                android:layout_marginEnd="70dp"
-                android:background="@drawable/btn_button">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/coolbutton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="0dp"
-                        android:background="@drawable/n_bt"
-                        android:gravity="center" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-
-            <LinearLayout
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="40dp"
-                android:orientation="vertical"
-                android:weightSum="2">
-
-                <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
-                    android:id="@+id/showmain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/overheated"
-                    android:textAlignment="center"
-                    android:textColor="#FF0000"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
-                    android:id="@+id/showsec"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/apps_are_causing_problem_hit_cool_down"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/_9sdp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/fl_adplaceholder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="500dp"
-            android:visibility="visible" />
-
-        <com.facebook.ads.NativeAdLayout
-            android:id="@+id/native_ad_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="500dp"
-            android:visibility="gone" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="300dp">
-
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="190dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="0dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="12dp"
-                app:cardUseCompatPadding="true">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="60dp"
+                android:fillViewport="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="3.5"
-                    android:gravity="center">
-
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:background="@drawable/h_bg"
+                            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/category"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    app:srcCompat="@drawable/ic_menu" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:text="CPU Cooler"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                            </RelativeLayout>
+                        </androidx.appcompat.widget.Toolbar>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/tempimg"
+                                android:layout_width="200dp"
+                                android:layout_height="200dp"
+                                android:src="@drawable/ic_cpu_cooler_bg" />
+
+                            <ImageView
+                                android:id="@+id/iv_tempimg"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/ic_before_cpu_cooler_icon" />
+
+                            <TextView
+                                android:id="@+id/batterytemp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tempimg"
+                                android:layout_centerHorizontal="true"
+                                android:text="35°C"
+                                android:textColor="@color/white"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:id="@+id/showmain"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="OVERHEATED"
+                                android:textColor="#F63030"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/showsec"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Apps are causing problem hit cool down"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/nooverheating"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/fl_adplaceholder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <com.facebook.ads.NativeAdLayout
+                            android:id="@+id/native_ad_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
 
                         <androidx.recyclerview.widget.RecyclerView
-
                             android:id="@+id/recycler_view"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:foregroundGravity="center"
-                            android:scrollbars="horizontal" />
+                            android:layout_height="200dp"
+                            android:layout_margin="10dp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="20dp">
+
+                            <ImageView
+                                android:id="@+id/coolbutton"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_centerHorizontal="true"
+                                android:src="@drawable/n_bt" />
+                        </RelativeLayout>
+
+                        <com.google.android.gms.ads.AdView
+                            android:id="@+id/admob_adview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:adSize="BANNER"
+                            app:adUnitId="@string/banner_ad_unit"
+                            android:visibility="gone" />
 
                     </LinearLayout>
-
-                    <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
-                        android:id="@+id/nooverheating"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="-20dp"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:text="No App Causing Overheating at this time"
-                        android:textAppearance="?android:textAppearanceMedium"
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
                 </RelativeLayout>
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:id="@+id/banner_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    >
-                </LinearLayout>
+            </ScrollView>
 
-            </androidx.cardview.widget.CardView>
+            <com.etebarian.meowbottomnavigation.MeowBottomNavigation
+                android:id="@+id/bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:mbn_circleColor="#ffffff"
+                app:mbn_backgroundBottomColor="#ffffff"
+                app:mbn_countBackgroundColor="#ff6f00"
+                app:mbn_countTextColor="#ffffff"
+                app:mbn_defaultIconColor="#90a4ae"
+                app:mbn_rippleColor="#2f424242"
+                app:mbn_selectedIconColor="#3c415e"
+                app:mbn_shadowColor="#1f212121"/>
 
-
-        </LinearLayout>
-
-
-
-
-
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>
-</ScrollView>
 
+    <include
+        android:id="@+id/drawer_navigation_view"
+        layout="@layout/drawer_navigation_view" />
+
+</com.infideap.drawerbehavior.Advance3DDrawerLayout>

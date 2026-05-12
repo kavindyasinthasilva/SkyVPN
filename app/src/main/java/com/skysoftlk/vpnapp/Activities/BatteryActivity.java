@@ -52,7 +52,7 @@ import java.util.List;
 
 import me.itangqi.waveloadingview.WaveLoadingView;
 
-public class BatteryActivity extends BaseActivity {
+public class BatteryActivity extends NavigationActivity {
     WaveLoadingView mWaveLoadingView;
     ImageView powersaving, ultrasaving, normal;
     TextView hourn, minutes, hourp, minutep, houru, minutesu, hourmain, minutesmain;
@@ -284,21 +284,16 @@ public class BatteryActivity extends BaseActivity {
     };
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_battery;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_battery);
 
 
 
-        Toolbar toolbar = findViewById(R.id.toolbarr);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle(R.string.battery_saver);
-        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
-        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
-        actionBar.setHomeAsUpIndicator(upArrow);
         if (getResources().getBoolean(R.bool.ads_switch) && (!Config.ads_subscription && !Config.all_subscription && !Config.vip_subscription)) {
 
             if (MainActivity.type.equals("ad")) {
@@ -317,7 +312,7 @@ public class BatteryActivity extends BaseActivity {
         hourn = findViewById(R.id.hourn);
         minutes = findViewById(R.id.minutes);
         hourp = findViewById(R.id.hourp);
-        minutep = findViewById(R.id.minutesp);
+        minutep = findViewById(R.id.minutep);
         houru = findViewById(R.id.houru);
         minutesu = findViewById(R.id.minutesu);
         hourmain = findViewById(R.id.hourmain);

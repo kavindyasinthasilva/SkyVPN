@@ -62,7 +62,7 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 
-public class CPUCoolerActivity extends BaseActivity {
+public class CPUCoolerActivity extends NavigationActivity {
     TextView batterytemp, showmain, showsec, nooverheating;
     float temp;
     ImageView coolbutton, tempimg,ivtemping;
@@ -82,18 +82,13 @@ public class CPUCoolerActivity extends BaseActivity {
     };
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_c_p_u_cooler;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_c_p_u_cooler);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarr);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar =getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle(R.string.cpu_cooler);
-        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
-        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
-        actionBar.setHomeAsUpIndicator(upArrow);
 
 
         if(MainActivity.type.equals("ad")) {
