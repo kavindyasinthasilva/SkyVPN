@@ -18,6 +18,7 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.infideap.drawerbehavior.Advance3DDrawerLayout
 import com.skysoftlk.vpnapp.R
+import com.skysoftlk.vpnapp.Utils.ChinaUtils
 
 abstract class BaseDrawerActivity : AppCompatActivity() {
     private lateinit var manager :ReviewManager
@@ -98,14 +99,24 @@ abstract class BaseDrawerActivity : AppCompatActivity() {
                 }
             }
             R.id.nav_rate -> {
-                startReviewFlow()
+                if (ChinaUtils.isLikelyInChina(this)) {
+                    // Open a generic help page or local store if in China
+                    Toast.makeText(this, "Rating not available in this region", Toast.LENGTH_SHORT).show()
+                } else {
+                    startReviewFlow()
+                }
             }
             R.id.nav_share -> {
                 try {
                     val shareIntent = Intent(Intent.ACTION_SEND)
                     shareIntent.type = "text/plain"
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, "share app")
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, "I'm using this Free VPN App, it's provide all servers free https://play.google.com/store/apps/details?id=" + this.packageName)
+                    val shareText = if (ChinaUtils.isLikelyInChina(this)) {
+                        "Try this VPN App! Contact support for more info."
+                    } else {
+                        "I'm using this Free VPN App, it's provide all servers free https://play.google.com/store/apps/details?id=" + this.packageName
+                    }
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
                     startActivity(Intent.createChooser(shareIntent, "choose one"))
                 } catch (e: Exception) {
                 }

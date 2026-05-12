@@ -17,11 +17,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.skysoftlk.vpnapp.R;
+import com.skysoftlk.vpnapp.Utils.ChinaUtils;
 import com.skysoftlk.vpnapp.Utils.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import top.oneconnectapi.app.api.OneConnect;
 
@@ -29,6 +31,13 @@ public class SplashScreen extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
+        coordinatorLayout = findViewById(R.id.cordi);
+
+        // Detect if we are in China to adjust services
+        boolean inChina = ChinaUtils.isLikelyInChina(this);
+        Log.d("SplashScreen", "Likely in China: " + inChina);
 
         Thread thread = new Thread(new Runnable() {
 
@@ -69,7 +78,10 @@ public class SplashScreen extends AppCompatActivity {
 
         thread.start();
 
+        // Firebase initialization with timeout for China resilience
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(true); // Enable offline persistence
+
         DatabaseReference typeRef = database.getReference("type");
         DatabaseReference indratech_toto_27640849_admob_id = database.getReference("indratech_toto_27640849_admob_id");
         DatabaseReference indratech_toto_27640849_ad_banner = database.getReference("indratech_toto_27640849_ad_banner");
@@ -308,10 +320,6 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
-        coordinatorLayout = findViewById(R.id.cordi);
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
