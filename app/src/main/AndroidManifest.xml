@@ -3,6 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -15,7 +24,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission tools:node="merge" android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"
+        tools:ignore="ProtectedPermissions"
+        />
+
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
 
 
@@ -87,10 +100,14 @@
         <service
             android:name="top.oneconnectapi.app.core.OpenVPNService"
             android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="specialUse"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="VPN connection" />
         </service>
 
 
