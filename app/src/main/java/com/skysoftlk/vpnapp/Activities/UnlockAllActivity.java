@@ -65,7 +65,7 @@ public class UnlockAllActivity extends BaseActivity {
         @Override
         public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
             if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                if (purchases != null) {
+                if (purchases != null && !purchases.isEmpty()) {
 
                     if (purchases.get(0) != null) {
                         Log.v("CHECKBILLING", purchases.get(0).toString());
@@ -163,6 +163,12 @@ public class UnlockAllActivity extends BaseActivity {
         });
     }
     private void billingSetup() {
+        if (billingClient.isReady()) {
+            for (int i = 0; i < allSubs.size(); i++) {
+                queryPrices(allSubs.get(i), tvPrice.get(i));
+            }
+            return;
+        }
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
@@ -179,13 +185,19 @@ public class UnlockAllActivity extends BaseActivity {
                 Log.v("CHECKBILLING", "disconnected");
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
-                finish();
-                Toast.makeText(UnlockAllActivity.this, "Service temporarily unavailable. Please check your Google Play account or try again after some time.", Toast.LENGTH_LONG).show();
+                if (!isFinishing()) {
+                    finish();
+                    Toast.makeText(UnlockAllActivity.this, "Service temporarily unavailable. Please check your Google Play account or try again after some time.", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
     private void queryProduct(String productId) {
+        if (!billingClient.isReady()) {
+            billingSetup();
+            return;
+        }
         Log.v("CHECKBILLING", "clicked");
         QueryProductDetailsParams queryProductDetailsParams =
                 QueryProductDetailsParams.newBuilder()
@@ -219,6 +231,9 @@ public class UnlockAllActivity extends BaseActivity {
     }
 
     private void queryPrices(String productId, TextView tvPrice) {
+        if (!billingClient.isReady()) {
+            return;
+        }
         QueryProductDetailsParams queryProductDetailsParams =
                 QueryProductDetailsParams.newBuilder()
                         .setProductList(
@@ -327,5 +342,13 @@ public class UnlockAllActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (billingClient != null) {
+            billingClient.endConnection();
+        }
+        super.onDestroy();
     }
 }

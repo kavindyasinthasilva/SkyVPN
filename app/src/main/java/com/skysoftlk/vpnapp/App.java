@@ -25,6 +25,11 @@ public class App extends Application {
         System.setProperty("otel.exporter.otlp.timeout", "60000");
         System.setProperty("otel.exporter.otlp.logs.timeout", "60000");
 
+        // Fix: [OneSignal-IO-1] HttpClient: null Error thrown from network stack.
+        // java.io.IOException: unexpected end of stream on com.android.okhttp.Address
+        // Disabling http.keepAlive to prevent "unexpected end of stream" error caused by stale connections.
+        System.setProperty("http.keepAlive", "false");
+
         // OneSignal Initialization
         OneSignal.getDebug().setLogLevel(LogLevel.WARN);
         OneSignal.initWithContext(this, "6e0e45ef-fd88-45ab-a646-03a36237f0ce");

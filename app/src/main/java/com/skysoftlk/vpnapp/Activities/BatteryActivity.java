@@ -323,7 +323,6 @@ public class BatteryActivity extends BaseActivity {
         hourmain = findViewById(R.id.hourmain);
         minutesmain = findViewById(R.id.minutesmain);
         sharedpreferences = getSharedPreferences("was", MODE_PRIVATE);
-        registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
 
         try {

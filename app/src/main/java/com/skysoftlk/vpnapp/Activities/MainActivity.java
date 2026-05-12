@@ -87,6 +87,10 @@ public class MainActivity extends ContentsActivity {
     };
 
     private void billingSetup() {
+        if (billingClient.isReady()) {
+            checkIfSubscribed();
+            return;
+        }
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
@@ -106,6 +110,10 @@ public class MainActivity extends ContentsActivity {
     }
 
     private void checkIfSubscribed() {
+        if (!billingClient.isReady()) {
+            billingSetup();
+            return;
+        }
 
         billingClient.queryPurchasesAsync(
                 QueryPurchasesParams.newBuilder()
@@ -117,8 +125,8 @@ public class MainActivity extends ContentsActivity {
                         // process returned purchase list, e.g. display the plans user owns
 
                         int isAcknowledged = 0;
-                        Log.v("CHECKBILLING", "purchases: " + purchases.size());
-                        if(purchases.size() > 0) {
+                        Log.v("CHECKBILLING", "purchases: " + (purchases != null ? purchases.size() : "null"));
+                        if(purchases != null && purchases.size() > 0) {
                             for (int i = 0; i < purchases.size(); i++) {
                                 Log.v("CHECKBILLING", "" + purchases.get(i).toString());
                                 isAcknowledged++;
@@ -141,11 +149,6 @@ public class MainActivity extends ContentsActivity {
         super.onStart();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("connectionState"));
-
-        billingClient = BillingClient.newBuilder(this)
-                .setListener(purchasesUpdatedListener)
-                .enablePendingPurchases()
-                .build();
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -203,6 +206,12 @@ public class MainActivity extends ContentsActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -255,6 +264,19 @@ public class MainActivity extends ContentsActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inAppUpdate();
+
+        billingClient = BillingClient.newBuilder(this)
+                .setListener(purchasesUpdatedListener)
+                .enablePendingPurchases()
+                .build();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (billingClient != null) {
+            billingClient.endConnection();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -358,6 +380,7 @@ public class MainActivity extends ContentsActivity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (isFinishing() || isDestroyed()) return;
             try {
                 updateUI(intent.getStringExtra("state"));
                 Log.v("CHECKSTATE", intent.getStringExtra("state"));

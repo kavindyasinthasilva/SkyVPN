@@ -146,6 +146,7 @@ dependencies {
     implementation 'com.google.android.play:review-ktx:2.0.2'
     implementation 'com.google.firebase:firebase-analytics:22.1.2'
     implementation 'com.google.firebase:firebase-database:21.0.0'
+    implementation 'com.google.firebase:firebase-auth:23.1.0'
 
     // UI Components
     implementation 'com.infideap.drawerbehavior:drawer-behavior:1.0.4'

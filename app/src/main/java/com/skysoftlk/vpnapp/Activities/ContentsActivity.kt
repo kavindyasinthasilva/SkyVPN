@@ -408,8 +408,9 @@ abstract class ContentsActivity : BaseDrawerActivity() {
     }
 
 
+    private val requestQueue by lazy { Volley.newRequestQueue(applicationContext) }
+
     private fun showIP() {
-        val queue = Volley.newRequestQueue(this)
         val urlip = "https://checkip.amazonaws.com/"
 
         val stringRequest =
@@ -419,7 +420,7 @@ abstract class ContentsActivity : BaseDrawerActivity() {
                         tvIpAddress?.setText(getString(R.string.app_name))
                     }
                 }
-        queue.add(stringRequest)
+        requestQueue.add(stringRequest)
     }
 
     override fun onStart() {
@@ -477,7 +478,7 @@ abstract class ContentsActivity : BaseDrawerActivity() {
     protected abstract fun checkRemainingTraffic()
 
     protected fun updateUI(status: String?) {
-        if (status == null) return
+        if (status == null || status == STATUS) return
         when (status) {
             "CONNECTED" -> {
                 STATUS = "CONNECTED"
@@ -986,8 +987,11 @@ abstract class ContentsActivity : BaseDrawerActivity() {
             byteIn: String,
             byteOut: String
     ) {
-        val byteinKb = byteIn.split("-").toTypedArray()[1]
-        val byteoutKb = byteOut.split("-").toTypedArray()[1]
+        val byteinParts = byteIn.split("-").toTypedArray()
+        val byteoutParts = byteOut.split("-").toTypedArray()
+
+        val byteinKb = if (byteinParts.size > 1) byteinParts[1] else byteIn
+        val byteoutKb = if (byteoutParts.size > 1) byteoutParts[1] else byteOut
 
         textDownloading!!.text = byteinKb
         textUploading!!.text = byteoutKb

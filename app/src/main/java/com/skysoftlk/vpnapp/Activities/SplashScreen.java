@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -78,14 +79,49 @@ public class SplashScreen extends AppCompatActivity {
 
         thread.start();
 
-        // Firebase initialization with timeout for China resilience
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        // Initialize Firebase Auth for anonymous sign-in to handle "Permission Denied" errors
+        // if rules require authentication.
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    Log.d("Firebase", "signInAnonymously:success");
+                    initializeFirebaseDatabase();
+                } else {
+                    Log.w("Firebase", "signInAnonymously:failure", task.getException());
+                    // Even if sign-in fails, try to initialize (rules might be public)
+                    initializeFirebaseDatabase();
+                }
+            });
+        } else {
+            initializeFirebaseDatabase();
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!Utility.isOnline(getApplicationContext())) {
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "Check internet connection", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
+                    startActivity(new Intent(SplashScreen.this, IntroActivity.class));
+                    finish();
+                }
+            }
+        }, 6000); // Increased delay to ensure Firebase data is fetched
+    }
+
+    private void initializeFirebaseDatabase() {
+        // Firebase initialization with the correct region URL to prevent redirection/ANRs
+        // Suggested URL from logs: https://skysoftvpn-default-rtdb.asia-southeast1.firebasedatabase.app
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://skysoftvpn-default-rtdb.asia-southeast1.firebasedatabase.app");
         database.setPersistenceEnabled(true); // Enable offline persistence
-        
+
         // China resilience: If in China, set a shorter timeout or skip Firebase wait if cached data exists
         if (ChinaUtils.isLikelyInChina(this)) {
-             // You might want to skip long waits here
-             Log.d("SplashScreen", "Applying China-specific Firebase strategy");
+            // You might want to skip long waits here
+            Log.d("SplashScreen", "Applying China-specific Firebase strategy");
         }
 
         DatabaseReference typeRef = database.getReference("type");
@@ -117,11 +153,11 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(@NotNull DatabaseError error) {
                 MainActivity.indratech_toto_27640849_all_ads_on_off = false;
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
-        typeRef.addValueEventListener(new ValueEventListener() {
+        typeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -135,11 +171,11 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
 
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
-        indratech_toto_27640849_aad_native.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_aad_native.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -153,12 +189,12 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
 
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
 
-        indratech_toto_27640849_admob_id.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_admob_id.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -166,30 +202,17 @@ public class SplashScreen extends AppCompatActivity {
                 MainActivity.indratech_toto_27640849_admob_id = value;
                 Log.d(TAG,"Admob ID"+value);
                 Log.d(TAG,"Admob ID"+MainActivity.indratech_toto_27640849_admob_id);
-                try {
-                    ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(getPackageName(),PackageManager.GET_META_DATA);
-                    Bundle bundle = applicationInfo.metaData;
-                    applicationInfo.metaData.putString("com.google.android.gms.ads.APPLICATION_ID",MainActivity.indratech_toto_27640849_admob_id);
-                    String apiKey = bundle.getString("com.google.android.gms.ads.APPLICATION_ID");
-                    Log.d(TAG,"The saved id is "+MainActivity.indratech_toto_27640849_admob_id);
-                    Log.d(TAG,"The saved id is "+apiKey);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                }
-
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
 
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
 
-        indratech_toto_27640849_ad_banner.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_ad_banner.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -203,12 +226,12 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
         // Read from the database
-        indratech_toto_27640849_ad_interstitial.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_ad_interstitial.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -223,12 +246,12 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
         // Read from the database
-        indratech_toto_27640849_fb_native.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_fb_native.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -243,12 +266,12 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
         // Read from the database
-        indratech_toto_27640849_fb_interstitial.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_fb_interstitial.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -263,12 +286,12 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
         // Read from the database
-        indratech_toto_27640849_fb_reward.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_fb_reward.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -283,12 +306,12 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
         // Read from the database
-        indratech_toto_27640849_admob_reward.addValueEventListener(new ValueEventListener() {
+        indratech_toto_27640849_admob_reward.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -303,11 +326,11 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
 
-        copyright_ivpnofficial_dont_change_the_value.addValueEventListener(new ValueEventListener() {
+        copyright_ivpnofficial_dont_change_the_value.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -322,22 +345,8 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!Utility.isOnline(getApplicationContext())) {
-                    Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Check internet connection", Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                } else {
-                    startActivity(new Intent(SplashScreen.this, IntroActivity.class));
-                    finish();
-                }
-            }
-        }, 4000);
     }
 }
