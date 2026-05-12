@@ -88,7 +88,7 @@ public class SplashScreen extends AppCompatActivity {
                     Log.d("Firebase", "signInAnonymously:success");
                     initializeFirebaseDatabase();
                 } else {
-                    Log.w("Firebase", "signInAnonymously:failure", task.getException());
+                    Log.w("Firebase", "signInAnonymously:failure. Make sure Anonymous Auth is enabled in Firebase Console.", task.getException());
                     // Even if sign-in fails, try to initialize (rules might be public)
                     initializeFirebaseDatabase();
                 }
@@ -113,10 +113,13 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void initializeFirebaseDatabase() {
+        // IMPORTANT: If you get "Permission denied", check your Firebase Console -> Realtime Database -> Rules.
+        // Make sure you have ".read": true or ".read": "auth != null" (if using Anonymous Auth).
+        // Also ensure Anonymous Authentication is ENABLED in the Firebase Console under Authentication -> Sign-in method.
+        
         // Firebase initialization with the correct region URL to prevent redirection/ANRs
         // Suggested URL from logs: https://skysoftvpn-default-rtdb.asia-southeast1.firebasedatabase.app
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://skysoftvpn-default-rtdb.asia-southeast1.firebasedatabase.app");
-        database.setPersistenceEnabled(true); // Enable offline persistence
 
         // China resilience: If in China, set a shorter timeout or skip Firebase wait if cached data exists
         if (ChinaUtils.isLikelyInChina(this)) {
@@ -153,6 +156,9 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onCancelled(@NotNull DatabaseError error) {
                 MainActivity.indratech_toto_27640849_all_ads_on_off = false;
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -169,8 +175,10 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-
+            public void onCancelled(@NotNull DatabaseError error) {
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -187,8 +195,10 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-
+            public void onCancelled(@NotNull DatabaseError error) {
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -205,8 +215,10 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-
+            public void onCancelled(@NotNull DatabaseError error) {
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -224,8 +236,11 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -244,8 +259,11 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -264,8 +282,11 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -284,8 +305,11 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -304,8 +328,11 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -324,8 +351,11 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });
@@ -343,8 +373,11 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
                 // Failed to read value
+                if (error.getCode() == DatabaseError.PERMISSION_DENIED) {
+                    Log.e(TAG, "Firebase Permission Denied! Check your Realtime Database Rules and enable Anonymous Auth in Firebase Console.");
+                }
                 Log.w(TAG, "Failed to read value. Error: " + error.getMessage(), error.toException());
             }
         });

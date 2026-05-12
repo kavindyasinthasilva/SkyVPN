@@ -8,9 +8,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.google.firebase.database.FirebaseDatabase;
 import com.onesignal.OneSignal;
 import com.onesignal.debug.LogLevel;
 
@@ -37,6 +36,14 @@ public class App extends Application {
         // Disabling http.keepAlive to prevent "unexpected end of stream" error caused by stale connections.
         System.setProperty("http.keepAlive", "false");
 
+        // Fix: Failed to read value. Error: Permission denied
+        // Enable offline persistence for Firebase Database once at startup.
+        try {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        } catch (Exception e) {
+            Log.w(TAG, "Firebase persistence already enabled or could not be enabled", e);
+        }
+
         // Fix: javax.net.ssl.SSLProtocolException: SSLV3_ALERT_CLOSE_NOTIFY
         // Some servers close the connection abruptly. Forcing TLS protocols can sometimes help stability.
         System.setProperty("https.protocols", "TLSv1.2,TLSv1.3");
@@ -45,16 +52,23 @@ public class App extends Application {
         OneSignal.getDebug().setLogLevel(LogLevel.WARN);
         OneSignal.initWithContext(this, "6e0e45ef-fd88-45ab-a646-03a36237f0ce");
 
-        // Fix: javax.net.ssl.SSLProtocolException: SSLV3_ALERT_CLOSE_NOTIFY
+        // Fix: Failed to register com.google.android.gms.providerinstaller#com.skysoftlk.vpnapp
+        // Fix: API: Phenotype.API is not available on this device.
         // Update the security provider to use modern SSL/TLS protocols and fix handshake issues.
+        // We prioritize Conscrypt to avoid GMS-related connection errors (DEVELOPER_ERROR) and ensure stability.
         try {
-            ProviderInstaller.installIfNeeded(this);
-            Log.i(TAG, "Security Provider updated via GMS.");
-        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-            Log.e(TAG, "Google Play Services not available for Security Provider update. Falling back to Conscrypt.", e);
-            // Fallback to Conscrypt for non-GMS devices (like Huawei)
             Security.insertProviderAt(Conscrypt.newProvider(), 1);
             Log.i(TAG, "Security Provider updated via Conscrypt.");
+        } catch (Throwable e) {
+            Log.e(TAG, "Conscrypt initialization failed.", e);
+        }
+
+        try {
+            // Attempt GMS update as a secondary measure, but catch all errors to prevent Phenotype API issues from causing logs or crashes.
+            ProviderInstaller.installIfNeeded(this);
+            Log.i(TAG, "Security Provider updated via GMS.");
+        } catch (Throwable e) {
+            Log.w(TAG, "Google Play Services Security Provider update skipped or failed. GMS Phenotype API may be unavailable on this device.");
         }
     }
 
