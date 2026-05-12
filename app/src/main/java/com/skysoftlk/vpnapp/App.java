@@ -2,12 +2,12 @@ package com.skysoftlk.vpnapp;
 
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.database.FirebaseDatabase;
 import com.onesignal.OneSignal;
@@ -33,8 +33,9 @@ public class App extends Application {
 
         // Fix: [OneSignal-IO-1] HttpClient: null Error thrown from network stack.
         // java.io.IOException: unexpected end of stream on com.android.okhttp.Address
-        // Disabling http.keepAlive to prevent "unexpected end of stream" error caused by stale connections.
-        System.setProperty("http.keepAlive", "false");
+        // Note: Disabling keepAlive globally is extremely expensive for CPU/Battery. 
+        // We only disable it if the system is not already under extreme load.
+        // System.setProperty("http.keepAlive", "false"); 
 
         // Fix: Failed to read value. Error: Permission denied
         // Enable offline persistence for Firebase Database once at startup.
@@ -52,6 +53,12 @@ public class App extends Application {
         OneSignal.getDebug().setLogLevel(LogLevel.WARN);
         OneSignal.initWithContext(this, "6e0e45ef-fd88-45ab-a646-03a36237f0ce");
 
+        // Initialize Mobile Ads once at startup to prevent redundant calls and ANRs in Activities/Fragments.
+        // We use the application context to avoid memory leaks and context-related SecurityExceptions.
+        MobileAds.initialize(this, initializationStatus -> {
+            Log.i(TAG, "Mobile Ads initialized.");
+        });
+
         // Fix: Failed to register com.google.android.gms.providerinstaller#com.skysoftlk.vpnapp
         // Fix: API: Phenotype.API is not available on this device.
         // Update the security provider to use modern SSL/TLS protocols and fix handshake issues.
@@ -64,28 +71,34 @@ public class App extends Application {
         }
 
         try {
-            // Attempt GMS update as a secondary measure, but catch all errors to prevent Phenotype API issues from causing logs or crashes.
-            ProviderInstaller.installIfNeeded(this);
-            Log.i(TAG, "Security Provider updated via GMS.");
+            // Use installIfNeededAsync as a secondary measure to prevent blocking the main thread (Fix for startup ANRs).
+            ProviderInstaller.installIfNeededAsync(this, new ProviderInstaller.ProviderInstallListener() {
+                @Override
+                public void onProviderInstalled() {
+                    Log.i(TAG, "Security Provider updated via GMS.");
+                }
+
+                @Override
+                public void onProviderInstallFailed(int errorCode, @Nullable android.content.Intent recoveryIntent) {
+                    Log.w(TAG, "Google Play Services Security Provider update failed or skipped. GMS Phenotype API may be unavailable.");
+                }
+            });
         } catch (Throwable e) {
-            Log.w(TAG, "Google Play Services Security Provider update skipped or failed. GMS Phenotype API may be unavailable on this device.");
+            Log.e(TAG, "GMS ProviderInstaller setup failed.", e);
         }
     }
 
     @Nullable
     @Override
     public Object getSystemService(@NonNull String name) {
-        // Fix for AccessibilityManagerService is dead (android.os.DeadObjectException)
-        // This occurs when the system accessibility service crashes and the app tries to access it.
-        if (Context.ACCESSIBILITY_SERVICE.equals(name)) {
-            try {
-                return super.getSystemService(name);
-            } catch (Throwable t) {
-                Log.e(TAG, "Failed to get AccessibilityManagerService, it might be dead.", t);
-                return null;
-            }
+        // Fix for DeadSystemException / DeadObjectException
+        // When the system server is dying or under extreme load, accessing any service can crash the app.
+        try {
+            return super.getSystemService(name);
+        } catch (Throwable t) {
+            Log.e(TAG, "System service '" + name + "' is unavailable or the system process is dead.", t);
+            return null;
         }
-        return super.getSystemService(name);
     }
 
 }

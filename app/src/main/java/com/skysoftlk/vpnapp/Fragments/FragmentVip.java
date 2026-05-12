@@ -111,13 +111,7 @@ public class FragmentVip extends Fragment {
 
         mPurchaseLayout.setVisibility(View.GONE);
 
-        MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                Log.e("REWARDED INITIALIZ", initializationStatus.getAdapterStatusMap().toString());
-                initAdMob();
-            }
-        });
+        initAdMob();
 
         initOnClick();
 

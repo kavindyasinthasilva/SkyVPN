@@ -82,107 +82,97 @@ public class NormalMode extends AppCompatActivity {
                 !Config.ads_subscription &&
                 !Config.all_subscription &&
                 !Config.vip_subscription) {
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                    Log.e("REWARDED INITIALIZ", initializationStatus.getAdapterStatusMap().toString());
+                if (MainActivity.type.equals("ad")) {
 
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    InterstitialAd.load(NormalMode.this, MainActivity.admob_interstitial_id, adRequest,
+                            new InterstitialAdLoadCallback() {
+                                @Override
+                                public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                    // The mInterstitialAd reference will be null until
+                                    // an ad is loaded.
+                                    mInterstitialAd = interstitialAd;
+                                    Log.i("INTERSTITIAL", "onAdLoaded");
 
-                    if(MainActivity.type.equals("ad")) {
+                                    if (mInterstitialAd != null) {
 
-                        AdRequest adRequest = new AdRequest.Builder().build();
-                        InterstitialAd.load(NormalMode.this, MainActivity.admob_interstitial_id, adRequest,
-                                new InterstitialAdLoadCallback() {
-                                    @Override
-                                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                                        // The mInterstitialAd reference will be null until
-                                        // an ad is loaded.
-                                        mInterstitialAd = interstitialAd;
-                                        Log.i("INTERSTITIAL", "onAdLoaded");
+                                        mInterstitialAd.show(NormalMode.this);
 
-                                        if (mInterstitialAd != null) {
+                                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                                            @Override
+                                            public void onAdDismissedFullScreenContent() {
+                                                // Called when fullscreen content is dismissed.
+                                                Log.d("TAG", "The ad was dismissed.");
+                                                Log.d("TESTAD", " dismissed update");
+                                            }
 
-                                            mInterstitialAd.show(NormalMode.this);
+                                            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                                // Called when fullscreen content failed to show.
+                                                Log.d("TAG", "The ad failed to show.");
+                                            }
 
-                                            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                                                @Override
-                                                public void onAdDismissedFullScreenContent() {
-                                                    // Called when fullscreen content is dismissed.
-                                                    Log.d("TAG", "The ad was dismissed.");
-                                                    Log.d("TESTAD", " dismissed update");
-                                                }
+                                            @Override
+                                            public void onAdShowedFullScreenContent() {
+                                                // Called when fullscreen content is shown.
+                                                // Make sure to set your reference to null so you don't
+                                                // show it a second time.
+                                                mInterstitialAd = null;
+                                                Log.d("TAG", "The ad was shown.");
+                                            }
+                                        });
 
-                                                public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                                    // Called when fullscreen content failed to show.
-                                                    Log.d("TAG", "The ad failed to show.");
-                                                }
-
-                                                @Override
-                                                public void onAdShowedFullScreenContent() {
-                                                    // Called when fullscreen content is shown.
-                                                    // Make sure to set your reference to null so you don't
-                                                    // show it a second time.
-                                                    mInterstitialAd = null;
-                                                    Log.d("TAG", "The ad was shown.");
-                                                }
-                                            });
-
-                                        } else {
-                                            Log.d("TAG", "The interstitial ad wasn't ready yet.");
-                                        }
+                                    } else {
+                                        Log.d("TAG", "The interstitial ad wasn't ready yet.");
                                     }
+                                }
 
-                                    @Override
-                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                        // Handle the error
-                                        Log.i("INTERSTITIAL", loadAdError.getMessage());
-                                        mInterstitialAd = null;
-                                    }
-                                });
-                    }else {
-                        AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
+                                @Override
+                                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                    // Handle the error
+                                    Log.i("INTERSTITIAL", loadAdError.getMessage());
+                                    mInterstitialAd = null;
+                                }
+                            });
+                } else {
+                    AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
 
 
-                        AudienceNetworkAds.initialize(NormalMode.this);
-                        com.facebook.ads.InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
-                            @Override
-                            public void onInterstitialDisplayed(Ad ad) {
+                    AudienceNetworkAds.initialize(NormalMode.this);
+                    com.facebook.ads.InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
+                        @Override
+                        public void onInterstitialDisplayed(Ad ad) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onInterstitialDismissed(Ad ad) {
+                        @Override
+                        public void onInterstitialDismissed(Ad ad) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onError(Ad ad, AdError adError) {
-                                Log.d("ADerror",adError.getErrorMessage());
-                            }
+                        @Override
+                        public void onError(Ad ad, AdError adError) {
+                            Log.d("ADerror", adError.getErrorMessage());
+                        }
 
-                            @Override
-                            public void onAdLoaded(Ad ad) {
-                                facebookInterstitialAd.show();
-                            }
+                        @Override
+                        public void onAdLoaded(Ad ad) {
+                            facebookInterstitialAd.show();
+                        }
 
-                            @Override
-                            public void onAdClicked(Ad ad) {
+                        @Override
+                        public void onAdClicked(Ad ad) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onLoggingImpression(Ad ad) {
+                        @Override
+                        public void onLoggingImpression(Ad ad) {
 
-                            }
-                        };
-                        facebookInterstitialAd = new com.facebook.ads.InterstitialAd(NormalMode.this,MainActivity.indratech_toto_27640849_fb_interstitial_id);
-                        facebookInterstitialAd.loadAd(facebookInterstitialAd.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
-
-                    }
-
+                        }
+                    };
+                    facebookInterstitialAd = new com.facebook.ads.InterstitialAd(NormalMode.this, MainActivity.indratech_toto_27640849_fb_interstitial_id);
+                    facebookInterstitialAd.loadAd(facebookInterstitialAd.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
 
                 }
-            });
         }
 
 

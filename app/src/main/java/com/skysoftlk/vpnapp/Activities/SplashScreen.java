@@ -83,16 +83,7 @@ public class SplashScreen extends AppCompatActivity {
         // if rules require authentication.
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
-            mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
-                if (task.isSuccessful()) {
-                    Log.d("Firebase", "signInAnonymously:success");
-                    initializeFirebaseDatabase();
-                } else {
-                    Log.w("Firebase", "signInAnonymously:failure. Make sure Anonymous Auth is enabled in Firebase Console.", task.getException());
-                    // Even if sign-in fails, try to initialize (rules might be public)
-                    initializeFirebaseDatabase();
-                }
-            });
+            signInAnonymouslyWithRetry(mAuth, 0, 3);
         } else {
             initializeFirebaseDatabase();
         }
@@ -110,6 +101,27 @@ public class SplashScreen extends AppCompatActivity {
                 }
             }
         }, 6000); // Increased delay to ensure Firebase data is fetched
+    }
+
+    private void signInAnonymouslyWithRetry(FirebaseAuth mAuth, int currentRetry, int maxRetries) {
+        mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                Log.d("Firebase", "signInAnonymously:success");
+                initializeFirebaseDatabase();
+            } else {
+                Exception e = task.getException();
+                Log.w("Firebase", "signInAnonymously:failure. Attempt " + (currentRetry + 1) + " of " + maxRetries, e);
+                
+                if (e instanceof com.google.firebase.FirebaseNetworkException && currentRetry < maxRetries) {
+                    // Retry with exponential backoff or simple delay
+                    new Handler().postDelayed(() -> signInAnonymouslyWithRetry(mAuth, currentRetry + 1, maxRetries), 2000);
+                } else {
+                    Log.e("Firebase", "signInAnonymously:final failure. Make sure Anonymous Auth is enabled in Firebase Console.");
+                    // Even if sign-in fails, try to initialize (rules might be public)
+                    initializeFirebaseDatabase();
+                }
+            }
+        });
     }
 
     private void initializeFirebaseDatabase() {

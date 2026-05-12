@@ -82,56 +82,46 @@ public class Saving_Power_Comp extends AppCompatActivity {
                     !Config.ads_subscription &&
                     !Config.all_subscription &&
                     !Config.vip_subscription) {
-                MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                    @Override
-                    public void onInitializationComplete(InitializationStatus initializationStatus) {
-                        Log.e("REWARDED INITIALIZ", initializationStatus.getAdapterStatusMap().toString());
+                if (!MainActivity.type.equals("ad")) {
+                    AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
 
 
-                        if(!MainActivity.type.equals("ad")) {
-                            AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
-
-
-                            AudienceNetworkAds.initialize(Saving_Power_Comp.this);
-                            com.facebook.ads.InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
-                                @Override
-                                public void onInterstitialDisplayed(Ad ad) {
-
-                                }
-
-                                @Override
-                                public void onInterstitialDismissed(Ad ad) {
-
-                                }
-
-                                @Override
-                                public void onError(Ad ad, AdError adError) {
-                                    Log.d("ADerror",adError.getErrorMessage());
-                                }
-
-                                @Override
-                                public void onAdLoaded(Ad ad) {
-                                    facebookInterstitialAd.show();
-                                }
-
-                                @Override
-                                public void onAdClicked(Ad ad) {
-
-                                }
-
-                                @Override
-                                public void onLoggingImpression(Ad ad) {
-
-                                }
-                            };
-                            facebookInterstitialAd = new com.facebook.ads.InterstitialAd(Saving_Power_Comp.this,MainActivity.indratech_toto_27640849_fb_interstitial_id);
-                            facebookInterstitialAd.loadAd(facebookInterstitialAd.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
+                    AudienceNetworkAds.initialize(Saving_Power_Comp.this);
+                    com.facebook.ads.InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
+                        @Override
+                        public void onInterstitialDisplayed(Ad ad) {
 
                         }
 
+                        @Override
+                        public void onInterstitialDismissed(Ad ad) {
 
-                    }
-                });
+                        }
+
+                        @Override
+                        public void onError(Ad ad, AdError adError) {
+                            Log.d("ADerror", adError.getErrorMessage());
+                        }
+
+                        @Override
+                        public void onAdLoaded(Ad ad) {
+                            facebookInterstitialAd.show();
+                        }
+
+                        @Override
+                        public void onAdClicked(Ad ad) {
+
+                        }
+
+                        @Override
+                        public void onLoggingImpression(Ad ad) {
+
+                        }
+                    };
+                    facebookInterstitialAd = new com.facebook.ads.InterstitialAd(Saving_Power_Comp.this, MainActivity.indratech_toto_27640849_fb_interstitial_id);
+                    facebookInterstitialAd.loadAd(facebookInterstitialAd.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
+
+                }
             }
         }
 

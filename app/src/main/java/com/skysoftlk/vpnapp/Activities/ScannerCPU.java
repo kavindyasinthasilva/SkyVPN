@@ -118,15 +118,10 @@ public class ScannerCPU extends BaseActivity {
                 !Config.ads_subscription &&
                 !Config.all_subscription &&
                 !Config.vip_subscription) {
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                    Log.e("REWARDED INITIALIZ", initializationStatus.getAdapterStatusMap().toString());
 
+            if(MainActivity.type.equals("ad")) {
 
-                    if(MainActivity.type.equals("ad")) {
-
-                        AdRequest adRequest = new AdRequest.Builder().build();
+                AdRequest adRequest = new AdRequest.Builder().build();
                         InterstitialAd.load(ScannerCPU.this, MainActivity.admob_interstitial_id, adRequest,
                                 new InterstitialAdLoadCallback() {
                                     @Override
@@ -218,8 +213,6 @@ public class ScannerCPU extends BaseActivity {
 
 
                 }
-            });
-        }
 
 
         RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);

@@ -66,13 +66,6 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
         adapter = new ServerListAdapterFree(getActivity());
         recyclerView.setAdapter(adapter);
 
-        MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                Log.e("REWARDED INITIALIZ", initializationStatus.getAdapterStatusMap().toString());
-            }
-        });
-
         if (getResources().getBoolean(R.bool.ads_switch) && getResources().getBoolean(R.bool.facebook_list_ads) && (!Config.ads_subscription && !Config.all_subscription&& !Config.vip_subscription)) {
 
             isAds = true;
