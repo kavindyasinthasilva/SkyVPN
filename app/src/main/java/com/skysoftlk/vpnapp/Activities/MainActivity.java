@@ -360,7 +360,20 @@ public class MainActivity extends ContentsActivity {
         try {
             ActiveServer.saveServer(MainActivity.selectedCountry, MainActivity.this);
             if (selectedCountry != null && selectedCountry.getOvpn() != null) {
-                OpenVpnApi.startVpn(this, selectedCountry.getOvpn(), selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
+                // Optimization: Prepare OVPN config with keep-alive and MTU optimizations for stability
+                String ovpnConfig = selectedCountry.getOvpn();
+                
+                // Ensure ping and ping-restart are set for connection health monitoring
+                if (!ovpnConfig.contains("keepalive")) {
+                    ovpnConfig += "\nkeepalive 10 60\n";
+                }
+                
+                // Optimized MTU for faster speeds and less fragmentation
+                if (!ovpnConfig.contains("mssfix")) {
+                    ovpnConfig += "\nmssfix 1300\n";
+                }
+
+                OpenVpnApi.startVpn(this, ovpnConfig, selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
             } else {
                 showMessage("Invalid server configuration", "error");
             }
