@@ -2,6 +2,8 @@ package com.skysoftlk.vpnapp;
 
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,9 +11,9 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.security.ProviderInstaller;
-import com.google.firebase.database.FirebaseDatabase;
 import com.onesignal.OneSignal;
 import com.onesignal.debug.LogLevel;
+import com.skysoftlk.vpnapp.Utils.ChinaUtils;
 
 import org.conscrypt.Conscrypt;
 
@@ -40,58 +42,61 @@ public class App extends Application {
             Log.e(TAG, "Conscrypt initialization failed.", e);
         }
 
-        // Fix: Failed to export logs. The request could not be executed. Full error message: timeout
-        // Increase OpenTelemetry export timeouts to prevent InterruptedIOException
-        System.setProperty("otel.exporter.otlp.timeout", "60000");
-        System.setProperty("otel.exporter.otlp.logs.timeout", "60000");
+        // Defer non-critical initializations to a background thread to prevent startup ANRs
+        // especially when the system is under high load (kswapd, high CPU usage).
+        final boolean finalConscryptInstalled = conscryptInstalled;
+        new Thread(() -> {
+            // Fix: Failed to export logs. The request could not be executed. Full error message: timeout
+            // Increase OpenTelemetry export timeouts to prevent InterruptedIOException
+            System.setProperty("otel.exporter.otlp.timeout", "60000");
+            System.setProperty("otel.exporter.otlp.logs.timeout", "60000");
 
-        // Fix: [OneSignal-IO-1] HttpClient: null Error thrown from network stack.
-        // java.io.IOException: unexpected end of stream on com.android.okhttp.Address
-        // This error occurs when the server closes a pooled connection prematurely. 
-        // Disabling keep-alive prevents the client from reusing potentially stale connections.
-        System.setProperty("http.keepAlive", "false");
+            // Fix: javax.net.ssl.SSLProtocolException: SSLV3_ALERT_CLOSE_NOTIFY
+            // Some servers close the connection abruptly. Forcing TLS protocols can sometimes help stability.
+            System.setProperty("https.protocols", "TLSv1.2,TLSv1.3");
 
-        // Fix: javax.net.ssl.SSLProtocolException: SSLV3_ALERT_CLOSE_NOTIFY
-        // Some servers close the connection abruptly. Forcing TLS protocols can sometimes help stability.
-        System.setProperty("https.protocols", "TLSv1.2,TLSv1.3");
-
-        // Fix: Failed to read value. Error: Permission denied
-        // Enable offline persistence for Firebase Database once at startup.
-        try {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        } catch (Exception e) {
-            Log.w(TAG, "Firebase persistence already enabled or could not be enabled", e);
-        }
-
-        // OneSignal Initialization
-        OneSignal.getDebug().setLogLevel(LogLevel.WARN);
-        OneSignal.initWithContext(this, "6e0e45ef-fd88-45ab-a646-03a36237f0ce");
-
-        // Initialize Mobile Ads once at startup to prevent redundant calls and ANRs in Activities/Fragments.
-        // We use the application context to avoid memory leaks and context-related SecurityExceptions.
-        MobileAds.initialize(this, initializationStatus -> {
-            Log.i(TAG, "Mobile Ads initialized.");
-        });
-
-        // Only attempt GMS ProviderInstaller if Conscrypt failed or as a fallback, 
-        // to avoid redundant service calls that can trigger SecurityExceptions in GoogleApiManager.
-        if (!conscryptInstalled) {
-            try {
-                ProviderInstaller.installIfNeededAsync(this, new ProviderInstaller.ProviderInstallListener() {
-                    @Override
-                    public void onProviderInstalled() {
-                        Log.i(TAG, "Security Provider updated via GMS.");
-                    }
-
-                    @Override
-                    public void onProviderInstallFailed(int errorCode, @Nullable android.content.Intent recoveryIntent) {
-                        Log.w(TAG, "Google Play Services Security Provider update failed. GMS Phenotype API may be unavailable. Error: " + errorCode);
-                    }
+            // OneSignal Initialization
+            // OneSignal recommends initialization on the main thread.
+            // CHINA FIX: Skip OneSignal in China to prevent constant CPU-heavy network retries
+            if (!ChinaUtils.isLikelyInChina(this)) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    OneSignal.getDebug().setLogLevel(LogLevel.WARN);
+                    OneSignal.initWithContext(this, "6e0e45ef-fd88-45ab-a646-03a36237f0ce");
                 });
-            } catch (Throwable e) {
-                Log.e(TAG, "GMS ProviderInstaller setup failed.", e);
+            } else {
+                Log.i(TAG, "Skipping OneSignal initialization in China region.");
             }
-        }
+
+            // Initialize Mobile Ads
+            // CHINA FIX: Skip AdMob in China to prevent constant CPU-heavy network retries
+            if (!ChinaUtils.isLikelyInChina(this)) {
+                MobileAds.initialize(this, initializationStatus -> {
+                    Log.i(TAG, "Mobile Ads initialized.");
+                });
+            } else {
+                Log.i(TAG, "Skipping Mobile Ads initialization in China region.");
+            }
+
+            // Only attempt GMS ProviderInstaller if Conscrypt failed or as a fallback,
+            // to avoid redundant service calls that can trigger SecurityExceptions in GoogleApiManager.
+            if (!finalConscryptInstalled) {
+                try {
+                    ProviderInstaller.installIfNeededAsync(this, new ProviderInstaller.ProviderInstallListener() {
+                        @Override
+                        public void onProviderInstalled() {
+                            Log.i(TAG, "Security Provider updated via GMS.");
+                        }
+
+                        @Override
+                        public void onProviderInstallFailed(int errorCode, @Nullable android.content.Intent recoveryIntent) {
+                            Log.w(TAG, "Google Play Services Security Provider update failed. GMS Phenotype API may be unavailable. Error: " + errorCode);
+                        }
+                    });
+                } catch (Throwable e) {
+                    Log.e(TAG, "GMS ProviderInstaller setup failed.", e);
+                }
+            }
+        }).start();
     }
 
     @Nullable

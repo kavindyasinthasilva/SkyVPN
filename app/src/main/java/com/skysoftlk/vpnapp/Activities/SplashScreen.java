@@ -9,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,28 +80,41 @@ public class SplashScreen extends AppCompatActivity {
 
         thread.start();
 
-        // Initialize Firebase Auth for anonymous sign-in to handle "Permission Denied" errors
-        // if rules require authentication.
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
-            signInAnonymouslyWithRetry(mAuth, 0, 3);
-        } else {
-            initializeFirebaseDatabase();
-        }
+        // Offload Firebase initialization to a background thread to prevent startup ANRs.
+        // Firebase operations are generally asynchronous, but the initial getInstance() and 
+        // reference creation can be slow on loaded systems.
+        new Thread(() -> {
+            try {
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                if (mAuth.getCurrentUser() == null) {
+                    signInAnonymouslyWithRetry(mAuth, 0, 3);
+                } else {
+                    initializeFirebaseDatabase();
+                }
+            } catch (Exception e) {
+                Log.e("SplashScreen", "Firebase initialization failed", e);
+            }
+        }).start();
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (!Utility.isOnline(getApplicationContext())) {
                     Snackbar snackbar = Snackbar
                             .make(coordinatorLayout, "Check internet connection", Snackbar.LENGTH_LONG);
                     snackbar.show();
+                    
+                    // Offline fallback: allow entry after delay
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        startActivity(new Intent(SplashScreen.this, IntroActivity.class));
+                        finish();
+                    }, 2000);
                 } else {
                     startActivity(new Intent(SplashScreen.this, IntroActivity.class));
                     finish();
                 }
             }
-        }, 6000); // Increased delay to ensure Firebase data is fetched
+        }, ChinaUtils.isLikelyInChina(this) ? 3000 : 4000); // Shorter delay in China
     }
 
     private void signInAnonymouslyWithRetry(FirebaseAuth mAuth, int currentRetry, int maxRetries) {

@@ -388,45 +388,68 @@ abstract class ContentsActivity : NavigationActivity() {
     private val requestQueue by lazy { Volley.newRequestQueue(applicationContext) }
 
     private fun showIP() {
-        val urlip = "https://api.ipify.org"
+        // If we have a cached IP fetched recently (within 5 minutes), use it
+        if (cachedIp != null && System.currentTimeMillis() - lastIpFetchTime < 300000) {
+            tvIpAddress?.text = cachedIp
+            return
+        }
 
-        val stringRequest =
-                StringRequest(Request.Method.GET, urlip, { response ->
-                    Log.d("IP_CHECK", "IP: $response")
-                    tvIpAddress?.setText(response)
-                })
-                { e ->
-                    Log.e("IP_CHECK", "Error fetching IP from $urlip: ${e.message}")
-                    // Fallback to second service if first fails
-                    showIPFallback()
-                }
+        // Avoid concurrent fetches
+        if (isFetchingIp) return
 
-        stringRequest.retryPolicy = DefaultRetryPolicy(
-            15000,
-            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        // China-friendly IP check services (Cloudflare and some local ones if needed)
+        val services = listOf(
+            "https://1.1.1.1/cdn-cgi/trace", // Cloudflare (often works)
+            "https://api.ipify.org",
+            "https://checkip.amazonaws.com/",
+            "https://ifconfig.me/ip"
         )
-        requestQueue.add(stringRequest)
+        
+        tryFetchIp(services, 0)
     }
 
-    private fun showIPFallback() {
-        val urlip = "https://checkip.amazonaws.com/"
+    private fun tryFetchIp(services: List<String>, index: Int) {
+        if (index >= services.size) {
+            isFetchingIp = false
+            tvIpAddress?.setText(getString(R.string.app_name))
+            return
+        }
 
-        val stringRequest =
-            StringRequest(Request.Method.GET, urlip, { response ->
-                Log.d("IP_CHECK", "Fallback IP: $response")
-                tvIpAddress?.setText(response)
-            })
-            { e ->
-                Log.e("IP_CHECK", "Error fetching IP from fallback: ${e.message}")
-                run {
-                    tvIpAddress?.setText(getString(R.string.app_name))
+        isFetchingIp = true
+        val urlip = services[index]
+        Log.d("IP_CHECK", "Trying $urlip")
+
+        val stringRequest = StringRequest(Request.Method.GET, urlip, { response ->
+            var ip = response?.trim() ?: ""
+            
+            // Special handling for Cloudflare trace output
+            if (urlip.contains("1.1.1.1")) {
+                val lines = ip.split("\n")
+                for (line in lines) {
+                    if (line.startsWith("ip=")) {
+                        ip = line.substring(3)
+                        break
+                    }
                 }
             }
+            
+            if (ip.isNotEmpty()) {
+                Log.d("IP_CHECK", "Success from $urlip: $ip")
+                cachedIp = ip
+                lastIpFetchTime = System.currentTimeMillis()
+                isFetchingIp = false
+                tvIpAddress?.text = cachedIp
+            } else {
+                tryFetchIp(services, index + 1)
+            }
+        }) { e ->
+            Log.e("IP_CHECK", "Failed $urlip: ${e.message}")
+            tryFetchIp(services, index + 1)
+        }
 
         stringRequest.retryPolicy = DefaultRetryPolicy(
-            15000,
-            1,
+            8000, // Shorter timeout per service
+            0,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
         requestQueue.add(stringRequest)
@@ -488,6 +511,12 @@ abstract class ContentsActivity : NavigationActivity() {
 
     protected fun updateUI(status: String?) {
         if (status == null || status == STATUS) return
+        
+        // Invalidate IP cache on significant state changes to ensure fresh IP display
+        if (status == "CONNECTED" || status == "DISCONNECTED") {
+            lastIpFetchTime = 0 
+        }
+
         when (status) {
             "CONNECTED" -> {
                 STATUS = "CONNECTED"
@@ -965,6 +994,14 @@ abstract class ContentsActivity : NavigationActivity() {
 
     companion object {
         protected val TAG = MainActivity::class.java.simpleName
+
+        // Static cache to share IP between activities and avoid redundant fetches
+        @JvmStatic
+        private var cachedIp: String? = null
+        @JvmStatic
+        private var lastIpFetchTime: Long = 0
+        @JvmStatic
+        private var isFetchingIp = false
     }
 
     protected fun showMessage(msg: String?, type:String) {

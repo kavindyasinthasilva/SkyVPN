@@ -147,41 +147,35 @@ public class FragmentVip extends Fragment {
             Log.e(TAG, "Manual JSON error: " + e.getMessage());
         }
 
-        if (Constants.PREMIUM_SERVERS == null || Constants.PREMIUM_SERVERS.isEmpty()) {
-            if (!servers.isEmpty()) {
-                animationHolder.setVisibility(View.GONE);
-                adapter.setData(servers);
-            } else {
-                animationHolder.setVisibility(View.GONE);
-            }
-            return;
-        }
-
-        try {
-            // Check if the response is an error object instead of a list
-            if (Constants.PREMIUM_SERVERS.startsWith("{")) {
-                JSONObject errorObj = new JSONObject(Constants.PREMIUM_SERVERS);
-                if (errorObj.has("result") && errorObj.getString("result").equals("error")) {
-                    Log.e(TAG, "OneConnect Error: " + errorObj.optString("message"));
-                    animationHolder.setVisibility(View.GONE);
-                    return;
+        if (Constants.PREMIUM_SERVERS != null && !Constants.PREMIUM_SERVERS.isEmpty()) {
+            try {
+                // Check if the response is an error object instead of a list
+                boolean isError = false;
+                if (Constants.PREMIUM_SERVERS.startsWith("{")) {
+                    JSONObject errorObj = new JSONObject(Constants.PREMIUM_SERVERS);
+                    if (errorObj.has("result") && errorObj.getString("result").equals("error")) {
+                        Log.e(TAG, "OneConnect Error: " + errorObj.optString("message"));
+                        isError = true;
+                    }
                 }
-            }
 
-            JSONArray jsonArray = new JSONArray(Constants.PREMIUM_SERVERS);
+                if (!isError) {
+                    JSONArray jsonArray = new JSONArray(Constants.PREMIUM_SERVERS);
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject object = (JSONObject) jsonArray.get(i);
-                servers.add(new Countries(object.getString("serverName"),
-                        object.getString("flag_url"),
-                        object.getString("ovpnConfiguration"),
-                        object.getString("vpnUserName"),
-                        object.getString("vpnPassword")
-                ));
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = (JSONObject) jsonArray.get(i);
+                        servers.add(new Countries(object.getString("serverName"),
+                                object.getString("flag_url"),
+                                object.getString("ovpnConfiguration"),
+                                object.getString("vpnUserName"),
+                                object.getString("vpnPassword")
+                        ));
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "JSON Parsing error: " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON Parsing error: " + e.getMessage());
-            e.printStackTrace();
         }
 
         adapter.setData(servers);

@@ -162,46 +162,40 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
             Log.e("FragmentFree", "Manual JSON error: " + e.getMessage());
         }
 
-        if (Constants.FREE_SERVERS == null || Constants.FREE_SERVERS.isEmpty()) {
-            if (!servers.isEmpty()) {
-                animationHolder.setVisibility(View.GONE);
-                adapter.setData(servers);
-            } else {
-                animationHolder.setVisibility(View.GONE);
-            }
-            return;
-        }
-
-        try {
-            // Check if the response is an error object instead of a list
-            if (Constants.FREE_SERVERS.startsWith("{")) {
-                JSONObject errorObj = new JSONObject(Constants.FREE_SERVERS);
-                if (errorObj.has("result") && errorObj.getString("result").equals("error")) {
-                    Log.e("FragmentFree", "OneConnect Error: " + errorObj.optString("message"));
-                    animationHolder.setVisibility(View.GONE);
-                    return;
-                }
-            }
-
-            JSONArray jsonArray = new JSONArray(Constants.FREE_SERVERS);
-            for (int i=0; i < jsonArray.length();i++){
-                JSONObject object = (JSONObject) jsonArray.get(i);
-                servers.add(new Countries(object.getString("serverName"),
-                        object.getString("flag_url"),
-                        object.getString("ovpnConfiguration"),
-                        object.getString("vpnUserName"),
-                        object.getString("vpnPassword")
-                ));
-
-                if((i % 2 == 0)&&(i > 0)){
-                    if (!Config.vip_subscription && !Config.all_subscription && !MainActivity.type.equals("ad")) {
-                        servers.add(null);
+        if (Constants.FREE_SERVERS != null && !Constants.FREE_SERVERS.isEmpty()) {
+            try {
+                // Check if the response is an error object instead of a list
+                boolean isError = false;
+                if (Constants.FREE_SERVERS.startsWith("{")) {
+                    JSONObject errorObj = new JSONObject(Constants.FREE_SERVERS);
+                    if (errorObj.has("result") && errorObj.getString("result").equals("error")) {
+                        Log.e("FragmentFree", "OneConnect Error: " + errorObj.optString("message"));
+                        isError = true;
                     }
                 }
+
+                if (!isError) {
+                    JSONArray jsonArray = new JSONArray(Constants.FREE_SERVERS);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = (JSONObject) jsonArray.get(i);
+                        servers.add(new Countries(object.getString("serverName"),
+                                object.getString("flag_url"),
+                                object.getString("ovpnConfiguration"),
+                                object.getString("vpnUserName"),
+                                object.getString("vpnPassword")
+                        ));
+
+                        if ((i % 2 == 0) && (i > 0)) {
+                            if (!Config.vip_subscription && !Config.all_subscription && !MainActivity.type.equals("ad")) {
+                                servers.add(null);
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e("FragmentFree", "JSON Parsing error: " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            Log.e("FragmentFree", "JSON Parsing error: " + e.getMessage());
-            e.printStackTrace();
         }
 
         animationHolder.setVisibility(View.GONE);
