@@ -21,8 +21,8 @@ android {
         applicationId 'com.skysoftlk.vpnapp'
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 16
-        versionName "16.0"
+        versionCode 18
+        versionName "18.0"
 
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -49,9 +49,13 @@ android {
             renderscriptDebuggable false
             pseudoLocalesEnabled false
             zipAlignEnabled true
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
         debug {
         }
@@ -69,7 +73,7 @@ android {
     packagingOptions {
         pickFirst '**/*.so'
         jniLibs {
-            useLegacyPackaging = true
+            useLegacyPackaging = false
         }
     }
 
