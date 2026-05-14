@@ -48,4 +48,10 @@
     <string name="connected">Connected</string>
     <string name="assign_ip">Assigning IP</string>
     <string name="config">Getting Configurations</string>
+    <string name="default_speed">0.0 mbit</string>
+    <string name="extend_connection">Extend Connection</string>
+    <string name="optimal_server">Optimal Server Selected</string>
+    <string name="upgrade_plan">Upgrade Plan</string>
+    <string name="default_ip">0.0.0.0</string>
+    <string name="select_country">Select Country</string>
 </resources>

@@ -4,25 +4,18 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/futuristic_bg_start"
     android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Full screen background image -->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img" />
-
-        <!-- Dark overlay for better text visibility -->
+        <!-- Futuristic Background (Optional: can be a dark image or gradient) -->
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80000000" />
+            android:background="@color/futuristic_bg_start" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator"
@@ -52,14 +45,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:mbn_circleColor="#ffffff"
-                app:mbn_backgroundBottomColor="#ffffff"
-                app:mbn_countBackgroundColor="#ff6f00"
-                app:mbn_countTextColor="#ffffff"
+                app:mbn_circleColor="@color/neon_blue"
+                app:mbn_backgroundBottomColor="@color/futuristic_bg_end"
+                app:mbn_countBackgroundColor="@color/red"
+                app:mbn_countTextColor="@color/white"
                 app:mbn_defaultIconColor="#90a4ae"
-                app:mbn_rippleColor="#2f424242"
-                app:mbn_selectedIconColor="#3c415e"
-                app:mbn_shadowColor="#1f212121"/>
+                app:mbn_rippleColor="@color/glass_white_border"
+                app:mbn_selectedIconColor="@color/white"
+                app:mbn_shadowColor="@color/futuristic_bg_end"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

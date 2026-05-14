@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#E5C07B</color>           <color name="primary_dark">#0F140A</color>      <color name="colorAccent">#E5C07B</color>       <color name="white">#FFFFFF</color>
+    <color name="primary">#E5C07B</color>
+    <color name="primary_dark">#0F140A</color>
+    <color name="colorAccent">#E5C07B</color>
+    <color name="white">#FFFFFF</color>
 
     <color name="colorwhite">#FFFFFF</color>
-    <color name="textcolor">#E0E0E0</color>         <color name="greyLight">#4B5D3F</color>         <color name="splashscreencolor">#0F140A</color> <color name="colorPrimary">#E5C07B</color>      <color name="colorPrimaryDark">#0A0D07</color>  <color name="popUpBg">#1B2414</color>           <color name="primary_white_text">@android:color/white</color>
-    <color name="colorview">#32FFFFFF</color>       <color name="text_color">#E5C07B</color>        <color name="tab_background_selected">#E5C07B</color> <color name="colorlightgrey">#848585</color>
-    <color name="toolbarTitle">#E5C07B</color>      <color name="txt_blue">#D4AF37</color>          <color name="red">#F63030</color>               </resources>
+    <color name="textcolor">#E0E0E0</color>
+    <color name="greyLight">#4B5D3F</color>
+    <color name="splashscreencolor">#0F140A</color>
+    <color name="colorPrimary">#E5C07B</color>
+    <color name="colorPrimaryDark">#0A0D07</color>
+    <color name="popUpBg">#1B2414</color>
+    <color name="primary_white_text">@android:color/white</color>
+    <color name="colorview">#32FFFFFF</color>
+    <color name="text_color">#E5C07B</color>
+    <color name="tab_background_selected">#E5C07B</color>
+    <color name="colorlightgrey">#848585</color>
+    <color name="toolbarTitle">#E5C07B</color>
+    <color name="txt_blue">#D4AF37</color>
+    <color name="red">#F63030</color>
+
+    <!-- Futuristic Colors -->
+    <color name="futuristic_bg_start">#0F140A</color>
+    <color name="futuristic_bg_end">#050704</color>
+    <color name="neon_blue">#00F2FF</color>
+    <color name="neon_purple">#BC00FF</color>
+    <color name="neon_green">#39FF14</color>
+    <color name="glass_white">#1AFFFFFF</color>
+    <color name="glass_white_border">#33FFFFFF</color>
+               </resources>

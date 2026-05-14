@@ -100,7 +100,6 @@ abstract class ContentsActivity : NavigationActivity() {
     var textDownloading: TextView? = null
     var textUploading: TextView? = null
     var tvConnectionStatus: TextView? = null
-    var ivConnectionStatusImage: ImageView? = null
     var ivVpnDetail: ImageView? = null
     private lateinit var btnAddTime: RelativeLayout
     private lateinit var lytAddTime: CardView
@@ -147,8 +146,6 @@ abstract class ContentsActivity : NavigationActivity() {
         textUploading = findViewById(R.id.uploading)
 
         tvConnectionStatus = findViewById(R.id.connection_status)
-
-        ivConnectionStatusImage = findViewById(R.id.connection_status_image)
 
         ivVpnDetail = findViewById(R.id.vpn_details)
 
@@ -619,7 +616,6 @@ abstract class ContentsActivity : NavigationActivity() {
             "USERPAUSE" -> {
                 STATUS = "DISCONNECTED"
                 tvConnectionStatus!!.text = "Not Selected"
-                ivConnectionStatusImage!!.setImageResource(R.drawable.ic_dot)
 
                 Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
                 Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
@@ -627,12 +623,10 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
                 connectionStateTextView!!.setText(R.string.paused)
-                ivConnectionStatusImage!!.setImageResource(R.drawable.ic_dot)
             }
             "NONETWORK" -> {
                 STATUS = "DISCONNECTED"
                 tvConnectionStatus!!.text = "Not Selected"
-                ivConnectionStatusImage!!.setImageResource(R.drawable.ic_dot)
                 showIP()
 
                 Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
@@ -641,12 +635,10 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
                 connectionStateTextView!!.setText(R.string.nonetwork)
-                ivConnectionStatusImage!!.setImageResource(R.drawable.ic_dot)
             }
             "DISCONNECTED" -> {
                 STATUS = "DISCONNECTED"
                 tvConnectionStatus!!.text = "Not Selected"
-                ivConnectionStatusImage!!.setImageResource(R.drawable.ic_dot)
                 timerTextView!!.visibility = View.INVISIBLE
                 hideConnectProgress()
                 showIP()
@@ -657,7 +649,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
                 connectionStateTextView!!.setText(R.string.disconnected)
-                ivConnectionStatusImage!!.setImageResource(R.drawable.ic_dot)
                 lytAddTime.visibility = View.GONE
             }
         }
