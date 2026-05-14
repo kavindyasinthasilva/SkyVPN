@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/futuristic_bg_start"
     android:fitsSystemWindows="true">
 
     <RelativeLayout
@@ -22,294 +22,302 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="60dp"
-                android:background="#FFFFFF"
-                android:scrollbars="none">
+                android:scrollbars="none"
+                android:fillViewport="true">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
+                    <!-- Toolbar -->
+                    <RelativeLayout
+                        android:id="@+id/toolbar_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:paddingHorizontal="20dp">
+
+                        <ImageView
+                            android:id="@+id/category"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/bg_glass_card"
+                            android:padding="8dp"
+                            app:srcCompat="@drawable/ic_menu"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="Speed Booster"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <!-- Main Booster Circle -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:gravity="center">
+
+                        <FrameLayout
+                            android:id="@+id/rl_main_booster"
+                            android:layout_width="260dp"
+                            android:layout_height="260dp"
+                            android:layout_centerHorizontal="true">
+
+                            <View
+                                android:layout_width="240dp"
+                                android:layout_height="240dp"
+                                android:layout_gravity="center"
+                                android:alpha="0.1"
+                                android:background="@drawable/bg_glow_circle" />
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/meter"
+                                android:alpha="0.3"
+                                app:tint="@color/neon_blue" />
+
+                            <com.hookedonplay.decoviewlib.DecoView
+                                android:id="@+id/dynamicArcView2"
+                                android:layout_width="200dp"
+                                android:layout_height="200dp"
+                                android:layout_gravity="center" />
+
+                            <com.hookedonplay.decoviewlib.DecoView
+                                android:id="@+id/dynamicArcView3"
+                                android:layout_width="200dp"
+                                android:layout_height="200dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/waves"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/top"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Storage"
+                                    android:textColor="@color/neon_blue"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/centree"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="100 MB"
+                                    android:textColor="@color/white"
+                                    android:textSize="28sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/bottom"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Found"
+                                    android:textColor="@color/red"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:id="@+id/scanlay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/rl_main_booster"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone">
+                            <TextView
+                                android:id="@+id/scanning"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Scanning..."
+                                android:textColor="@color/neon_blue" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/optimizelay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/rl_main_booster"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="20dp">
+
+                            <RelativeLayout
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:background="@drawable/bg_connect_button">
+
+                                <ImageView
+                                    android:id="@+id/optbutton"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:layout_centerInParent="true"
+                                    android:src="@drawable/ic_on_off"
+                                    app:tint="@color/neon_blue" />
+
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <!-- Stats Cards -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <androidx.appcompat.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            android:background="@drawable/h_bg"
-                            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:id="@+id/category"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    app:srcCompat="@drawable/ic_menu" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:text="Speed Booster"
-                                    android:textColor="@color/white"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                            </RelativeLayout>
-                        </androidx.appcompat.widget.Toolbar>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="20dp"
-                            android:gravity="center">
-
-                            <RelativeLayout
-                                android:id="@+id/rl_main_booster"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                android:layout_centerHorizontal="true">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:src="@drawable/meter" />
-
-                                <com.hookedonplay.decoviewlib.DecoView
-                                    android:id="@+id/dynamicArcView2"
-                                    android:layout_width="120dp"
-                                    android:layout_height="120dp"
-                                    android:layout_centerInParent="true" />
-
-                                <com.hookedonplay.decoviewlib.DecoView
-                                    android:id="@+id/dynamicArcView3"
-                                    android:layout_width="120dp"
-                                    android:layout_height="120dp"
-                                    android:layout_centerInParent="true"
-                                    android:visibility="gone" />
-
-                                <ImageView
-                                    android:id="@+id/waves"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:id="@+id/top"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Storage"
-                                        android:textColor="@color/txt_blue"
-                                        android:textSize="11sp"
-                                        android:visibility="gone" />
-
-                                    <TextView
-                                        android:id="@+id/centree"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="100 MB"
-                                        android:textColor="#000000"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/bottom"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Found"
-                                        android:textColor="@color/red"
-                                        android:textSize="11sp" />
-                                </LinearLayout>
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:id="@+id/scanlay"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/rl_main_booster"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginTop="10dp"
-                                android:visibility="gone">
-                                <TextView
-                                    android:id="@+id/scanning"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Scanning..." />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/optimizelay"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/rl_main_booster"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginTop="20dp">
-
-                                <RelativeLayout
-                                    android:layout_width="70dp"
-                                    android:layout_height="70dp"
-                                    android:background="@drawable/btn_button">
-
-                                    <ImageView
-                                        android:id="@+id/optbutton"
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:layout_centerInParent="true"
-                                        android:src="@drawable/ic_on_off" />
-
-                                </RelativeLayout>
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/fl_adplaceholder"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                        <com.facebook.ads.NativeAdLayout
-                            android:id="@+id/native_ad_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:padding="15dp"
+                        android:weightSum="2">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="10dp"
-                            android:weightSum="2">
+                            android:layout_width="0dp"
+                            android:layout_height="130dp"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_glass_card"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/processes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="13"
+                                android:textColor="@color/white"
+                                android:textSize="26sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Running Processes"
+                                android:textColor="@color/colorlightgrey"
+                                android:textSize="12sp" />
 
                             <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="120dp"
-                                android:layout_margin="5dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/btn_bg"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="4dp">
                                 <TextView
-                                    android:id="@+id/processes"
+                                    android:id="@+id/appsused"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="13"
-                                    android:textColor="@color/white"
-                                    android:textSize="24sp"
-                                    android:textStyle="bold" />
-
+                                    android:text="1.24 GB / "
+                                    android:textColor="@color/neon_green"
+                                    android:textSize="11sp" />
                                 <TextView
+                                    android:id="@+id/appsfreed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Running Processes"
+                                    android:text="2.67 GB"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-                                    <TextView
-                                        android:id="@+id/appsused"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="1.24 GB / "
-                                        android:textColor="@color/white"
-                                        android:textSize="11sp" />
-                                    <TextView
-                                        android:id="@+id/appsfreed"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="2.67 GB"
-                                        android:textColor="@color/white"
-                                        android:textSize="11sp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="120dp"
-                                android:layout_margin="5dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/btn_bg"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/ramperct"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="48%"
-                                    android:textColor="@color/white"
-                                    android:textSize="24sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Ram Usage"
-                                    android:textColor="@color/white"
-                                    android:textSize="12sp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-                                    <TextView
-                                        android:id="@+id/usedram"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="1.24 GB / "
-                                        android:textColor="@color/white"
-                                        android:textSize="11sp" />
-                                    <TextView
-                                        android:id="@+id/totalram"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="2.67 GB"
-                                        android:textColor="@color/white"
-                                        android:textSize="11sp" />
-                                </LinearLayout>
+                                    android:textSize="11sp" />
                             </LinearLayout>
                         </LinearLayout>
 
-                        <com.google.android.gms.ads.AdView
-                            android:id="@+id/admob_adview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:adSize="BANNER"
-                            app:adUnitId="@string/banner_ad_unit"
-                            android:visibility="gone" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="130dp"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_glass_card"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
+                            <TextView
+                                android:id="@+id/ramperct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="48%"
+                                android:textColor="@color/white"
+                                android:textSize="26sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ram Usage"
+                                android:textColor="@color/colorlightgrey"
+                                android:textSize="12sp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="4dp">
+                                <TextView
+                                    android:id="@+id/usedram"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1.24 GB / "
+                                    android:textColor="@color/neon_green"
+                                    android:textSize="11sp" />
+                                <TextView
+                                    android:id="@+id/totalram"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="2.67 GB"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
-                </RelativeLayout>
+
+                    <!-- Ad Space -->
+                    <RelativeLayout
+                        android:id="@+id/fl_adplaceholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.facebook.ads.NativeAdLayout
+                        android:id="@+id/native_ad_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <com.google.android.gms.ads.AdView
+                        android:id="@+id/admob_adview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:adSize="BANNER"
+                        app:adUnitId="@string/banner_ad_unit"
+                        android:visibility="gone" />
+
+                </LinearLayout>
             </ScrollView>
 
+            <!-- Bottom Navigation -->
             <com.etebarian.meowbottomnavigation.MeowBottomNavigation
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:mbn_circleColor="#ffffff"
-                app:mbn_backgroundBottomColor="#ffffff"
-                app:mbn_countBackgroundColor="#ff6f00"
-                app:mbn_countTextColor="#ffffff"
+                app:mbn_circleColor="@color/neon_blue"
+                app:mbn_backgroundBottomColor="@color/futuristic_bg_end"
+                app:mbn_countBackgroundColor="@color/red"
+                app:mbn_countTextColor="@color/white"
                 app:mbn_defaultIconColor="#90a4ae"
-                app:mbn_rippleColor="#2f424242"
-                app:mbn_selectedIconColor="#3c415e"
-                app:mbn_shadowColor="#1f212121"/>
+                app:mbn_rippleColor="@color/glass_white_border"
+                app:mbn_selectedIconColor="@color/white"
+                app:mbn_shadowColor="@color/futuristic_bg_end"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>

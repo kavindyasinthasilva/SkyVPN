@@ -65,7 +65,6 @@ import com.skysoftlk.vpnapp.speed.Speed
 import com.skysoftlk.vpnapp.ui.BaseDrawerActivity
 import es.dmoral.toasty.Toasty
 import ph.gemeaux.materialloadingindicator.MaterialCircularIndicator
-import pl.droidsonroids.gif.GifImageView
 
 abstract class ContentsActivity : NavigationActivity() {
 
@@ -108,8 +107,6 @@ abstract class ContentsActivity : NavigationActivity() {
     var connectionStateTextView: TextView? = null
     var rcvFree: RecyclerView? = null
     var footer: RelativeLayout? = null
-    var gifImageView1: GifImageView? = null
-    var gifImageView2: GifImageView? = null
     lateinit var sharedPreferences :SharedPreferences
 
     private var timer: CountDownTimer? = null
@@ -172,9 +169,6 @@ abstract class ContentsActivity : NavigationActivity() {
 
         nativeAdLayout = findViewById(R.id.native_ad_container)
 
-        gifImageView1 = findViewById(R.id.gifImageView1)
-        gifImageView2 = findViewById(R.id.gifImageView2)
-
         connectBtnTextView?.setOnClickListener {
             btnConnectDisconnect()
         }
@@ -190,17 +184,11 @@ abstract class ContentsActivity : NavigationActivity() {
         lottieAnimationView = findViewById(R.id.animation_view)
 
         ivVpnDetail?.setOnClickListener {
-            if(Constants.FREE_SERVERS != "server" && Constants.PREMIUM_SERVERS != "")
-                showServerList()
-            else
-                showMessage("Loading servers. Please try again", "")
+            showServerList()
         }
 
         flagName?.setOnClickListener {
-            if(Constants.FREE_SERVERS != "server" && Constants.PREMIUM_SERVERS != "")
-                showServerList()
-            else
-                showMessage("Loading servers. Please try again", "")
+            showServerList()
         }
 
         btnAddTime.setOnClickListener {
@@ -519,16 +507,11 @@ abstract class ContentsActivity : NavigationActivity() {
                 STATUS = "CONNECTED"
                 textDownloading!!.visibility = View.VISIBLE
                 textUploading!!.visibility = View.VISIBLE
-                gifImageView1!!.setBackgroundResource(R.drawable.gif)
-                gifImageView2!!.setBackgroundResource(R.drawable.gif)
                 connectBtnTextView!!.isEnabled = true
                 connectionStateTextView!!.setText(R.string.connected)
                 timerTextView!!.visibility = View.VISIBLE
                 hideConnectProgress()
                 showIP()
-
-                Glide.with(this).load(R.drawable.gif).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.gif).into(gifImageView2!!)
 
                 connectBtnTextView!!.visibility = View.VISIBLE
                 tvConnectionStatus!!.text = "Selected"
@@ -546,9 +529,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.visibility = View.VISIBLE
                 lottieAnimationView!!.visibility = View.VISIBLE
 
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
-
                 connectionStateTextView!!.setText(R.string.auth)
                 connectBtnTextView!!.isEnabled = true
                 timerTextView!!.visibility = View.GONE
@@ -557,9 +537,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 STATUS = "WAITING"
                 connectBtnTextView!!.visibility = View.VISIBLE
                 lottieAnimationView!!.visibility = View.VISIBLE
-
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
 
                 connectionStateTextView!!.setText(R.string.wait)
                 connectBtnTextView!!.isEnabled = true
@@ -570,9 +547,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.visibility = View.VISIBLE
                 lottieAnimationView!!.visibility = View.VISIBLE
 
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
-
                 connectionStateTextView!!.setText(R.string.recon)
                 connectBtnTextView!!.isEnabled = true
                 timerTextView!!.visibility = View.GONE
@@ -581,9 +555,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 STATUS = "LOAD"
                 connectBtnTextView!!.visibility = View.VISIBLE
                 lottieAnimationView!!.visibility = View.VISIBLE
-
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
 
                 connectionStateTextView!!.setText(R.string.connecting)
                 connectBtnTextView!!.isEnabled = true
@@ -594,9 +565,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.visibility = View.VISIBLE
                 lottieAnimationView!!.visibility = View.VISIBLE
 
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
-
                 connectionStateTextView!!.setText(R.string.assign_ip)
                 connectBtnTextView!!.isEnabled = true
                 timerTextView!!.visibility = View.GONE
@@ -606,9 +574,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.visibility = View.VISIBLE
                 lottieAnimationView!!.visibility = View.VISIBLE
 
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
-
                 connectionStateTextView!!.setText(R.string.config)
                 connectBtnTextView!!.isEnabled = true
                 timerTextView!!.visibility = View.GONE
@@ -616,9 +581,6 @@ abstract class ContentsActivity : NavigationActivity() {
             "USERPAUSE" -> {
                 STATUS = "DISCONNECTED"
                 tvConnectionStatus!!.text = "Not Selected"
-
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
 
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
@@ -628,9 +590,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 STATUS = "DISCONNECTED"
                 tvConnectionStatus!!.text = "Not Selected"
                 showIP()
-
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
 
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
@@ -642,9 +601,6 @@ abstract class ContentsActivity : NavigationActivity() {
                 timerTextView!!.visibility = View.INVISIBLE
                 hideConnectProgress()
                 showIP()
-
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView1!!)
-                Glide.with(this).load(R.drawable.static_img).into(gifImageView2!!)
 
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"

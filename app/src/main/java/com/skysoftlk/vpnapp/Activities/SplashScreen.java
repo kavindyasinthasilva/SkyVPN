@@ -1,6 +1,10 @@
 package com.skysoftlk.vpnapp.Activities;
 
 import android.content.Intent;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.OvershootInterpolator;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,55 +34,40 @@ import java.util.concurrent.TimeUnit;
 import top.oneconnectapi.app.api.OneConnect;
 
 public class SplashScreen extends AppCompatActivity {
-    CoordinatorLayout coordinatorLayout;
+    View coordinatorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         coordinatorLayout = findViewById(R.id.cordi);
 
+        // Animations
+        View logoImg = findViewById(R.id.logo_img);
+        View logoGlow = findViewById(R.id.logo_glow);
+        View slogan = findViewById(R.id.app_slogan);
+
+        logoImg.setAlpha(0f);
+        logoImg.setScaleX(0.8f);
+        logoImg.setScaleY(0.8f);
+        
+        logoImg.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(1200).setInterpolator(new android.view.animation.OvershootInterpolator()).start();
+        
+        // Pulsing glow animation
+        android.view.animation.Animation pulse = new android.view.animation.AlphaAnimation(0.2f, 0.5f);
+        pulse.setDuration(1000);
+        pulse.setRepeatMode(android.view.animation.Animation.REVERSE);
+        pulse.setRepeatCount(android.view.animation.Animation.INFINITE);
+        logoGlow.startAnimation(pulse);
+
+        slogan.setAlpha(0f);
+        slogan.setTranslationY(20f);
+        slogan.animate().alpha(1f).translationY(0f).setStartDelay(500).setDuration(1000).start();
+
         // Detect if we are in China to adjust services
         boolean inChina = ChinaUtils.isLikelyInChina(this);
         Log.d("SplashScreen", "Likely in China: " + inChina);
 
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try  {
-                    OneConnect oneConnect = new OneConnect();
-                    oneConnect.initialize(SplashScreen.this, "K.F.P5RToLk5TXNPi2.4P6edjtY0gyfhZUAO.CWkB1KYhs4I4w"); // Put Your OneConnect Api Key
-                    
-                    int retryCount = 0;
-                    int maxRetries = 3;
-                    boolean success = false;
-                    
-                    while (retryCount < maxRetries && !success) {
-                        try {
-                            Constants.FREE_SERVERS = oneConnect.fetch(true);
-                            Constants.PREMIUM_SERVERS = oneConnect.fetch(false);
-                            success = true;
-                        } catch (IOException e) {
-                            retryCount++;
-                            if (retryCount >= maxRetries) {
-                                e.printStackTrace();
-                            } else {
-                                try {
-                                    Thread.sleep(2000); // Wait 2 seconds before retry
-                                } catch (InterruptedException ie) {
-                                    ie.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
+        com.skysoftlk.vpnapp.Utils.ServerFetcher.fetchServers(this, null);
 
         // Offload Firebase initialization to a background thread to prevent startup ANRs.
         // Firebase operations are generally asynchronous, but the initial getInstance() and 

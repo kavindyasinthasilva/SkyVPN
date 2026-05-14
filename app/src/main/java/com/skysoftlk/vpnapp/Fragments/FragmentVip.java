@@ -40,6 +40,7 @@ import com.skysoftlk.vpnapp.AdapterWrappers.ServerListAdapterVip;
 import com.skysoftlk.vpnapp.Config;
 import com.facebook.ads.*;
 import com.skysoftlk.vpnapp.Utils.Constants;
+import com.skysoftlk.vpnapp.Utils.ServerFetcher;
 import com.skysoftlk.vpnapp.model.Countries;
 
 import org.json.JSONArray;
@@ -176,6 +177,13 @@ public class FragmentVip extends Fragment {
                 Log.e(TAG, "JSON Parsing error: " + e.getMessage());
                 e.printStackTrace();
             }
+        } else {
+            // Try fetching if empty
+            ServerFetcher.fetchServers(getContext(), () -> {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(this::loadServers);
+                }
+            });
         }
 
         adapter.setData(servers);

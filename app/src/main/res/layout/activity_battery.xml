@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/futuristic_bg_start"
     android:fitsSystemWindows="true">
 
     <RelativeLayout
@@ -21,258 +21,337 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="60dp"
-                android:fillViewport="true">
+                android:fillViewport="true"
+                android:scrollbars="none">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Toolbar -->
+                    <RelativeLayout
+                        android:id="@+id/toolbar_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:paddingHorizontal="20dp">
+
+                        <ImageView
+                            android:id="@+id/category"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/bg_glass_card"
+                            android:padding="8dp"
+                            app:srcCompat="@drawable/ic_menu"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="Battery Saver"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <!-- Battery Status Area -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="320dp"
+                        android:gravity="center">
+
+                        <View
+                            android:layout_width="260dp"
+                            android:layout_height="260dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.1"
+                            android:background="@drawable/bg_glow_circle" />
+
+                        <me.itangqi.waveloadingview.WaveLoadingView
+                            android:id="@+id/waveView"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_centerInParent="true"
+                            app:wlv_borderColor="@color/neon_blue"
+                            app:wlv_borderWidth="4dp"
+                            app:wlv_progressValue="40"
+                            app:wlv_shapeType="circle"
+                            app:wlv_waveAmplitude="30"
+                            app:wlv_waveColor="@color/neon_blue"
+                            app:wlv_titleCenterSize="24sp" />
+
+                        <!-- Remaining Time Badge -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/waveView"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="-25dp"
+                            android:background="@drawable/bg_glass_card"
+                            android:elevation="10dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="20dp"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:id="@+id/hourmain"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="8"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="h "
+                                android:textColor="@color/neon_blue" />
+
+                            <TextView
+                                android:id="@+id/minutesmain"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="15"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="m remaining"
+                                android:textColor="@color/neon_blue"
+                                android:layout_marginStart="4dp"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <!-- Ad Space -->
+                    <RelativeLayout
+                        android:id="@+id/fl_adplaceholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
+
+                    <com.facebook.ads.NativeAdLayout
+                        android:id="@+id/native_ad_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <!-- Mode Selection -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Saving Modes"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
 
-                        <androidx.appcompat.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            android:background="@drawable/h_bg"
-                            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+                        <!-- Normal Mode -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_glass_card"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="12dp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <ImageView
+                                android:id="@+id/normal"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/g_b"
+                                app:tint="@color/neon_green" />
 
-                                <ImageView
-                                    android:id="@+id/category"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Normal"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:layout_marginTop="8dp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/hourn"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    app:srcCompat="@drawable/ic_menu" />
-
+                                    android:text="8"
+                                    android:textColor="@color/neon_green"
+                                    android:textStyle="bold" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:text="Battery Saver"
-                                    android:textColor="@color/white"
-                                    android:textSize="18sp"
+                                    android:text="h "
+                                    android:textColor="@color/colorlightgrey"
+                                    android:textSize="10sp" />
+                                <TextView
+                                    android:id="@+id/minutes"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15"
+                                    android:textColor="@color/neon_green"
                                     android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="m"
+                                    android:textColor="@color/colorlightgrey"
+                                    android:textSize="10sp" />
+                            </LinearLayout>
+                        </LinearLayout>
 
-                            </RelativeLayout>
-                        </androidx.appcompat.widget.Toolbar>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="250dp"
-                            android:gravity="center">
-
-                            <me.itangqi.waveloadingview.WaveLoadingView
-                                android:id="@+id/waveView"
-                                android:layout_width="180dp"
-                                android:layout_height="180dp"
-                                app:wlv_borderColor="#FFFFFF"
-                                app:wlv_borderWidth="6dp"
-                                app:wlv_progressValue="40"
-                                app:wlv_shapeType="circle"
-                                app:wlv_waveAmplitude="40"
-                                app:wlv_waveColor="#0d1543" />
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="140dp"
-                                android:layout_height="70dp"
-                                android:layout_toEndOf="@+id/waveView"
-                                android:layout_marginStart="-40dp"
-                                android:layout_marginTop="30dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardElevation="5dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/hourmain"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="8"
-                                        android:textColor="@color/popUpBg"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="h "
-                                        android:textColor="@color/popUpBg" />
-
-                                    <TextView
-                                        android:id="@+id/minutesmain"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="15"
-                                        android:textColor="@color/popUpBg"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="m"
-                                        android:textColor="@color/popUpBg" />
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/fl_adplaceholder"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                        <com.facebook.ads.NativeAdLayout
-                            android:id="@+id/native_ad_container"
-                            android:layout_width="match_parent"
+                        <!-- Ultra Saving -->
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:visibility="gone" />
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_glass_card"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="12dp">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="5dp">
+                            <ImageView
+                                android:id="@+id/powersaving"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/b_b"
+                                app:tint="@color/neon_blue" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Power"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:layout_marginTop="8dp" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:padding="10dp"
-                                android:weightSum="3">
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
+                                android:layout_marginTop="4dp"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/hourp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-                                    <ImageView
-                                        android:id="@+id/normal"
-                                        android:layout_width="80dp"
-                                        android:layout_height="80dp"
-                                        android:src="@drawable/g_b" />
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal">
-                                        <TextView
-                                            android:id="@+id/hourn"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="8" />
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="h " />
-                                        <TextView
-                                            android:id="@+id/minutes"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="15" />
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="m" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:text="10"
+                                    android:textColor="@color/neon_blue"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-                                    <ImageView
-                                        android:id="@+id/powersaving"
-                                        android:layout_width="80dp"
-                                        android:layout_height="80dp"
-                                        android:src="@drawable/b_b" />
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal">
-                                        <TextView
-                                            android:id="@+id/hourp"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="10" />
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="h " />
-                                        <TextView
-                                            android:id="@+id/minutep"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="20" />
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="m" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:text="h "
+                                    android:textColor="@color/colorlightgrey"
+                                    android:textSize="10sp" />
+                                <TextView
+                                    android:id="@+id/minutep"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-                                    <ImageView
-                                        android:id="@+id/ultra"
-                                        android:layout_width="80dp"
-                                        android:layout_height="80dp"
-                                        android:src="@drawable/r_b" />
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal">
-                                        <TextView
-                                            android:id="@+id/houru"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="15" />
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="h " />
-                                        <TextView
-                                            android:id="@+id/minutesu"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="45" />
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="m" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
+                                    android:text="20"
+                                    android:textColor="@color/neon_blue"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="m"
+                                    android:textColor="@color/colorlightgrey"
+                                    android:textSize="10sp" />
                             </LinearLayout>
-                        </androidx.cardview.widget.CardView>
+                        </LinearLayout>
 
-                        <com.google.android.gms.ads.AdView
-                            android:id="@+id/admob_adview"
-                            android:layout_width="match_parent"
+                        <!-- Extreme Mode -->
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:adSize="BANNER"
-                            app:adUnitId="@string/banner_ad_unit"
-                            android:visibility="gone" />
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_glass_card"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <ImageView
+                                android:id="@+id/ultra"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/r_b"
+                                app:tint="@color/red" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Extreme"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:layout_marginTop="8dp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/houru"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15"
+                                    android:textColor="@color/red"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="h "
+                                    android:textColor="@color/colorlightgrey"
+                                    android:textSize="10sp" />
+                                <TextView
+                                    android:id="@+id/minutesu"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="45"
+                                    android:textColor="@color/red"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="m"
+                                    android:textColor="@color/colorlightgrey"
+                                    android:textSize="10sp" />
+                            </LinearLayout>
+                        </LinearLayout>
 
                     </LinearLayout>
-                </RelativeLayout>
+
+                    <com.google.android.gms.ads.AdView
+                        android:id="@+id/admob_adview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:adSize="BANNER"
+                        app:adUnitId="@string/banner_ad_unit"
+                        android:visibility="gone" />
+
+                </LinearLayout>
             </ScrollView>
 
             <com.etebarian.meowbottomnavigation.MeowBottomNavigation
@@ -280,14 +359,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:mbn_circleColor="#ffffff"
-                app:mbn_backgroundBottomColor="#ffffff"
-                app:mbn_countBackgroundColor="#ff6f00"
-                app:mbn_countTextColor="#ffffff"
+                app:mbn_circleColor="@color/neon_blue"
+                app:mbn_backgroundBottomColor="@color/futuristic_bg_end"
+                app:mbn_countBackgroundColor="@color/red"
+                app:mbn_countTextColor="@color/white"
                 app:mbn_defaultIconColor="#90a4ae"
-                app:mbn_rippleColor="#2f424242"
-                app:mbn_selectedIconColor="#3c415e"
-                app:mbn_shadowColor="#1f212121"/>
+                app:mbn_rippleColor="@color/glass_white_border"
+                app:mbn_selectedIconColor="@color/white"
+                app:mbn_shadowColor="@color/futuristic_bg_end"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>

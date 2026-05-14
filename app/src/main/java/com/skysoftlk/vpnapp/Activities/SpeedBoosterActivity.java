@@ -205,20 +205,17 @@ public class SpeedBoosterActivity extends NavigationActivity {
         arcView.setVisibility(View.GONE);
 
 
-        arcView.addSeries(new SeriesItem.Builder(Color.argb(255, 218, 218, 218))
-                .setRange(0, 100, 0)
-                .setInterpolator(new AccelerateInterpolator())
+        arcView.addSeries(new SeriesItem.Builder(Color.parseColor("#1AFFFFFF"))
+                .setRange(0, 100, 100)
+                .setInitialVisibility(true)
+                .setLineWidth(16f)
                 .build());
 
 
-        SeriesItem seriesItem1 = new SeriesItem.Builder(Color.parseColor("#00000000"))
+        SeriesItem seriesItem2 = new SeriesItem.Builder(Color.parseColor("#00F2FF"))
                 .setRange(0, 100, 0)
-                .setLineWidth(32f)
-                .build();
-
-        SeriesItem seriesItem2 = new SeriesItem.Builder(Color.parseColor("#ffffff"))
-                .setRange(0, 100, 0)
-                .setLineWidth(32f)
+                .setLineWidth(16f)
+                .setCapRounded(true)
                 .build();
 
 
@@ -366,20 +363,17 @@ public class SpeedBoosterActivity extends NavigationActivity {
         final int proc = ran2.nextInt(60) + 30;
 
 
-        arcView.addSeries(new SeriesItem.Builder(Color.argb(255, 218, 218, 218))
-                .setRange(0, 100, 0)
-                .setInterpolator(new AccelerateInterpolator())
+        arcView.addSeries(new SeriesItem.Builder(Color.parseColor("#1AFFFFFF"))
+                .setRange(0, 100, 100)
+                .setInitialVisibility(true)
+                .setLineWidth(16f)
                 .build());
 
 
-        SeriesItem seriesItem1 = new SeriesItem.Builder(Color.parseColor("#00000000"))
+        SeriesItem seriesItem2 = new SeriesItem.Builder(Color.parseColor("#00F2FF"))
                 .setRange(0, 100, 0)
-                .setLineWidth(32f)
-                .build();
-
-        SeriesItem seriesItem2 = new SeriesItem.Builder(Color.parseColor("#ffffff"))
-                .setRange(0, 100, 0)
-                .setLineWidth(32f)
+                .setLineWidth(16f)
+                .setCapRounded(true)
                 .build();
 
 

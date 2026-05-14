@@ -171,7 +171,7 @@ public class ServerListAdapterFree extends RecyclerView.Adapter<ServerListAdapte
                     intent.putExtra("type",MainActivity.type);
                     intent.putExtra("indratech_toto_27640849_ad_banner",MainActivity.indratech_toto_27640849_ad_banner_id);
                     intent.putExtra("admob_interstitial",MainActivity.admob_interstitial_id);
-                    intent.putExtra("fb_banner",MainActivity.indratech_toto_27640849_fb_native_id);
+                    intent.putExtra("indratech_toto_27640849_fb_native",MainActivity.indratech_toto_27640849_fb_native_id);
                     intent.putExtra("indratech_toto_27640849_fb_interstitial",MainActivity.indratech_toto_27640849_fb_interstitial_id);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

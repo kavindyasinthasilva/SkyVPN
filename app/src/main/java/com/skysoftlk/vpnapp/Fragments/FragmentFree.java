@@ -34,6 +34,7 @@ import com.skysoftlk.vpnapp.AdapterWrappers.ServerListAdapterFree;
 import com.skysoftlk.vpnapp.Config;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.skysoftlk.vpnapp.Utils.Constants;
+import com.skysoftlk.vpnapp.Utils.ServerFetcher;
 import com.skysoftlk.vpnapp.model.Countries;
 
 import org.json.JSONArray;
@@ -196,6 +197,13 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
                 Log.e("FragmentFree", "JSON Parsing error: " + e.getMessage());
                 e.printStackTrace();
             }
+        } else {
+            // Try fetching if empty
+            ServerFetcher.fetchServers(getContext(), () -> {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(this::loadServers);
+                }
+            });
         }
 
         animationHolder.setVisibility(View.GONE);

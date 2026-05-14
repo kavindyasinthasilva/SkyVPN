@@ -21,44 +21,7 @@ public class IntroActivity extends MaterialIntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try  {
-                    OneConnect oneConnect = new OneConnect();
-                    oneConnect.initialize(IntroActivity.this, "K.F.P5RToLk5TXNPi2.4P6edjtY0gyfhZUAO.CWkB1KYhs4I4w");  // Put Your OneConnect API key
-                    
-                    int retryCount = 0;
-                    int maxRetries = 3;
-                    boolean success = false;
-                    
-                    while (retryCount < maxRetries && !success) {
-                        try {
-                            Constants.FREE_SERVERS = oneConnect.fetch(true);
-                            Constants.PREMIUM_SERVERS = oneConnect.fetch(false);
-                            success = true;
-                        } catch (IOException e) {
-                            retryCount++;
-                            if (retryCount >= maxRetries) {
-                                e.printStackTrace();
-                            } else {
-                                try {
-                                    Thread.sleep(2000); // Wait 2 seconds before retry
-                                } catch (InterruptedException ie) {
-                                    ie.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
+        com.skysoftlk.vpnapp.Utils.ServerFetcher.fetchServers(this, null);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (!prefs.getBoolean("firstTime", true)) {

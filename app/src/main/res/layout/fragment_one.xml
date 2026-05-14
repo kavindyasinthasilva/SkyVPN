@@ -1,40 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
 
 
     <RelativeLayout
         android:id="@+id/animation_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        >
+        android:background="@color/futuristic_bg_start"
+        android:elevation="10dp">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading_view"
-            android:layout_width="200dp"
+            android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="-5dp"
-            android:visibility="visible"
-            android:layout_marginBottom="-5dp"
-            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             app:lottie_rawRes="@raw/homel"
             app:lottie_loop="true"
-            android:layout_below="@+id/connect_btn"
-            app:lottie_autoPlay="true"
-            android:layout_centerInParent="true"
-            />
+            app:lottie_autoPlay="true" />
 
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/region_recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,33 +40,31 @@
         android:id="@+id/purchase_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/trans_layer"
-        android:visibility="visible"
+        android:background="#99000000"
+        android:visibility="gone"
         android:clickable="true"
         android:focusable="true"
-        >
+        android:elevation="5dp">
 
         <ImageButton
             android:id="@+id/vip_unblock"
-            android:layout_width="400dp"
-            android:layout_height="800dp"
-            android:layout_centerInParent="true"
-            android:padding="65dp"
-            android:background="@drawable/trans"
-            android:adjustViewBounds="true"/>
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:padding="65dp"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/vip_unblock"
-            android:text="Unlock"
-            android:textSize="22dp"
-            android:textAlignment="center"
+            android:layout_centerInParent="true"
+            android:text="Unlock Premium Servers"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:visibility="gone"
-            android:textColor="@color/colorPrimary"
-            />
+            android:textColor="@color/neon_blue"
+            android:background="@drawable/bg_glass_card"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp" />
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

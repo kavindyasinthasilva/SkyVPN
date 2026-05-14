@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.infideap.drawerbehavior.Advance3DDrawerLayout
+import com.skysoftlk.vpnapp.Activities.MainActivity
 import com.skysoftlk.vpnapp.R
 import com.skysoftlk.vpnapp.Utils.ChinaUtils
 
@@ -84,6 +85,19 @@ abstract class BaseDrawerActivity : AppCompatActivity() {
 
     private fun handleDrawerClick(menuId: Int) {
         when (menuId) {
+            R.id.nav_home -> {
+                if (this !is MainActivity) {
+                    val intent = Intent(this, com.skysoftlk.vpnapp.Activities.MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    startActivity(intent)
+                }
+            }
+            R.id.nav_servers -> {
+                startActivity(Intent(this, com.skysoftlk.vpnapp.Activities.Servers::class.java))
+            }
+            R.id.nav_premium -> {
+                startActivity(Intent(this, com.skysoftlk.vpnapp.Activities.UnlockAllActivity::class.java))
+            }
             R.id.nav_helpus -> {
                 val intent = Intent(Intent.ACTION_SENDTO)
                 intent.data = Uri.parse("mailto:support@indratech.in")

@@ -204,7 +204,7 @@ public class BatteryActivity extends NavigationActivity {
                 houru.setText(28 + "");
                 minutesu.setText(15 + "");
 
-                mWaveLoadingView.setCenterTitleColor(R.color.primary_white_text);
+                mWaveLoadingView.setCenterTitleColor(Color.WHITE);
 
                 if (sharedpreferences.getString("mode", "0").equals("0")) {
                     hourmain.setText(7 + "");
@@ -225,7 +225,7 @@ public class BatteryActivity extends NavigationActivity {
 
                 houru.setText(30 + "");
                 minutesu.setText(55 + "");
-                mWaveLoadingView.setCenterTitleColor(R.color.primary_white_text);
+                mWaveLoadingView.setCenterTitleColor(Color.WHITE);
 
                 if (sharedpreferences.getString("mode", "0").equals("0")) {
                     hourmain.setText(9 + "");
@@ -246,7 +246,7 @@ public class BatteryActivity extends NavigationActivity {
 
                 houru.setText(38 + "");
                 minutesu.setText(5 + "");
-                mWaveLoadingView.setCenterTitleColor(R.color.primary_white_text);
+                mWaveLoadingView.setCenterTitleColor(Color.WHITE);
 
                 if (sharedpreferences.getString("mode", "0").equals("0")) {
                     hourmain.setText(14 + "");
@@ -267,7 +267,7 @@ public class BatteryActivity extends NavigationActivity {
 
                 houru.setText(60 + "");
                 minutesu.setText(55 + "");
-                mWaveLoadingView.setCenterTitleColor(R.color.primary_white_text);
+                mWaveLoadingView.setCenterTitleColor(Color.WHITE);
 
                 if (sharedpreferences.getString("mode", "0").equals("0")) {
                     hourmain.setText(20 + "");
@@ -356,11 +356,11 @@ public class BatteryActivity extends NavigationActivity {
 
             mWaveLoadingView.setShapeType(WaveLoadingView.ShapeType.CIRCLE);
 
-            mWaveLoadingView.setCenterTitleColor(Color.parseColor("#136af6"));
-            mWaveLoadingView.setBottomTitleColor(Color.parseColor("#FFFFFF"));
+            mWaveLoadingView.setCenterTitleColor(Color.WHITE);
+            mWaveLoadingView.setBottomTitleColor(Color.WHITE);
 
             mWaveLoadingView.setAmplitudeRatio(30);
-            mWaveLoadingView.setWaveColor(Color.parseColor("#136af6"));
+            mWaveLoadingView.setWaveColor(Color.parseColor("#00F2FF")); // neon_blue
 
 
             mWaveLoadingView.setTopTitleStrokeWidth(3);
