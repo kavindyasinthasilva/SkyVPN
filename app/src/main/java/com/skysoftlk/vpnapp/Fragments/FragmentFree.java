@@ -199,8 +199,8 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
             }
         } else {
             // Try fetching if empty
-            ServerFetcher.fetchServers(getContext(), () -> {
-                if (getActivity() != null) {
+            ServerFetcher.fetchServers(getContext(), (success) -> {
+                if (success && isAdded() && getActivity() != null) {
                     getActivity().runOnUiThread(this::loadServers);
                 }
             });

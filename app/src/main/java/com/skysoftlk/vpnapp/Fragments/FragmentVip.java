@@ -179,8 +179,8 @@ public class FragmentVip extends Fragment {
             }
         } else {
             // Try fetching if empty
-            ServerFetcher.fetchServers(getContext(), () -> {
-                if (getActivity() != null) {
+            ServerFetcher.fetchServers(getContext(), (success) -> {
+                if (success && isAdded() && getActivity() != null) {
                     getActivity().runOnUiThread(this::loadServers);
                 }
             });

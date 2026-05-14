@@ -28,8 +28,12 @@ public class CustomTxTRegular extends androidx.appcompat.widget.AppCompatTextVie
 
     private void init() {
         if (!isInEditMode()){
-            Typeface normalTypeface = Typeface.createFromAsset(getContext().getAssets(), "Montserrat-Regular.ttf");
-            setTypeface(normalTypeface);
+            try {
+                Typeface normalTypeface = Typeface.createFromAsset(getContext().getAssets(), "Montserrat-Regular.ttf");
+                setTypeface(normalTypeface);
+            } catch (Exception e) {
+                // Fallback to default
+            }
         }
     }
 }

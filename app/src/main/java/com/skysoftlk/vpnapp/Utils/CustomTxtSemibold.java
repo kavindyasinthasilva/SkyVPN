@@ -15,16 +15,27 @@ public class CustomTxtSemibold extends androidx.appcompat.widget.AppCompatTextVi
 
     public CustomTxtSemibold(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public CustomTxtSemibold(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     public void init() {
         if (!isInEditMode()){
-            Typeface normalTypeface = Typeface.createFromAsset(getContext().getAssets(), "Montserrat-SemiBold.ttf");
-            setTypeface(normalTypeface);
+            try {
+                Typeface normalTypeface = Typeface.createFromAsset(getContext().getAssets(), "Montserrat-SemiBold.ttf");
+                setTypeface(normalTypeface);
+            } catch (Exception e) {
+                try {
+                    Typeface regularTypeface = Typeface.createFromAsset(getContext().getAssets(), "Montserrat-Regular.ttf");
+                    setTypeface(regularTypeface);
+                } catch (Exception ex) {
+                    // Fallback to default
+                }
+            }
         }
     }
 }

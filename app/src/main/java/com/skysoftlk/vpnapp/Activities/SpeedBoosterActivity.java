@@ -76,6 +76,8 @@ public class SpeedBoosterActivity extends NavigationActivity {
     TextView scanning, centree, totalram, usedram, appused, appsfreed, processes, top, bottom, ramperct;
     LinearLayout scanlay, optimizelay;
     public static ImageView optimizebutton;
+    private Timer mainTimer;
+    private Timer secondaryTimer;
     TimerTask timer = null;
     TimerTask timer2 = null;
     int x, y;
@@ -330,9 +332,11 @@ public class SpeedBoosterActivity extends NavigationActivity {
 
 
     public void start() {
-
-
-        final Timer t = new Timer();
+        if (mainTimer != null) {
+            mainTimer.cancel();
+            mainTimer = null;
+        }
+        mainTimer = new Timer();
         timer = new TimerTask() {
 
             @Override
@@ -356,7 +360,7 @@ public class SpeedBoosterActivity extends NavigationActivity {
             }
 
         };
-        t.schedule(timer, 30, 30);
+        mainTimer.schedule(timer, 30, 30);
 
 
         Random ran2 = new Random();
@@ -395,9 +399,10 @@ public class SpeedBoosterActivity extends NavigationActivity {
             @Override
             public void onEventEnd(DecoEvent decoEvent) {
 
-                t.cancel();
-                timer.cancel();
-                t.purge();
+                if (mainTimer != null) {
+                    mainTimer.cancel();
+                    mainTimer = null;
+                }
 
 
                 centree.setText(getUsedMemorySize() + " MB");
@@ -408,8 +413,11 @@ public class SpeedBoosterActivity extends NavigationActivity {
                 }
 
 
-                final Timer t = new Timer();
-                final Timer t2 = new Timer();
+                if (secondaryTimer != null) {
+                    secondaryTimer.cancel();
+                    secondaryTimer = null;
+                }
+                secondaryTimer = new Timer();
 
 
                 try {
@@ -432,9 +440,10 @@ public class SpeedBoosterActivity extends NavigationActivity {
                                             centree.setText(sharedpreferences.getString("value", "50MB"));
                                         }
 
-                                        t2.cancel();
-                                        timer2.cancel();
-                                        t2.purge();
+                                        if (secondaryTimer != null) {
+                                            secondaryTimer.cancel();
+                                            secondaryTimer = null;
+                                        }
                                     }
                                 });
                             } catch (Exception e) {
@@ -449,7 +458,7 @@ public class SpeedBoosterActivity extends NavigationActivity {
 
                 }
 
-                t2.schedule(timer2, 100, 100);
+                secondaryTimer.schedule(timer2, 100, 100);
 
 
             }
@@ -809,6 +818,14 @@ public class SpeedBoosterActivity extends NavigationActivity {
         }
         if (facebookAdview != null) {
             facebookAdview.destroy();
+        }
+        if (mainTimer != null) {
+            mainTimer.cancel();
+            mainTimer = null;
+        }
+        if (secondaryTimer != null) {
+            secondaryTimer.cancel();
+            secondaryTimer = null;
         }
         super.onDestroy();
     }

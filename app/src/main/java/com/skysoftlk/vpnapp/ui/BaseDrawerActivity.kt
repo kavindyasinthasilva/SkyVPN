@@ -16,7 +16,7 @@ import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.infideap.drawerbehavior.Advance3DDrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import com.skysoftlk.vpnapp.Activities.MainActivity
 import com.skysoftlk.vpnapp.R
 import com.skysoftlk.vpnapp.Utils.ChinaUtils
@@ -29,7 +29,7 @@ abstract class BaseDrawerActivity : AppCompatActivity() {
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
-    private var mDrawerLayout: Advance3DDrawerLayout? = null
+    private var mDrawerLayout: DrawerLayout? = null
     private var navigationView: NavigationView? = null
 
 
@@ -43,14 +43,12 @@ abstract class BaseDrawerActivity : AppCompatActivity() {
         }
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
-        navigationView = findViewById(R.id.drawer_navigation_view)
+        navigationView = findViewById(R.id.nav_view)
 
         val category = findViewById<ImageView?>(R.id.category)
         category?.setOnClickListener {
             mDrawerLayout?.openDrawer(GravityCompat.START, true)
         }
-
-        mDrawerLayout?.setViewRotation(GravityCompat.START, 15F)
 
         manager = ReviewManagerFactory.create(this)
     }

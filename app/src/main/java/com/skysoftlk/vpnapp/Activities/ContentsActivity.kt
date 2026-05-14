@@ -183,6 +183,10 @@ abstract class ContentsActivity : NavigationActivity() {
 //        Lottie animation to show animation in the project
         lottieAnimationView = findViewById(R.id.animation_view)
 
+        findViewById<View>(R.id.vpn_location)?.setOnClickListener {
+            showServerList()
+        }
+
         ivVpnDetail?.setOnClickListener {
             showServerList()
         }
