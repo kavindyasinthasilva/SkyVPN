@@ -31,8 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import top.oneconnectapi.app.api.OneConnect;
-
 public class SplashScreen extends AppCompatActivity {
     View coordinatorLayout;
     @Override
@@ -66,8 +64,6 @@ public class SplashScreen extends AppCompatActivity {
         // Detect if we are in China to adjust services
         boolean inChina = ChinaUtils.isLikelyInChina(this);
         Log.d("SplashScreen", "Likely in China: " + inChina);
-
-        com.skysoftlk.vpnapp.Utils.ServerFetcher.fetchServers(this, null);
 
         // Offload Firebase initialization to a background thread to prevent startup ANRs.
         // Firebase operations are generally asynchronous, but the initial getInstance() and 

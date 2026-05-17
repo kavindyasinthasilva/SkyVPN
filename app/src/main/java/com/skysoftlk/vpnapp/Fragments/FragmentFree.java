@@ -34,7 +34,6 @@ import com.skysoftlk.vpnapp.AdapterWrappers.ServerListAdapterFree;
 import com.skysoftlk.vpnapp.Config;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.skysoftlk.vpnapp.Utils.Constants;
-import com.skysoftlk.vpnapp.Utils.ServerFetcher;
 import com.skysoftlk.vpnapp.model.Countries;
 
 import org.json.JSONArray;
@@ -170,7 +169,7 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
                 if (Constants.FREE_SERVERS.startsWith("{")) {
                     JSONObject errorObj = new JSONObject(Constants.FREE_SERVERS);
                     if (errorObj.has("result") && errorObj.getString("result").equals("error")) {
-                        Log.e("FragmentFree", "OneConnect Error: " + errorObj.optString("message"));
+                        Log.e("FragmentFree", "Fetch Error: " + errorObj.optString("message"));
                         isError = true;
                     }
                 }
@@ -197,13 +196,6 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
                 Log.e("FragmentFree", "JSON Parsing error: " + e.getMessage());
                 e.printStackTrace();
             }
-        } else {
-            // Try fetching if empty
-            ServerFetcher.fetchServers(getContext(), (success) -> {
-                if (success && isAdded() && getActivity() != null) {
-                    getActivity().runOnUiThread(this::loadServers);
-                }
-            });
         }
 
         animationHolder.setVisibility(View.GONE);

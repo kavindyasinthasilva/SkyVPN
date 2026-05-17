@@ -49,7 +49,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import top.oneconnectapi.app.OpenVpnApi;
-import top.oneconnectapi.app.core.OpenVPNThread;
 
 public class MainActivity extends ContentsActivity {
 
@@ -69,31 +68,28 @@ public class MainActivity extends ContentsActivity {
     public static String indratech_toto_27640849_fb_interstitial_id = "";
     public static boolean indratech_toto_27640849_all_ads_on_off = false;
 
-    private OpenVPNThread vpnThread = new OpenVPNThread();
-
     private BillingClient billingClient;
-    private Map<String, SkuDetails> skusWithSkuDetails = new HashMap<>();
     private final List<String> allSubs = new ArrayList<>(Arrays.asList(
             Config.all_month_id,
             Config.all_threemonths_id,
             Config.all_sixmonths_id,
             Config.all_yearly_id));
 
-    private final PurchasesUpdatedListener purchasesUpdatedListener = new PurchasesUpdatedListener() {
-        @Override
-        public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
-
+    private final PurchasesUpdatedListener purchasesUpdatedListener = (billingResult, list) -> {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            checkIfSubscribed();
         }
     };
 
     private void billingSetup() {
+        if (billingClient == null) return;
         if (billingClient.isReady()) {
             checkIfSubscribed();
             return;
         }
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
-            public void onBillingSetupFinished(BillingResult billingResult) {
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
                 if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
                     Log.v("CHECKBILLING", "ready");
                     checkIfSubscribed();
@@ -102,16 +98,12 @@ public class MainActivity extends ContentsActivity {
             @Override
             public void onBillingServiceDisconnected() {
                 Log.v("CHECKBILLING", "disconnected");
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-
             }
         });
     }
 
     private void checkIfSubscribed() {
-        if (!billingClient.isReady()) {
-            billingSetup();
+        if (billingClient == null || !billingClient.isReady()) {
             return;
         }
 
@@ -119,26 +111,26 @@ public class MainActivity extends ContentsActivity {
                 QueryPurchasesParams.newBuilder()
                         .setProductType(BillingClient.ProductType.SUBS)
                         .build(),
-                new PurchasesResponseListener() {
-                    public void onQueryPurchasesResponse(BillingResult billingResult, List purchases) {
-                        // check billingResult
-                        // process returned purchase list, e.g. display the plans user owns
-
-                        int isAcknowledged = 0;
-                        Log.v("CHECKBILLING", "purchases: " + (purchases != null ? purchases.size() : "null"));
-                        if(purchases != null && purchases.size() > 0) {
-                            for (int i = 0; i < purchases.size(); i++) {
-                                Log.v("CHECKBILLING", "" + purchases.get(i).toString());
-                                isAcknowledged++;
+                (billingResult, purchases) -> {
+                    if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                        boolean hasActiveSubs = false;
+                        if (purchases != null) {
+                            for (Purchase purchase : purchases) {
+                                if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+                                    hasActiveSubs = true;
+                                    break;
+                                }
                             }
                         }
+                        
+                        Config.vip_subscription = hasActiveSubs;
+                        Config.all_subscription = hasActiveSubs;
 
-                        Config.vip_subscription = isAcknowledged > 0;
-                        Config.all_subscription = isAcknowledged > 0;
-
-                        if (!Config.vip_subscription) {
-                            updateSubscription();
-                        }
+                        runOnUiThread(() -> {
+                            if (!Config.vip_subscription) {
+                                updateSubscription();
+                            }
+                        });
                     }
                 }
         );
@@ -208,10 +200,9 @@ public class MainActivity extends ContentsActivity {
     public void onResume() {
         super.onResume();
 
-        if(billingClient.isReady())
-            checkIfSubscribed();
-        else
-            billingSetup();
+        if (billingClient != null && !billingClient.isReady()) {
+             billingSetup();
+        }
 
         // Sync VPN status to ensure UI reflects actual connection
         String currentStatus = getVpnStatus();
@@ -274,12 +265,8 @@ public class MainActivity extends ContentsActivity {
 
     @Override
     protected void disconnectFromVpn() {
-        try {
-            vpnThread.stop();
-            updateUI("DISCONNECTED");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // OneConnect removed. Implement your own VPN disconnection logic here.
+        updateUI("DISCONNECTED");
     }
 
     @Override
@@ -365,8 +352,9 @@ public class MainActivity extends ContentsActivity {
                 showMessage("Invalid server configuration", "error");
             }
 
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            showMessage("Error starting VPN: " + e.getMessage(), "error");
         }
     }
 

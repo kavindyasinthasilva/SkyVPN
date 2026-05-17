@@ -7,8 +7,6 @@
         </trust-anchors>
     </base-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">developer.oneconnect.top</domain>
-        <domain includeSubdomains="true">oneconnect.top</domain>
         <domain includeSubdomains="true">googleapis.com</domain>
         <domain includeSubdomains="true">firebaseio.com</domain>
     </domain-config>

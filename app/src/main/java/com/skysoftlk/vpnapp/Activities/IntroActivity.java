@@ -12,7 +12,6 @@ import java.io.IOException;
 
 import io.github.dreierf.materialintroscreen.MaterialIntroActivity;
 import io.github.dreierf.materialintroscreen.SlideFragmentBuilder;
-import top.oneconnectapi.app.api.OneConnect;
 
 public class IntroActivity extends MaterialIntroActivity {
     SharedPreferences prefs;
@@ -20,8 +19,6 @@ public class IntroActivity extends MaterialIntroActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        com.skysoftlk.vpnapp.Utils.ServerFetcher.fetchServers(this, null);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (!prefs.getBoolean("firstTime", true)) {

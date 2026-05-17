@@ -184,7 +184,7 @@ dependencies {
     // Conscrypt for modern SSL/TLS support on older devices and non-GMS devices
     implementation 'org.conscrypt:conscrypt-android:2.5.3'
 
-    // OneConnect
+    // Removed OneConnect
     implementation 'com.github.oneconnectapi:OneConnectLib:v1.1.1'
     implementation 'com.github.gemeauxph:MaterialLoadingIndicator:v1.0.4'
 }

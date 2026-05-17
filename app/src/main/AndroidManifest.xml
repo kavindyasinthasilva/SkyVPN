@@ -111,18 +111,12 @@
         <activity android:name="com.skysoftlk.vpnapp.Activities.MainActivity" />
         <activity android:name="com.facebook.ads.AudienceNetworkActivity" android:hardwareAccelerated="true" />
 
-        <activity
-            android:name="top.oneconnectapi.app.DisconnectVPNActivity"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:taskAffinity=".DisconnectVPN"
-            android:theme="@style/blinkt.dialog" />
-
         <service
             android:name="top.oneconnectapi.app.core.OpenVPNService"
             android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="true"
             android:foregroundServiceType="specialUse"
-            android:exported="true">
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
@@ -130,6 +124,15 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="VPN connection" />
         </service>
+
+        <activity
+            android:name="top.oneconnectapi.app.DisconnectVPNActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=".DisconnectVPN"
+            android:theme="@style/blinkt.dialog" />
+
+
 
 
         <!-- OneSignal -->

@@ -37,9 +37,9 @@
 -keep class com.skysoftlk.vpnapp.model.** { *; }
 -keep class com.skysoftlk.vpnapp.model.Countries { *; }
 
-# OpenVPN / OneConnect
+# OpenVPN
+-keep class de.blinkt.openvpn.** { *; }
 -keep class top.oneconnectapi.app.** { *; }
--dontwarn top.oneconnectapi.app.**
 
 # Lottie
 -keep class com.airbnb.lottie.** { *; }
