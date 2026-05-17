@@ -21,8 +21,8 @@ android {
         applicationId 'com.skysoftlk.vpnapp'
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 21
-        versionName "21.0"
+        versionCode 22
+        versionName "22.0"
 
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
