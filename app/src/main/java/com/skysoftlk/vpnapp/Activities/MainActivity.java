@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
@@ -142,30 +144,59 @@ public class MainActivity extends ContentsActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("connectionState"));
 
+        // Billing and UI setup
         billingSetup();
 
-        Intent intent = getIntent();
-
-        if(getIntent().getExtras() != null) {
+        // Check if coming from Server selection
+        if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("c")) {
             selectedCountry = getIntent().getExtras().getParcelable("c");
-            updateUI("LOAD");
+            
+            if (selectedCountry != null) {
+                updateUI("LOAD");
+                updateFlagUI();
 
-            if (!Utility.isOnline(getApplicationContext())) {
-                showMessage("No Internet Connection", "error");
-            } else {
-                showInterstitialAndConnect();
+                if (!Utility.isOnline(getApplicationContext())) {
+                    showMessage("No Internet Connection", "error");
+                    updateUI("DISCONNECTED");
+                } else {
+                    showInterstitialAndConnect();
+                }
             }
         } else {
-            if(selectedCountry != null) {
-                updateUI("CONNECTED");
-
-                Glide.with(this)
-                        .load(selectedCountry.getFlagUrl())
-                        .into(imgFlag);
-                flagName.setText(selectedCountry.getCountry());
+            // Load saved server on fresh start or return to app
+            if (selectedCountry == null) {
+                Countries saved = ActiveServer.getSavedServer(this);
+                if (saved != null && !TextUtils.isEmpty(saved.getCountry())) {
+                    selectedCountry = saved;
+                }
+            }
+            
+            if (selectedCountry != null) {
+                updateFlagUI();
+                // Sync UI with actual VPN status
+                if (Utility.isVpnConnected(this)) {
+                    updateUI("CONNECTED");
+                } else {
+                    updateUI("DISCONNECTED");
+                }
             }
         }
 
+        setupAds();
+    }
+
+    private void updateFlagUI() {
+        if (selectedCountry != null && imgFlag != null && flagName != null) {
+            Glide.with(this)
+                    .load(selectedCountry.getFlagUrl())
+                    .placeholder(R.drawable.logo)
+                    .into(imgFlag);
+            flagName.setText(selectedCountry.getCountry());
+        }
+    }
+
+    private void setupAds() {
+        Intent intent = getIntent();
         if (intent.getStringExtra("type") != null) {
             type = intent.getStringExtra("type");
             indratech_toto_27640849_ad_banner_id = intent.getStringExtra("indratech_toto_27640849_ad_banner");
@@ -174,19 +205,10 @@ public class MainActivity extends ContentsActivity {
             indratech_toto_27640849_fb_interstitial_id = intent.getStringExtra("indratech_toto_27640849_fb_interstitial");
         }
 
-        if(TextUtils.isEmpty(type)) {
-            type = "";
-            Log.v("AD_TYPE", " null");
-        }
-
         if (type.equals("ad")) {
-            RequestConfiguration.Builder requestBuilder = new RequestConfiguration.Builder();
-            MobileAds.setRequestConfiguration(requestBuilder.build());
+            // MobileAds initialization is now handled in App.java for better performance
         } else {
-            AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
-
-            //Initialize facebook ads
-            AudienceNetworkAds.initialize(this);
+            // Facebook ads initialization is also in App.java
         }
     }
 
@@ -343,11 +365,23 @@ public class MainActivity extends ContentsActivity {
         }
     }
 
-    protected void startVpn() {
+    private final Handler connectionWatchdog = new Handler(Looper.getMainLooper());
+    private final Runnable connectionTimeoutRunnable = () -> {
+        if (getVpnStatus() != null && (getVpnStatus().equals("LOAD") || getVpnStatus().equals("AUTHENTICATION"))) {
+            updateUI("DISCONNECTED");
+            showMessage("Connection timed out. Please try another server.", "error");
+        }
+    };
+
+    public void startVpn() {
         try {
             ActiveServer.saveServer(MainActivity.selectedCountry, MainActivity.this);
             if (selectedCountry != null && selectedCountry.getOvpn() != null) {
                 OpenVpnApi.startVpn(this, selectedCountry.getOvpn(), selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
+                
+                // Start watchdog timer (30 seconds) to detect hung connections
+                connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
+                connectionWatchdog.postDelayed(connectionTimeoutRunnable, 30000);
             } else {
                 showMessage("Invalid server configuration", "error");
             }
@@ -367,6 +401,11 @@ public class MainActivity extends ContentsActivity {
                 if (state != null) {
                     updateUI(state);
                     Log.v("CHECKSTATE", state);
+                    
+                    // Cancel watchdog on any successful state progression or termination
+                    if (state.equals("CONNECTED") || state.equals("DISCONNECTED")) {
+                        connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
+                    }
                 }
 
                 if (isFirst) {

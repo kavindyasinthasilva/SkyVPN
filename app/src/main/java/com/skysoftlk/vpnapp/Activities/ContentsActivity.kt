@@ -501,8 +501,10 @@ abstract class ContentsActivity : NavigationActivity() {
     protected fun updateUI(status: String?) {
         if (status == null || status == STATUS) return
         
-        // Invalidate IP cache on significant state changes to ensure fresh IP display
-        if (status == "CONNECTED" || status == "DISCONNECTED") {
+        // Only invalidate cache and fetch on actual connection/disconnection events
+        // to avoid redundant network calls during intermediate states (AUTH, WAIT, etc.)
+        val isSignificantChange = (status == "CONNECTED" || status == "DISCONNECTED")
+        if (isSignificantChange) {
             lastIpFetchTime = 0 
         }
 
@@ -515,6 +517,8 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectionStateTextView!!.setText(R.string.connected)
                 timerTextView!!.visibility = View.VISIBLE
                 hideConnectProgress()
+                
+                // Fetch IP only once when connected
                 showIP()
 
                 connectBtnTextView!!.visibility = View.VISIBLE
@@ -990,9 +994,11 @@ abstract class ContentsActivity : NavigationActivity() {
         val byteinKb = if (byteinParts.size > 1) byteinParts[1] else byteIn
         val byteoutKb = if (byteoutParts.size > 1) byteoutParts[1] else byteOut
 
-        textDownloading!!.text = byteinKb
-        textUploading!!.text = byteoutKb
-       // timerTextView!!.text = duration
+        // Ensure UI updates happen on main thread to prevent crashes/ANRs
+        handler.post {
+            textDownloading?.text = byteinKb
+            textUploading?.text = byteoutKb
+        }
     }
 
     fun showInterstitialAndConnect() {

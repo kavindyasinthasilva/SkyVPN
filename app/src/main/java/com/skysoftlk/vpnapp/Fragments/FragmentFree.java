@@ -143,6 +143,12 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
     }
 
     private void loadServers() {
+        // Skip reloading if we already have data to avoid list flashing and unnecessary CPU usage
+        if (adapter != null && adapter.getItemCount() > 0 && countryArrayList.size() > 0) {
+            animationHolder.setVisibility(View.GONE);
+            return;
+        }
+
         ArrayList<Countries> servers = new ArrayList<>();
 
         // 1. Load Manual Servers from JSON
@@ -199,6 +205,8 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
         }
 
         animationHolder.setVisibility(View.GONE);
+        countryArrayList.clear();
+        countryArrayList.addAll(servers);
         adapter.setData(servers);
     }
 
