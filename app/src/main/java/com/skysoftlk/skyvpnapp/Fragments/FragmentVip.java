@@ -60,6 +60,7 @@ public class FragmentVip extends Fragment {
     public static ProgressDialog progressdialog;
     private static BottomSheetDialog btDialog;
     private ScheduledExecutorService scheduledExecutor;
+    private ExecutorService pingExecutor;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -180,25 +181,26 @@ public class FragmentVip extends Fragment {
         if (scheduledExecutor != null && !scheduledExecutor.isShutdown()) {
             scheduledExecutor.shutdownNow();
         }
+        if (pingExecutor != null && !pingExecutor.isShutdown()) {
+            pingExecutor.shutdownNow();
+        }
     }
 
     private void startPinging(ArrayList<Countries> servers) {
         stopRealTimeUpdates();
         scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+        pingExecutor = Executors.newFixedThreadPool(3); // Reduced thread count
 
-        // Run pinging every 10 seconds while the fragment is visible
+        // Run pinging every 15 seconds while the fragment is visible (increased interval)
         scheduledExecutor.scheduleWithFixedDelay(() -> {
             Log.d(TAG, "Starting ping cycle for " + servers.size() + " servers");
-            ExecutorService pingExecutor = Executors.newFixedThreadPool(4);
             for (int i = 0; i < servers.size(); i++) {
                 final int index = i;
                 Countries server = servers.get(index);
                 String host = server.getServerHost();
-                Log.d(TAG, "Server: " + server.getCountry() + " Host extracted: " + host);
                 if (host != null) {
                     pingExecutor.execute(() -> {
                         int ping = getPing(host);
-                        Log.d(TAG, "Ping result for " + host + ": " + ping);
                         server.setPing(ping);
                         if (getActivity() != null) {
                             getActivity().runOnUiThread(() -> adapter.notifyItemChanged(index));
@@ -206,37 +208,17 @@ public class FragmentVip extends Fragment {
                     });
                 }
             }
-            pingExecutor.shutdown();
-        }, 0, 10, TimeUnit.SECONDS);
+        }, 0, 15, TimeUnit.SECONDS);
     }
 
     private int getPing(String host) {
         try {
-            // 1. Try System Ping Command (ICMP) - Most accurate
-            Process process = Runtime.getRuntime().exec("/system/bin/ping -c 1 -w 2 " + host);
-            int exitValue = process.waitFor();
-            if (exitValue == 0) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.contains("time=")) {
-                        String time = line.substring(line.indexOf("time=") + 5, line.indexOf(" ms"));
-                        return (int) Float.parseFloat(time);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Ignore and fallback
-        }
-
-        try {
-            // 2. Fallback to TCP Handshake if ICMP is blocked
+            // TCP Handshake check - MUCH lighter than spawning a shell process
             long startTime = System.currentTimeMillis();
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(host, 443), 1500);
-            socket.close();
-            // Subtract small overhead for socket creation
-            return (int) (System.currentTimeMillis() - startTime) - 20; 
+            try (Socket socket = new Socket()) {
+                socket.connect(new InetSocketAddress(host, 443), 2000);
+            }
+            return (int) (System.currentTimeMillis() - startTime);
         } catch (Exception e) {
             return 0;
         }

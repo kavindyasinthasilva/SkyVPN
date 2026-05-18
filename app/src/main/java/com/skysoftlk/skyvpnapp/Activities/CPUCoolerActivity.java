@@ -101,7 +101,7 @@ public class CPUCoolerActivity extends NavigationActivity {
             batterytemp = findViewById(R.id.batterytemp);
 
             if (!((System.currentTimeMillis() - getSharedPreferences("APPS_CONFIGS", Context.MODE_PRIVATE).getLong("COOLER_LAST_UPDATE", 0)) < 1200000)) {
-                makeStabilityScanning(null);
+                new Thread(() -> makeStabilityScanning(null)).start();
             }
 
         } catch (Exception e) {
@@ -120,48 +120,49 @@ public class CPUCoolerActivity extends NavigationActivity {
     }
 
     public void getAllICONS() {
+        new Thread(() -> {
+            PackageManager pm = getPackageManager();
+            List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
-        PackageManager pm = getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+            if (packages != null) {
+                for (int k = 0; k < packages.size(); k++) {
+                    String packageName = packages.get(k).packageName;
 
-        if (packages != null) {
-            for (int k = 0; k < packages.size(); k++) {
-                String packageName = packages.get(k).packageName;
+                    if (!packageName.equals(getPackageName())) {
+                        try {
+                            Apps app = new Apps();
+                            ApplicationInfo a = packages.get(k);
+                            
+                            // Only add if it's a non-system app
+                            if (((a.flags & ApplicationInfo.FLAG_SYSTEM) == 0)) {
+                                app.setImage(pm.getApplicationIcon(a));
+                                
+                                // Randomize size for display if needed or read properly
+                                app.setSize((new File(a.publicSourceDir).length() / 1000000 + 20) + "MB");
 
-                if (!packageName.equals(getPackageName())) {
-                    try {
-                        Apps app = new Apps();
-                        File file = new File(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA).publicSourceDir);
-                        long size = file.length();
-
-                        app.setSize(size / 1000000 + 20 + "MB");
-
-                        ApplicationInfo a = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-                        app.setImage(pm.getApplicationIcon(packages.get(k).packageName));
-
-                        if (((a.flags & ApplicationInfo.FLAG_SYSTEM) == 0)) {
-                            if (check <= 5) {
-                                check++;
-                                apps.add(app);
-                            } else {
-                                break;
+                                synchronized (apps) {
+                                    if (check < 5) {
+                                        check++;
+                                        apps.add(app);
+                                    } else {
+                                        break;
+                                    }
+                                }
                             }
+
+                        } catch (Exception e) {
+                            Log.e("ERROR", "Error fetching icon: " + e.getMessage());
                         }
-
-                    } catch (PackageManager.NameNotFoundException e) {
-                        Log.e("ERROR", "Unable to find icon for package '"
-                                + packageName + "': " + e.getMessage());
                     }
-
                 }
+                
+                runOnUiThread(() -> {
+                    if (apps != null && !apps.isEmpty()) {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
             }
-            mAdapter.notifyDataSetChanged();
-        }
-
-        if (apps != null && apps.size() > 1) {
-            mAdapter = new RecyclerAdapter(apps);
-            mAdapter.notifyDataSetChanged();
-        }
+        }).start();
     }
 
     private void makeStabilityScanning(Intent intent) {

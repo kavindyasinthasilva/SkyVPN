@@ -163,8 +163,8 @@ abstract class ContentsActivity : NavigationActivity() {
     private val requestQueue by lazy { Volley.newRequestQueue(applicationContext) }
 
     private fun showIP() {
-        // If we have a cached IP fetched recently (within 5 minutes), use it
-        if (cachedIp != null && System.currentTimeMillis() - lastIpFetchTime < 300000) {
+        // Use cached IP if it's recent (less than 1 minute old to prevent redundant calls during flapping)
+        if (cachedIp != null && (System.currentTimeMillis() - lastIpFetchTime) < 60000) {
             tvIpAddress?.text = cachedIp
             return
         }
@@ -172,13 +172,13 @@ abstract class ContentsActivity : NavigationActivity() {
         // Avoid concurrent fetches
         if (isFetchingIp) return
 
-        // China-friendly IP check services (Cloudflare and some local ones if needed)
+        // IP check services
         val services = listOf(
-            "https://1.1.1.1/cdn-cgi/trace", // Cloudflare (often works)
-            "https://vv.video.qq.com/checktime", // Tencent (Local China)
             "https://api.ipify.org",
             "https://checkip.amazonaws.com/",
-            "https://ifconfig.me/ip"
+            "https://ipv4.icanhazip.com/",
+            "https://ifconfig.me/ip",
+            "https://1.1.1.1/cdn-cgi/trace"
         )
         
         tryFetchIp(services, 0)
@@ -331,7 +331,7 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView?.isEnabled = true
                 timerTextView?.visibility = View.GONE
             }
-            "RECONNECTING" -> {
+            "RECONNECTING", "CONNECTRETRY" -> {
                 STATUS = "RECONNECTING"
                 connectBtnTextView?.visibility = View.VISIBLE
                 lottieAnimationView?.visibility = View.VISIBLE

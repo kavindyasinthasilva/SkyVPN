@@ -137,11 +137,8 @@ public class MainActivity extends ContentsActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("connectionState"));
 
-        // Move non-essential setup to background to prevent UI lag
-        new Thread(() -> {
-            billingSetup();
-            runOnUiThread(this::updateTrialBanner);
-        }).start();
+        // updateTrialBanner depends on Config values updated by billing
+        runOnUiThread(this::updateTrialBanner);
 
         // Check if coming from Server selection
         if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("c")) {
@@ -248,13 +245,17 @@ public class MainActivity extends ContentsActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        inAppUpdate();
-
+        
         billingClient = BillingClient.newBuilder(this)
                 .setListener(purchasesUpdatedListener)
                 .enablePendingPurchases()
                 .build();
-        
+
+        new Thread(() -> {
+            inAppUpdate();
+            billingSetup();
+        }).start();
+
         findViewById(R.id.btnLanguage).setOnClickListener(v -> showLanguageDialog());
     }
 
@@ -388,9 +389,9 @@ public class MainActivity extends ContentsActivity {
                 
                 OpenVpnApi.startVpn(this, config, selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
                 
-                // Start watchdog timer (30 seconds) to detect hung connections
+                // Start watchdog timer (60 seconds) to detect hung connections
                 connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
-                connectionWatchdog.postDelayed(connectionTimeoutRunnable, 30000);
+                connectionWatchdog.postDelayed(connectionTimeoutRunnable, 60000);
             } else {
                 showMessage("Invalid server configuration", "error");
             }
