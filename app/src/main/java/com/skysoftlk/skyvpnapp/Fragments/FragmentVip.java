@@ -32,10 +32,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FragmentVip extends Fragment {
 
@@ -164,41 +168,54 @@ public class FragmentVip extends Fragment {
     }
 
     private void startPinging(ArrayList<Countries> servers) {
-        new Thread(() -> {
-            for (int i = 0; i < servers.size(); i++) {
-                Countries server = servers.get(i);
-                String host = server.getServerHost();
-                if (host != null) {
+        ExecutorService executor = Executors.newFixedThreadPool(4); // Ping 4 servers at once
+        for (int i = 0; i < servers.size(); i++) {
+            final int index = i;
+            Countries server = servers.get(i);
+            String host = server.getServerHost();
+            if (host != null) {
+                executor.execute(() -> {
                     int ping = getPing(host);
                     server.setPing(ping);
-                    int finalI = i;
                     if (getActivity() != null) {
-                        getActivity().runOnUiThread(() -> adapter.notifyItemChanged(finalI));
+                        getActivity().runOnUiThread(() -> adapter.notifyItemChanged(index));
                     }
-                }
+                });
             }
-        }).start();
+        }
+        executor.shutdown();
     }
 
     private int getPing(String host) {
         try {
+            // 1. Try System Ping Command (ICMP) - Most accurate
+            Process process = Runtime.getRuntime().exec("/system/bin/ping -c 1 -w 2 " + host);
+            int exitValue = process.waitFor();
+            if (exitValue == 0) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.contains("time=")) {
+                        String time = line.substring(line.indexOf("time=") + 5, line.indexOf(" ms"));
+                        return (int) Float.parseFloat(time);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore and fallback
+        }
+
+        try {
+            // 2. Fallback to TCP Handshake if ICMP is blocked
             long startTime = System.currentTimeMillis();
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(host, 443), 2000); // Try connecting to 443 (common for OVPN)
+            socket.connect(new InetSocketAddress(host, 443), 1500);
             socket.close();
-            return (int) (System.currentTimeMillis() - startTime);
+            // Subtract small overhead for socket creation
+            return (int) (System.currentTimeMillis() - startTime) - 20; 
         } catch (Exception e) {
-            try {
-                // Fallback to ICMP ping if socket fails
-                long startTime = System.currentTimeMillis();
-                if (InetAddress.getByName(host).isReachable(2000)) {
-                    return (int) (System.currentTimeMillis() - startTime);
-                }
-            } catch (Exception e2) {
-                return 0;
-            }
+            return 0;
         }
-        return 0;
     }
 
     public static void unblockServer() {
