@@ -35,8 +35,6 @@ public class Saving_Power_Comp extends AppCompatActivity {
     ImageView istpic, secpic, thirpic, foupic;
     int check = 0;
 
-    View viewOne, viewTwo, viewThree, viewFour, viewFive;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +48,6 @@ public class Saving_Power_Comp extends AppCompatActivity {
         thirpic = (ImageView) findViewById(R.id.thipic);
         foupic = (ImageView) findViewById(R.id.foupic);
         completion = (TextView) findViewById(R.id.completion);
-
-        viewOne = findViewById(R.id.viewone);
-        viewTwo = findViewById(R.id.viewtwo);
-        viewThree = findViewById(R.id.viewthree);
-        viewFour = findViewById(R.id.viewfour);
 
         arcView = (DecoView) findViewById(R.id.dynamicArcView2);
 
@@ -84,19 +77,23 @@ public class Saving_Power_Comp extends AppCompatActivity {
 
                 if (v1 >= 10 && v1 < 50) {
                     ist.setTextColor(Color.parseColor("#4e5457"));
+                    istpic.setVisibility(View.VISIBLE);
                     istpic.setImageResource(R.drawable.ic_blue_dot);
 
 
                 } else if (v1 >= 50 && v1 < 75) {
                     sec.setTextColor(Color.parseColor("#4e5457"));
+                    secpic.setVisibility(View.VISIBLE);
                     secpic.setImageResource(R.drawable.ic_blue_dot);
 
                 } else if (v1 >= 75 && v1 < 90) {
                     thir.setTextColor(Color.parseColor("#4e5457"));
+                    thirpic.setVisibility(View.VISIBLE);
                     thirpic.setImageResource(R.drawable.ic_blue_dot);
 
                 } else if (v1 >= 90 && v1 <= 100) {
                     fou.setTextColor(Color.parseColor("#4e5457"));
+                    foupic.setVisibility(View.VISIBLE);
                     foupic.setImageResource(R.drawable.ic_blue_dot);
 
                 }

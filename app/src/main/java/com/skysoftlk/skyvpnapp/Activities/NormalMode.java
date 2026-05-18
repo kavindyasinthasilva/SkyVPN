@@ -32,7 +32,6 @@ public class NormalMode extends AppCompatActivity {
     DecoView arcView;
     TextView ist, sec, thir, fou, completion;
     ImageView istpic, secpic, thirpic, foupic;
-    View one, two, three, four;
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
     int check = 0;
@@ -50,11 +49,6 @@ public class NormalMode extends AppCompatActivity {
         thirpic = (ImageView) findViewById(R.id.thipic);
         foupic = (ImageView) findViewById(R.id.foupic);
         completion = (TextView) findViewById(R.id.completion);
-
-        one = findViewById(R.id.view_one);
-        two = findViewById(R.id.view_two);
-        three = findViewById(R.id.view_three);
-        four = findViewById(R.id.view_four);
 
 
         sharedpreferences = getSharedPreferences("was", Context.MODE_PRIVATE);
@@ -88,19 +82,23 @@ public class NormalMode extends AppCompatActivity {
 
                 if (v1 >= 10 && v1 < 50) {
                     ist.setTextColor(Color.parseColor("#4e5457"));
+                    istpic.setVisibility(View.VISIBLE);
                     istpic.setImageResource(R.drawable.ic_blue_dot);
 
 
                 } else if (v1 >= 50 && v1 < 75) {
                     sec.setTextColor(Color.parseColor("#4e5457"));
+                    secpic.setVisibility(View.VISIBLE);
                     secpic.setImageResource(R.drawable.ic_blue_dot);
 
                 } else if (v1 >= 75 && v1 < 90) {
                     thir.setTextColor(Color.parseColor("#4e5457"));
+                    thirpic.setVisibility(View.VISIBLE);
                     thirpic.setImageResource(R.drawable.ic_blue_dot);
 
                 } else if (v1 >= 90 && v1 <= 100) {
                     fou.setTextColor(Color.parseColor("#4e5457"));
+                    foupic.setVisibility(View.VISIBLE);
                     foupic.setImageResource(R.drawable.ic_blue_dot);
 
                 }

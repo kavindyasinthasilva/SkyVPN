@@ -33,7 +33,6 @@ import com.skysoftlk.skyvpnapp.R;
 public class UApplying extends AppCompatActivity {
     DecoView arcView;
     TextView ist,sec,thir,fou,completion,fif;
-    View vOne, vTwo, vThree, vFour, vFive;
     ImageView istpic,secpic,thirpic,foupic,fifthpic;
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
@@ -51,15 +50,8 @@ public class UApplying extends AppCompatActivity {
         secpic=(ImageView) findViewById(R.id.secpic);
         thirpic=(ImageView) findViewById(R.id.thipic);
         foupic=(ImageView) findViewById(R.id.foupic);
-        foupic=(ImageView) findViewById(R.id.foupic);
         fifthpic =(ImageView) findViewById(R.id.fifthpic);
         completion=(TextView) findViewById(R.id.completion);
-
-        vOne= findViewById(R.id.view_one);
-        vTwo= findViewById(R.id.view_two);
-        vThree= findViewById(R.id.view_three);
-        vFour= findViewById(R.id.view_four);
-        vFive= findViewById(R.id.view_five);
 
 
         sharedpreferences = getSharedPreferences("was", Context.MODE_PRIVATE);
@@ -105,6 +97,7 @@ public class UApplying extends AppCompatActivity {
                 if(v1>=10 && v1<40)
                 {
                     ist.setTextColor(Color.parseColor("#4e5457"));
+                    istpic.setVisibility(View.VISIBLE);
                     istpic.setImageResource(R.drawable.ic_blue_dot);
 
 
@@ -112,6 +105,7 @@ public class UApplying extends AppCompatActivity {
                 else if(v1>=40 && v1<65)
                 {
                     sec.setTextColor(Color.parseColor("#4e5457"));
+                    secpic.setVisibility(View.VISIBLE);
                     secpic.setImageResource(R.drawable.ic_blue_dot);
 
 
@@ -119,6 +113,7 @@ public class UApplying extends AppCompatActivity {
                 else if(v1>=65 && v1<80)
                 {
                     thir.setTextColor(Color.parseColor("#4e5457"));
+                    thirpic.setVisibility(View.VISIBLE);
                     thirpic.setImageResource(R.drawable.ic_blue_dot);
 
 
@@ -126,6 +121,7 @@ public class UApplying extends AppCompatActivity {
                 else if(v1>=80 && v1<90)
                 {
                     fou.setTextColor(Color.parseColor("#4e5457"));
+                    foupic.setVisibility(View.VISIBLE);
                     foupic.setImageResource(R.drawable.ic_blue_dot);
 
 
@@ -133,6 +129,7 @@ public class UApplying extends AppCompatActivity {
                 else if(v1>=90 && v1<100)
                 {
                     fif.setTextColor(Color.parseColor("#4e5457"));
+                    fifthpic.setVisibility(View.VISIBLE);
                     fifthpic.setImageResource(R.drawable.ic_blue_dot);
 
                 }

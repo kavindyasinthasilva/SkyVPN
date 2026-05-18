@@ -76,17 +76,16 @@ public class ScannerCPU extends BaseActivity {
 
         RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(1500);
-        rotate.setRepeatCount(3);
+        rotate.setRepeatCount(Animation.INFINITE);
         rotate.setInterpolator(new LinearInterpolator());
         scanner.startAnimation(rotate);
 
-        TranslateAnimation animation = new TranslateAnimation(0.0f, 1000.0f, 0.0f, 0.0f);
-        animation.setDuration(5000);
-        animation.setRepeatCount(0);
+        img_animation.setVisibility(View.VISIBLE);
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f, -500.0f, 500.0f);
+        animation.setDuration(3000);
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.setRepeatMode(Animation.REVERSE);
         animation.setInterpolator(new LinearInterpolator());
-
-        animation.setFillAfter(true);
-
         img_animation.startAnimation(animation);
 
         animation.setAnimationListener(new Animation.AnimationListener() {
@@ -185,28 +184,32 @@ public class ScannerCPU extends BaseActivity {
             handler7.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    add("Closes System Services like Bluetooth,Screen Rotation,Sync etc.", 6);
+                    add("Optimizing CPU Performance...", 6);
                     remove(0);
 
                     final RippleBackground rippleBackground = (RippleBackground) findViewById(R.id.content);
                     rippleBackground.startRippleAnimation();
 
-                    img_animation.setImageResource(0);
-                    img_animation.setBackgroundResource(0);
+                    img_animation.clearAnimation();
+                    img_animation.setVisibility(View.GONE);
+                    
                     cpu.setImageResource(R.drawable.ic_cooling_complete);
+                    cpu.setColorFilter(getResources().getColor(R.color.neon_green), PorterDuff.Mode.SRC_ATOP);
                     shadowCpu.setVisibility(View.GONE);
 
+                    scanner.clearAnimation();
                     scanner.setVisibility(View.GONE);
-                    ivCompltecheck.setImageResource(R.drawable.ic_cooling_complete_check);
                     ivCompltecheck.setVisibility(View.VISIBLE);
+                    
                     ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(getApplicationContext(), R.animator.flipping);
-                    anim.setTarget(scanner);
+                    anim.setTarget(ivCompltecheck);
                     anim.setDuration(3000);
                     anim.start();
 
                     rel.setVisibility(View.GONE);
 
                     cooledcpu.setText("Cooled CPU to 25.3°C");
+                    cooledcpu.setTextColor(getResources().getColor(R.color.neon_green));
                     anim.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
@@ -250,18 +253,20 @@ public class ScannerCPU extends BaseActivity {
 
     public void add(String text, int position) {
         try {
-            mAdapter.notifyItemInserted(position);
+            cooledcpu.setText(text);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
     public void remove(int position) {
-        mAdapter.notifyItemRemoved(position);
         try {
-            CPUCoolerActivity.apps.remove(position);
+            if (CPUCoolerActivity.apps != null && position < CPUCoolerActivity.apps.size()) {
+                CPUCoolerActivity.apps.remove(position);
+                mAdapter.notifyItemRemoved(position);
+            }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

@@ -147,7 +147,6 @@ public class CPUCoolerActivity extends NavigationActivity {
                                 break;
                             }
                         }
-                        mAdapter.notifyDataSetChanged();
 
                     } catch (PackageManager.NameNotFoundException e) {
                         Log.e("ERROR", "Unable to find icon for package '"
@@ -156,7 +155,7 @@ public class CPUCoolerActivity extends NavigationActivity {
 
                 }
             }
-
+            mAdapter.notifyDataSetChanged();
         }
 
         if (apps != null && apps.size() > 1) {
