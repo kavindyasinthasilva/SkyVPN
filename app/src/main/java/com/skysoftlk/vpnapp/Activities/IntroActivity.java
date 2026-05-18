@@ -24,22 +24,21 @@ public class IntroActivity extends MaterialIntroActivity {
         if (!prefs.getBoolean("firstTime", true)) {
             onFinish();
         } else {
-//            To familiar the user with the basic requirements of the application...
-            addSlide(new SlideFragmentBuilder()
-                    .backgroundColor(R.color.colorPrimaryDark)
-                    .buttonsColor(R.color.colorPrimary)
-                    .image(R.drawable.intro)
-                    .title("Secure VPN Servers")
-                    .description("Premium VPN App is Very Fast & Secure. And Easy to Use")
-                    .build());
-            addSlide(new SlideFragmentBuilder()
-                    .backgroundColor(R.color.colorPrimaryDark)
-                    .buttonsColor(R.color.colorPrimary)
-                    .image(R.drawable.intro2)
-                    .title("Use Premium ")
-                    .description("Buy Premium Servers and get more Secure Servers ")
-                    .build());
-
+            addSlide(IntroSlideFragment.newInstance(
+                    "Ultra Fast Speed",
+                    "Connect to high-speed servers across the globe with zero latency.",
+                    R.raw.homel
+            ));
+            addSlide(IntroSlideFragment.newInstance(
+                    "Maximum Security",
+                    "Military-grade encryption keeps your data safe from prying eyes.",
+                    R.raw.homel
+            ));
+            addSlide(IntroSlideFragment.newInstance(
+                    "Privacy First",
+                    "We follow a strict no-logs policy to ensure your anonymity online.",
+                    R.raw.homel
+            ));
         }
     }
 

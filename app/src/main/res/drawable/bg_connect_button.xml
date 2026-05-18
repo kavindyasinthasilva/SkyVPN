@@ -9,8 +9,8 @@
                 android:startColor="#2D3748"
                 android:type="linear" />
             <stroke
-                android:width="4dp"
-                android:color="@color/glass_white_border" />
+                android:width="2dp"
+                android:color="@color/neon_blue" />
             <size
                 android:width="150dp"
                 android:height="150dp" />
