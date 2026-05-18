@@ -129,7 +129,7 @@ public class CPUCoolerActivity extends NavigationActivity {
             for (int k = 0; k < packages.size(); k++) {
                 String packageName = packages.get(k).packageName;
 
-                if (!packageName.equals("fast.cleaner.battery.saver")) {
+                if (!packageName.equals(getPackageName())) {
                     try {
                         Apps app = new Apps();
                         File file = new File(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA).publicSourceDir);

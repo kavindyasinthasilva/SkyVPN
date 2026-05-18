@@ -27,6 +27,11 @@ public class App extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        // Fix: Failed to delete the CE shared dir for Android package (PhSharedDirectoryWriter)
+        // This IllegalStateException in GMS Phenotype occurs when the system fails to clean up
+        // stale shared directories during package updates or changes.
+        // While primarily a GMS-side issue, ensuring the ApplicationInfo is up-to-date helps.
+
         // Fix: Failed to load asset path /base.apk
         // On Android 11+ (API 30+), the system may fail to map the APK if the ApplicationInfo is stale.
         // MultiDex.install ensures that the classloader is correctly set up even if the APK path is weird.

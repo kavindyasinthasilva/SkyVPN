@@ -28,6 +28,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
+
+        externalNativeBuild {
+            ndkBuild {
+                arguments "APP_STL:=c++_shared"
+                cppFlags "-std=c++17"
+            }
+        }
+
+        ndk {
+            // Enable 16 KB page alignment for native libraries
+            // This is required for Android 15+ compatibility
+            debugSymbolLevel 'FULL'
+        }
     }
 
     buildFeatures {
@@ -73,7 +86,7 @@ android {
     packagingOptions {
         pickFirst '**/*.so'
         jniLibs {
-            useLegacyPackaging = true
+            useLegacyPackaging = false
         }
     }
 
