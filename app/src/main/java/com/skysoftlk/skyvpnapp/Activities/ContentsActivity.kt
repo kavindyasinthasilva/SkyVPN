@@ -482,16 +482,17 @@ abstract class ContentsActivity : NavigationActivity() {
             byteIn: String,
             byteOut: String
     ) {
+        // The oneconnect SDK typically returns formats like "1.5-kB/s" or "800-B/s"
         val byteinParts = byteIn.split("-").toTypedArray()
         val byteoutParts = byteOut.split("-").toTypedArray()
 
-        val byteinKb = if (byteinParts.size > 1) byteinParts[1] else byteIn
-        val byteoutKb = if (byteoutParts.size > 1) byteoutParts[1] else byteOut
+        var finalIn = if (byteinParts.size > 1) "${byteinParts[0]} ${byteinParts[1]}" else byteIn
+        var finalOut = if (byteoutParts.size > 1) "${byteoutParts[0]} ${byteoutParts[1]}" else byteOut
 
         // Ensure UI updates happen on main thread to prevent crashes/ANRs
         handler.post {
-            textDownloading?.text = byteinKb
-            textUploading?.text = byteoutKb
+            textDownloading?.text = finalIn
+            textUploading?.text = finalOut
         }
     }
 

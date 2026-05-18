@@ -40,6 +40,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class FragmentVip extends Fragment {
 
@@ -57,6 +59,7 @@ public class FragmentVip extends Fragment {
     static View view;
     public static ProgressDialog progressdialog;
     private static BottomSheetDialog btDialog;
+    private ScheduledExecutorService scheduledExecutor;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -167,23 +170,44 @@ public class FragmentVip extends Fragment {
         startPinging(servers);
     }
 
-    private void startPinging(ArrayList<Countries> servers) {
-        ExecutorService executor = Executors.newFixedThreadPool(4); // Ping 4 servers at once
-        for (int i = 0; i < servers.size(); i++) {
-            final int index = i;
-            Countries server = servers.get(i);
-            String host = server.getServerHost();
-            if (host != null) {
-                executor.execute(() -> {
-                    int ping = getPing(host);
-                    server.setPing(ping);
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(() -> adapter.notifyItemChanged(index));
-                    }
-                });
-            }
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopRealTimeUpdates();
+    }
+
+    private void stopRealTimeUpdates() {
+        if (scheduledExecutor != null && !scheduledExecutor.isShutdown()) {
+            scheduledExecutor.shutdownNow();
         }
-        executor.shutdown();
+    }
+
+    private void startPinging(ArrayList<Countries> servers) {
+        stopRealTimeUpdates();
+        scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+
+        // Run pinging every 10 seconds while the fragment is visible
+        scheduledExecutor.scheduleWithFixedDelay(() -> {
+            Log.d(TAG, "Starting ping cycle for " + servers.size() + " servers");
+            ExecutorService pingExecutor = Executors.newFixedThreadPool(4);
+            for (int i = 0; i < servers.size(); i++) {
+                final int index = i;
+                Countries server = servers.get(index);
+                String host = server.getServerHost();
+                Log.d(TAG, "Server: " + server.getCountry() + " Host extracted: " + host);
+                if (host != null) {
+                    pingExecutor.execute(() -> {
+                        int ping = getPing(host);
+                        Log.d(TAG, "Ping result for " + host + ": " + ping);
+                        server.setPing(ping);
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> adapter.notifyItemChanged(index));
+                        }
+                    });
+                }
+            }
+            pingExecutor.shutdown();
+        }, 0, 10, TimeUnit.SECONDS);
     }
 
     private int getPing(String host) {

@@ -60,8 +60,9 @@ public class ServerListAdapterVip extends RecyclerView.Adapter<ServerListAdapter
     }
 
     private void updateSignalStatus(mViewhoder holder, int ping) {
-        if (ping == 0) {
+        if (ping <= 0) {
             holder.region_limit.setText("---");
+            holder.region_limit.setTextColor(ContextCompat.getColor(context, R.color.colorlightgrey));
             holder.signal_dot.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorlightgrey)));
             return;
         }

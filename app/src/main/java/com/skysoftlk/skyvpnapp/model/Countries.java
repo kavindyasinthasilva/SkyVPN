@@ -112,13 +112,17 @@ public class Countries implements Parcelable {
 
     public String getServerHost() {
         if (ovpn == null || ovpn.isEmpty()) return null;
-        String[] lines = ovpn.split("\n");
+        String[] lines = ovpn.split("\\\\n|\\n");
         for (String line : lines) {
-            line = line.trim();
-            if (line.startsWith("remote ")) {
-                String[] parts = line.split("\\s+");
-                if (parts.length >= 2) {
-                    return parts[1];
+            String trimmed = line.trim();
+            if (trimmed.startsWith("remote ")) {
+                String[] parts = trimmed.split("\\s+");
+                for (String part : parts) {
+                    if (part.matches("^(\\d{1,3}\\.){3}\\d{1,3}$") || part.contains(".")) {
+                        if (!part.equals("remote") && !part.equals("tcp") && !part.equals("udp")) {
+                            return part;
+                        }
+                    }
                 }
             }
         }
