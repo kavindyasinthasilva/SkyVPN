@@ -6,7 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.skysoftlk.skyvpnapp.Utils.LanguageManager;
+
 public class BaseActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LanguageManager.setLocale(newBase));
+    }
     
     @Nullable
     @Override

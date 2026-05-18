@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import com.skysoftlk.skyvpnapp.Utils.LanguageManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -135,9 +137,11 @@ public class MainActivity extends ContentsActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("connectionState"));
 
-        // Billing and UI setup
-        billingSetup();
-        updateTrialBanner();
+        // Move non-essential setup to background to prevent UI lag
+        new Thread(() -> {
+            billingSetup();
+            runOnUiThread(this::updateTrialBanner);
+        }).start();
 
         // Check if coming from Server selection
         if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("c")) {
@@ -250,6 +254,27 @@ public class MainActivity extends ContentsActivity {
                 .setListener(purchasesUpdatedListener)
                 .enablePendingPurchases()
                 .build();
+        
+        findViewById(R.id.btnLanguage).setOnClickListener(v -> showLanguageDialog());
+    }
+
+    private void showLanguageDialog() {
+        String[] languages = {"English", "Chinese", "German", "Italian", "Spanish", "French", "Arabic", "Hindi", "Tamil", "Sinhala", "Danish"};
+        String[] langCodes = {"en", "zh", "de", "it", "es", "fr", "ar", "hi", "ta", "si", "da"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.change_language));
+        builder.setItems(languages, (dialog, which) -> {
+            String selectedLang = langCodes[which];
+            LanguageManager.setNewLocale(this, selectedLang);
+            
+            // Restart activity to apply changes
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
+        builder.show();
     }
 
     @Override
@@ -358,7 +383,10 @@ public class MainActivity extends ContentsActivity {
         try {
             ActiveServer.saveServer(MainActivity.selectedCountry, MainActivity.this);
             if (selectedCountry != null && selectedCountry.getOvpn() != null) {
-                OpenVpnApi.startVpn(this, selectedCountry.getOvpn(), selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
+                // Normalize OVPN string: convert literal "\n" to actual newline characters
+                String config = selectedCountry.getOvpn().replace("\\n", "\n");
+                
+                OpenVpnApi.startVpn(this, config, selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
                 
                 // Start watchdog timer (30 seconds) to detect hung connections
                 connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);

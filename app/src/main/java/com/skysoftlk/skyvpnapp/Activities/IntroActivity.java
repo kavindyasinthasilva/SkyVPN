@@ -1,16 +1,23 @@
 package com.skysoftlk.skyvpnapp.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.skysoftlk.skyvpnapp.R;
+import com.skysoftlk.skyvpnapp.Utils.LanguageManager;
 
 import io.github.dreierf.materialintroscreen.MaterialIntroActivity;
 
 public class IntroActivity extends MaterialIntroActivity {
     SharedPreferences prefs;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LanguageManager.setLocale(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -175,6 +175,7 @@ abstract class ContentsActivity : NavigationActivity() {
         // China-friendly IP check services (Cloudflare and some local ones if needed)
         val services = listOf(
             "https://1.1.1.1/cdn-cgi/trace", // Cloudflare (often works)
+            "https://vv.video.qq.com/checktime", // Tencent (Local China)
             "https://api.ipify.org",
             "https://checkip.amazonaws.com/",
             "https://ifconfig.me/ip"

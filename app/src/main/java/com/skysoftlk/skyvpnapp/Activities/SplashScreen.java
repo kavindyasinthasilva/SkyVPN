@@ -1,5 +1,6 @@
 package com.skysoftlk.skyvpnapp.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +14,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.skysoftlk.skyvpnapp.R;
 import com.skysoftlk.skyvpnapp.Utils.ChinaUtils;
+import com.skysoftlk.skyvpnapp.Utils.LanguageManager;
 
 public class SplashScreen extends AppCompatActivity {
     View coordinatorLayout;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LanguageManager.setLocale(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

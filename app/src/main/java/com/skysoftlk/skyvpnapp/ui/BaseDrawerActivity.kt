@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.skysoftlk.skyvpnapp.Activities.MainActivity
 import com.skysoftlk.skyvpnapp.R
 import com.skysoftlk.skyvpnapp.Utils.ChinaUtils
+import com.skysoftlk.skyvpnapp.Utils.LanguageManager
 
 abstract class BaseDrawerActivity : AppCompatActivity() {
     private lateinit var manager :ReviewManager
@@ -32,6 +33,10 @@ abstract class BaseDrawerActivity : AppCompatActivity() {
     private var mDrawerLayout: DrawerLayout? = null
     private var navigationView: NavigationView? = null
 
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LanguageManager.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

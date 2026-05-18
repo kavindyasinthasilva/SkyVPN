@@ -60,6 +60,18 @@
                 android:src="@drawable/upgrade" />
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/btnLanguage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:padding="8dp"
+            android:background="@drawable/bg_glass_card"
+            app:layout_constraintEnd_toEndOf="@id/btnServerList"
+            app:layout_constraintTop_toBottomOf="@id/btnServerList"
+            app:srcCompat="@drawable/settings"
+            app:tint="@color/white" />
+
         <!-- Connection Circle Area -->
         <FrameLayout
             android:id="@+id/connection_container"

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SkyVPN</string>
-    <string name="connected">CONNECTED</string>
-    <string name="disconnected">DISCONNECTED</string>
-    <string name="connecting">CONNECTING...</string>
-    <string name="wait">PLEASE WAIT...</string>
-    <string name="auth">AUTHENTICATING...</string>
-    <string name="config">GETTING CONFIG...</string>
-    <string name="assign_ip">ASSIGNING IP...</string>
-    <string name="recon">RECONNECTING...</string>
-    <string name="cpu_cooler">CPU Cooler</string>
-    <string name="battery_saver">Battery Saver</string>
-    <string name="phone_booster">Phone Booster</string>
-    <string name="server_list">Server List</string>
-    <string name="go_premium">Go Premium</string>
-    <string name="select_server">Select Server</string>
-    <string name="change_language">Change Language</string>
+    <string name="app_name">ஸ்கை VPN</string>
+    <string name="connected">இணைக்கப்பட்டது</string>
+    <string name="disconnected">துண்டிக்கப்பட்டது</string>
+    <string name="connecting">இணைக்கிறது...</string>
+    <string name="wait">தயவுசெய்து காத்திருங்கள்...</string>
+    <string name="auth">அங்கீகரிக்கிறது...</string>
+    <string name="config">அமைப்புகளைப் பெறுகிறது...</string>
+    <string name="assign_ip">IP ஒதுக்கீடு செய்கிறது...</string>
+    <string name="recon">மீண்டும் இணைக்கிறது...</string>
+    <string name="cpu_cooler">CPU குளிர்விப்பான்</string>
+    <string name="battery_saver">பேටரி சேமிப்பான்</string>
+    <string name="phone_booster">போன் பூஸ்டர்</string>
+    <string name="server_list">சர்வர் பட்டியல்</string>
+    <string name="go_premium">பிரீமியம் பெறுங்கள்</string>
+    <string name="select_server">சர்வரைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="change_language">மொழியை மாற்றவும்</string>
     <string name="paused">PAUSED</string>
     <string name="nonetwork">NO NETWORK</string>
     <string name="batterysavertxt">Optimize your battery for longer usage.</string>

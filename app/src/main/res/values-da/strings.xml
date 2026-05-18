@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SkyVPN</string>
-    <string name="connected">CONNECTED</string>
-    <string name="disconnected">DISCONNECTED</string>
-    <string name="connecting">CONNECTING...</string>
-    <string name="wait">PLEASE WAIT...</string>
-    <string name="auth">AUTHENTICATING...</string>
-    <string name="config">GETTING CONFIG...</string>
-    <string name="assign_ip">ASSIGNING IP...</string>
-    <string name="recon">RECONNECTING...</string>
-    <string name="cpu_cooler">CPU Cooler</string>
-    <string name="battery_saver">Battery Saver</string>
-    <string name="phone_booster">Phone Booster</string>
-    <string name="server_list">Server List</string>
-    <string name="go_premium">Go Premium</string>
-    <string name="select_server">Select Server</string>
-    <string name="change_language">Change Language</string>
+    <string name="connected">FORBUNDET</string>
+    <string name="disconnected">AFBRUDT</string>
+    <string name="connecting">FORBINDER...</string>
+    <string name="wait">VENT VENLIGST...</string>
+    <string name="auth">GODKENDER...</string>
+    <string name="config">HENTER KONFIG...</string>
+    <string name="assign_ip">TILDELER IP...</string>
+    <string name="recon">GENOPRETTER FORBINDELSE...</string>
+    <string name="cpu_cooler">CPU-køler</string>
+    <string name="battery_saver">Batterisparer</string>
+    <string name="phone_booster">Telefon-booster</string>
+    <string name="server_list">Serverliste</string>
+    <string name="go_premium">Gå til Premium</string>
+    <string name="select_server">Vælg server</string>
+    <string name="change_language">Skift sprog</string>
     <string name="paused">PAUSED</string>
     <string name="nonetwork">NO NETWORK</string>
     <string name="batterysavertxt">Optimize your battery for longer usage.</string>
