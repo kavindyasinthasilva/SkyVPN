@@ -16,7 +16,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+        <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
             android:textSize="18sp"
             android:textStyle="normal"
             android:gravity="center"
@@ -46,7 +46,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="-6dp"/>
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:id="@+id/completion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                 android:layout_height="match_parent" />
 
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:id="@+id/ist"
                 android:text="Decreasing Brightness Upto 90%"
@@ -134,7 +134,7 @@
                 android:layout_height="match_parent" />
 
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:id="@+id/sec"
                 android:text="Decreasing Device Performance"
@@ -175,7 +175,7 @@
                 android:layout_height="match_parent" />
 
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:id="@+id/thi"
                 android:text="Closing Background Apps and Services"
@@ -216,7 +216,7 @@
                 android:layout_height="match_parent" />
 
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:id="@+id/fou"
                 android:text="Locking Acess To Power Consuming Apps"
@@ -258,7 +258,7 @@
                 android:layout_height="match_parent" />
 
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:id="@+id/fif"
                 android:text="Closing All Power Consuming Functions"

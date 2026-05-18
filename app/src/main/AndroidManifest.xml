@@ -37,7 +37,7 @@
     </queries>
 
     <application
-        android:name="com.skysoftlk.vpnapp.App"
+        android:name="com.skysoftlk.skyvpnapp.App"
         android:allowBackup="true"
         android:extractNativeLibs="true"
         android:icon="@drawable/logo"
@@ -49,20 +49,20 @@
         tools:replace="android:networkSecurityConfig"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.skysoftlk.vpnapp.Activities.Apps_Picker"/>
-        <activity android:name="com.skysoftlk.vpnapp.Activities.Black_Battery_Saver" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.Saving_Power_Comp" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.UApplying" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.NormalMode" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.UPopUp" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.PopUp_SavingPower" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.BatteryActivity" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.ScannerCPU" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.CPUCoolerActivity" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.SpeedBoosterActivity" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.UnlockAllActivity" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.Apps_Picker"/>
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.Black_Battery_Saver" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.Saving_Power_Comp" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.UApplying" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.NormalMode" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.UPopUp" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.PopUp_SavingPower" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.BatteryActivity" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.ScannerCPU" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.CPUCoolerActivity" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.SpeedBoosterActivity" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.UnlockAllActivity" />
         <activity
-            android:name="com.skysoftlk.vpnapp.Activities.ContentsActivity"
+            android:name="com.skysoftlk.skyvpnapp.Activities.ContentsActivity"
             android:label="@string/app_name">
         </activity>
         <meta-data
@@ -72,10 +72,10 @@
 
 
         <activity
-            android:name="com.skysoftlk.vpnapp.Activities.IntroActivity"
+            android:name="com.skysoftlk.skyvpnapp.Activities.IntroActivity"
             android:theme="@style/AppTheme1" />
         <activity
-            android:name="com.skysoftlk.vpnapp.Activities.SplashScreen"
+            android:name="com.skysoftlk.skyvpnapp.Activities.SplashScreen"
             android:theme="@style/Splashscreentheme"
             android:exported="true">
             <intent-filter>
@@ -85,9 +85,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.skysoftlk.vpnapp.Activities.Servers"
-            android:parentActivityName="com.skysoftlk.vpnapp.Activities.MainActivity" />
-        <activity android:name="com.skysoftlk.vpnapp.Activities.MainActivity" />
+            android:name="com.skysoftlk.skyvpnapp.Activities.Servers"
+            android:parentActivityName="com.skysoftlk.skyvpnapp.Activities.MainActivity" />
+        <activity android:name="com.skysoftlk.skyvpnapp.Activities.MainActivity" />
 
 
         <service

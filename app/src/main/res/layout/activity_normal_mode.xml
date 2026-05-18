@@ -14,7 +14,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+        <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
             android:textSize="18sp"
             android:textStyle="normal"
             android:gravity="center"
@@ -45,7 +45,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="-6dp"/>
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:id="@+id/completion"
                 android:textColor="#2C0F61"
                 android:text="25%"
@@ -94,7 +94,7 @@
                 android:layout_height="match_parent"
                 android:visibility="gone"/>
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:id="@+id/ist"
                 android:text="Decreasing Brightness from 80% to Normal"
@@ -134,7 +134,7 @@
                 android:visibility="gone"
                 android:layout_height="match_parent" />
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:id="@+id/sec"
                 android:text="Decreasing Device Performance to Normal"
@@ -175,7 +175,7 @@
                 android:visibility="gone"
                 android:layout_height="match_parent" />
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:visibility="gone"
                 android:id="@+id/thi"
@@ -216,7 +216,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:gravity="center|left"
                 android:layout_marginStart="27dp"
                 android:id="@+id/fou"
@@ -246,7 +246,7 @@
             android:visibility="gone"
             android:layout_height="0dp">
 
-            <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+            <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

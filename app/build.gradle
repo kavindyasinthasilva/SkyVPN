@@ -18,7 +18,7 @@ android {
                 force 'androidx.core:core:1.13.1'
             }
         }
-        applicationId 'com.skysoftlk.vpnapp'
+        applicationId 'com.skysoftlk.skyvpnapp'
         minSdkVersion 23
         targetSdkVersion 35
         versionCode 22
@@ -98,7 +98,7 @@ android {
                 '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED']
     }
 
-    namespace 'com.skysoftlk.vpnapp'
+    namespace 'com.skysoftlk.skyvpnapp'
 }
 
 dependencies {

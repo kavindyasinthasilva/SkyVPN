@@ -22,7 +22,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <com.skysoftlk.vpnapp.Utils.CustomTxTRegular
+        <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -105,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.skysoftlk.vpnapp.Utils.CustomTxtSemibold
+        <com.skysoftlk.skyvpnapp.Utils.CustomTxtSemibold
             android:id="@+id/cpucooler"
             android:textColor="@color/tab_background_selected"
             android:textAppearance="?android:textAppearanceLarge"

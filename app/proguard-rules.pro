@@ -34,8 +34,8 @@
 -keep class com.android.volley.** { *; }
 
 # Keep model classes (to prevent issues with reflection/JSON serialization)
--keep class com.skysoftlk.vpnapp.model.** { *; }
--keep class com.skysoftlk.vpnapp.model.Countries { *; }
+-keep class com.skysoftlk.skyvpnapp.model.** { *; }
+-keep class com.skysoftlk.skyvpnapp.model.Countries { *; }
 
 # OpenVPN
 -keep class de.blinkt.openvpn.** { *; }

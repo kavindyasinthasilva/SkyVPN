@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "656379486933",
-    "project_id": "skysoftvpn",
-    "storage_bucket": "skysoftvpn.firebasestorage.app"
+    "project_number": "54595809321",
+    "project_id": "skyvpnapp-79a4c",
+    "storage_bucket": "skyvpnapp-79a4c.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:656379486933:android:b561191d64d2209617f85c",
+        "mobilesdk_app_id": "1:54595809321:android:5cd13bed26a2e227766c38",
         "android_client_info": {
-          "package_name": "com.skysoftlk.vpnapp"
+          "package_name": "com.skysoftlk.skyvpnapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAeZOoiOwIU18d6sHghNEvtRfrzBA2tpyk"
+          "current_key": "AIzaSyAHdJLPMhROXJW6jVTIa9_qsvtOIECPogY"
         }
       ],
       "services": {

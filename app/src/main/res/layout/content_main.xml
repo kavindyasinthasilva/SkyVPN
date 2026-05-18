@@ -8,7 +8,7 @@
     android:background="@color/futuristic_bg_start"
     android:fillViewport="true"
     android:scrollbars="none"
-    tools:context="com.skysoftlk.vpnapp.Activities.MainActivity">
+    tools:context="com.skysoftlk.skyvpnapp.Activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
