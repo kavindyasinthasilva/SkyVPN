@@ -65,6 +65,25 @@ public class MainActivity extends ContentsActivity {
         }
     };
 
+    private void updateTrialBanner() {
+        if (!Config.vip_subscription && !Config.all_subscription) {
+            if (Config.isTrialActive(this)) {
+                // Show trial status
+                long installTime = getSharedPreferences("vpn_prefs", MODE_PRIVATE).getLong("install_time", 0);
+                long timeLeft = (3 * 24 * 60 * 60 * 1000L) - (System.currentTimeMillis() - installTime);
+                long daysLeft = timeLeft / (24 * 60 * 60 * 1000L);
+                long hoursLeft = (timeLeft % (24 * 60 * 60 * 1000L)) / (60 * 60 * 1000L);
+                
+                String trialMsg = "Free Trial: " + daysLeft + "d " + hoursLeft + "h left";
+                if (tvConnectionStatus != null) tvConnectionStatus.setText(trialMsg);
+            } else {
+                if (tvConnectionStatus != null) tvConnectionStatus.setText("Trial Expired");
+            }
+        } else {
+            if (tvConnectionStatus != null) tvConnectionStatus.setText("Premium Active");
+        }
+    }
+
     private void billingSetup() {
         if (billingClient == null) return;
         if (billingClient.isReady()) {
@@ -107,8 +126,9 @@ public class MainActivity extends ContentsActivity {
                             }
                         }
                         
-                        Config.vip_subscription = hasActiveSubs;
-                        Config.all_subscription = hasActiveSubs;
+                    Config.vip_subscription = hasActiveSubs;
+                    Config.all_subscription = hasActiveSubs;
+                    runOnUiThread(this::updateTrialBanner);
                     }
                 }
         );
@@ -122,6 +142,7 @@ public class MainActivity extends ContentsActivity {
 
         // Billing and UI setup
         billingSetup();
+        updateTrialBanner();
 
         // Check if coming from Server selection
         if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("c")) {

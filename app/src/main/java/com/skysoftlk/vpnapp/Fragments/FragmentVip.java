@@ -175,7 +175,7 @@ public class FragmentVip extends Fragment {
     public static void onItemClick(Countries country) {
         countryy = country;
 
-        if (Config.vip_subscription || Config.all_subscription) {
+        if (Config.hasPremiumAccess(context)) {
             Intent intent = new Intent(context, MainActivity.class);
             intent.putExtra("c", country);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

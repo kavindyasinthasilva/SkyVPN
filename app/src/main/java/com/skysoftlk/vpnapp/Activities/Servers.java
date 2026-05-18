@@ -24,7 +24,7 @@ public class Servers extends BaseActivity {
         setContentView(R.layout.activity_servers);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarold);
-        toolbar.setTitle("Premium Servers");
+        toolbar.setTitle("VPN Servers");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -32,11 +32,12 @@ public class Servers extends BaseActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         adapter = new TabAdapter(getSupportFragmentManager());
 
-        adapter.addFragment(new FragmentVip(), "Vip Server");
-        adapter.addFragment(new FragmentFree(), "Free Server");
+        adapter.addFragment(new FragmentVip(), "All Servers");
+        // Removed FragmentFree as we only want one category
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-
+        
+        // Hide tab layout if only one fragment is present
+        tabLayout.setVisibility(android.view.View.GONE);
     }
 }

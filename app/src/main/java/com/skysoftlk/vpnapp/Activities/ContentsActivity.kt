@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -64,7 +63,9 @@ abstract class ContentsActivity : NavigationActivity() {
     var tvIpAddress: TextView? = null
     var textDownloading: TextView? = null
     var textUploading: TextView? = null
-    var tvConnectionStatus: TextView? = null
+
+    @JvmField
+    protected var tvConnectionStatus: TextView? = null
     var ivVpnDetail: ImageView? = null
     var timerTextView: TextView? = null
     var connectBtnTextView: ImageView? = null
@@ -73,9 +74,18 @@ abstract class ContentsActivity : NavigationActivity() {
     var footer: RelativeLayout? = null
     lateinit var sharedPreferences :SharedPreferences
 
-    private var timer: CountDownTimer? = null
-    private val twoHours = 7200000L
-    private var timeLeft = 0L
+    private var timer: Handler? = Handler(Looper.getMainLooper())
+    private var connectionStartTime = 0L
+    private val updateTimerRunnable = object : Runnable {
+        override fun run() {
+            if (STATUS == "CONNECTED") {
+                val duration = System.currentTimeMillis() - connectionStartTime
+                timerTextView!!.text = formatMilliSecondsToTime(duration)
+                timer?.postDelayed(this, 1000)
+            }
+        }
+    }
+
     @JvmField
     var imgFlag: ImageView? = null
 
@@ -106,9 +116,6 @@ abstract class ContentsActivity : NavigationActivity() {
         connectionStateTextView = findViewById(R.id.connection_state)
 
         imgFlag = findViewById(R.id.flag_image)
-
-
-
 
         flagName = findViewById(R.id.flag_name)
 
@@ -141,31 +148,21 @@ abstract class ContentsActivity : NavigationActivity() {
         }
     }
 
+    protected fun addTimer() {
+        connectionStartTime = System.currentTimeMillis()
+        timer?.removeCallbacks(updateTimerRunnable)
+        timer?.post(updateTimerRunnable)
+    }
 
-
-    private fun addTimer(time: Long) {
-
-        println("CHECKTIMER TEST")
-        if (timer != null) {
-            timer!!.cancel()
-            timer = null
-        }
-        timer = object : CountDownTimer(time + timeLeft, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timeLeft = millisUntilFinished
-                timerTextView!!.text = formatMilliSecondsToTime(millisUntilFinished)
-            }
-
-            override fun onFinish() {
-                disconnectFromVpn()
-            }
-        }.start()
+    protected fun stopTimer() {
+        timer?.removeCallbacks(updateTimerRunnable)
+        timerTextView!!.text = "00:00:00"
     }
 
     private fun formatMilliSecondsToTime(milliseconds: Long): String? {
         val seconds = (milliseconds / 1000).toInt() % 60
         val minutes = (milliseconds / (1000 * 60) % 60).toInt()
-        val hours = (milliseconds / (1000 * 60 * 60) % 24).toInt()
+        val hours = (milliseconds / (1000 * 60 * 60)).toInt()
         return (twoDigitString(hours.toLong()) + ":" + twoDigitString(minutes.toLong()) + ":"
                 + twoDigitString(seconds.toLong()))
     }
@@ -266,6 +263,7 @@ abstract class ContentsActivity : NavigationActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopTimer()
     }
 
     private fun showOrHideAppendLayout() {
@@ -287,7 +285,7 @@ abstract class ContentsActivity : NavigationActivity() {
         }
     }
 
-    private fun btnConnectDisconnect() {
+    protected fun btnConnectDisconnect() {
         if (STATUS != "DISCONNECTED") {
             disconnectAlert()
         } else {
@@ -329,9 +327,7 @@ abstract class ContentsActivity : NavigationActivity() {
                 lottieAnimationView!!.visibility = View.GONE
                 Toasty.success(this@ContentsActivity, "Server Connected", Toast.LENGTH_SHORT).show()
 
-                if (!Config.vip_subscription && !Config.all_subscription) {
-                    addTimer(twoHours)
-                }
+                addTimer()
             }
             "AUTH" -> {
                 STATUS = "AUTHENTICATION"
@@ -394,6 +390,7 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
                 connectionStateTextView!!.setText(R.string.paused)
+                stopTimer()
             }
             "NONETWORK" -> {
                 STATUS = "DISCONNECTED"
@@ -403,6 +400,7 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
                 connectionStateTextView!!.setText(R.string.nonetwork)
+                stopTimer()
             }
             "DISCONNECTED" -> {
                 STATUS = "DISCONNECTED"
@@ -414,6 +412,7 @@ abstract class ContentsActivity : NavigationActivity() {
                 connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus!!.text = "Not Selected"
                 connectionStateTextView!!.setText(R.string.disconnected)
+                stopTimer()
             }
         }
     }
@@ -435,6 +434,7 @@ abstract class ContentsActivity : NavigationActivity() {
             textUploading!!.text = "0.0 kB/s"
 
             showMessage("Server Disconnected", "success")
+            stopTimer()
         }
         builder.setNegativeButton(
                 "Cancel"
@@ -504,7 +504,7 @@ abstract class ContentsActivity : NavigationActivity() {
         prepareVpn()
     }
 
-    private fun showServerList() {
+    protected fun showServerList() {
         startActivity(Intent(this, Servers::class.java))
     }
 
