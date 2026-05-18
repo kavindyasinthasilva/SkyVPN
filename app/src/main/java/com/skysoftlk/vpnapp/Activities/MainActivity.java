@@ -26,12 +26,6 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryPurchasesParams;
 import com.android.billingclient.api.SkuDetails;
 import com.bumptech.glide.Glide;
-import com.facebook.ads.AdSettings;
-import com.facebook.ads.AudienceNetworkAds;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
@@ -54,21 +48,9 @@ import top.oneconnectapi.app.OpenVpnApi;
 
 public class MainActivity extends ContentsActivity {
 
-    public static String indratech_toto_27640849_fb_reward_id = "";
-    public static String indratech_toto_27640849_admob_reward = "";
-    public static String copyright_ivpnofficial_dont_change_the_value;
     public static Countries selectedCountry = null;
     private Locale locale;
     private boolean isFirst = true;
-
-    public static String type = "";
-    public static String indratech_toto_27640849_admob_id = "ca-app-pub-4509914586377718~7682770234";
-    public static String indratech_toto_27640849_ad_banner_id = "ca-app-pub-4509914586377718/3798981108";
-    public static String admob_interstitial_id = "ca-app-pub-4509914586377718/6888178875";
-    public static String indratech_toto_27640849_aad_native_id = "";
-    public static String indratech_toto_27640849_fb_native_id = "";
-    public static String indratech_toto_27640849_fb_interstitial_id = "";
-    public static boolean indratech_toto_27640849_all_ads_on_off = false;
 
     private BillingClient billingClient;
     private final List<String> allSubs = new ArrayList<>(Arrays.asList(
@@ -127,12 +109,6 @@ public class MainActivity extends ContentsActivity {
                         
                         Config.vip_subscription = hasActiveSubs;
                         Config.all_subscription = hasActiveSubs;
-
-                        runOnUiThread(() -> {
-                            if (!Config.vip_subscription) {
-                                updateSubscription();
-                            }
-                        });
                     }
                 }
         );
@@ -159,7 +135,7 @@ public class MainActivity extends ContentsActivity {
                     showMessage("No Internet Connection", "error");
                     updateUI("DISCONNECTED");
                 } else {
-                    showInterstitialAndConnect();
+                    prepareVpn();
                 }
             }
         } else {
@@ -181,8 +157,6 @@ public class MainActivity extends ContentsActivity {
                 }
             }
         }
-
-        setupAds();
     }
 
     private void updateFlagUI() {
@@ -195,22 +169,7 @@ public class MainActivity extends ContentsActivity {
         }
     }
 
-    private void setupAds() {
-        Intent intent = getIntent();
-        if (intent.getStringExtra("type") != null) {
-            type = intent.getStringExtra("type");
-            indratech_toto_27640849_ad_banner_id = intent.getStringExtra("indratech_toto_27640849_ad_banner");
-            admob_interstitial_id = intent.getStringExtra("admob_interstitial");
-            indratech_toto_27640849_fb_native_id = intent.getStringExtra("indratech_toto_27640849_fb_native");
-            indratech_toto_27640849_fb_interstitial_id = intent.getStringExtra("indratech_toto_27640849_fb_interstitial");
-        }
 
-        if (type.equals("ad")) {
-            // MobileAds initialization is now handled in App.java for better performance
-        } else {
-            // Facebook ads initialization is also in App.java
-        }
-    }
 
     @Override
     protected void onStop() {
@@ -287,7 +246,13 @@ public class MainActivity extends ContentsActivity {
 
     @Override
     protected void disconnectFromVpn() {
-        // OneConnect removed. Implement your own VPN disconnection logic here.
+        try {
+            Intent intent = new Intent(this, top.oneconnectapi.app.DisconnectVPNActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         updateUI("DISCONNECTED");
     }
 
@@ -453,7 +418,7 @@ public class MainActivity extends ContentsActivity {
             updateUI("DISCONNECT");
             showMessage("Please select a server first", "");
         } else {
-            showInterstitialAndConnect();
+            prepareVpn();
             updateUI("LOAD");
         }
     }

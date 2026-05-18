@@ -281,25 +281,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Ad Space -->
-                    <RelativeLayout
-                        android:id="@+id/fl_adplaceholder"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
 
-                    <com.facebook.ads.NativeAdLayout
-                        android:id="@+id/native_ad_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone" />
-
-                    <com.google.android.gms.ads.AdView
-                        android:id="@+id/admob_adview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:adSize="BANNER"
-                        app:adUnitId="@string/banner_ad_unit"
-                        android:visibility="gone" />
 
                 </LinearLayout>
             </ScrollView>

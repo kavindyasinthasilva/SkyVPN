@@ -73,7 +73,7 @@ android {
     packagingOptions {
         pickFirst '**/*.so'
         jniLibs {
-            useLegacyPackaging = false
+            useLegacyPackaging = true
         }
     }
 
@@ -115,10 +115,7 @@ dependencies {
     implementation 'com.cardiomood.android:android-widgets:0.1.1'
     implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
 
-    // Ads
-    implementation 'com.facebook.android:audience-network-sdk:6.16.0'
-    implementation 'com.google.ads.mediation:facebook:6.16.0.0'
-    implementation 'com.google.android.gms:play-services-ads:23.6.0'
+
 
     // Charts & Animations
     implementation 'com.github.anastr:speedviewlib:1.6.0'
@@ -134,7 +131,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.16.0'
 
     // Utility Libraries
-    implementation 'com.github.daoibrahim:AdmobAdvancedNativeRecyclerview:1.0.0'
+
     implementation 'com.github.GrenderG:Toasty:1.5.2'
     implementation 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     implementation 'com.github.oatrice:internet-speed-testing:1.0.1'

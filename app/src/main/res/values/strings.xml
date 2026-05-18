@@ -11,9 +11,9 @@
     <string name="privacy_policy_link">https://support.indratech.in/privacy_policy/TOTO_VPN.html</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="nav_header_title">Premium VPN</string>
-    <bool name="ads_switch">true</bool>
+    <bool name="ads_switch">false</bool>
     <bool name="facebook_list_ads">false</bool>
-    <bool name="admob_list_ads">true</bool>
+    <bool name="admob_list_ads">false</bool>
     <string name="support_email_subject">Send Bug Report</string>
     <string name="support_email_extra_text">Please Give Your Feedback</string>
     <string name="share_app">Share App</string>
@@ -34,7 +34,7 @@
     <string name="ext_battery">\n to 6h 30m</string>
     <string name="batterysavertxt">Save your battery power and optimize battery usage with just 1 tap, longer the phone battery life up to 80%.</string>
 
-    <string name="banner_ad_unit" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!--DEMO DATA -->
+
     <string name="battery_saver">Battery Saver</string>
     <string name="extended_battery_life"> \n to 2h 10m </string>
 

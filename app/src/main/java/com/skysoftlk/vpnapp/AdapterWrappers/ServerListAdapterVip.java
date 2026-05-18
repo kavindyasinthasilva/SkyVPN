@@ -20,26 +20,23 @@ import java.util.List;
 public class ServerListAdapterVip extends RecyclerView.Adapter<ServerListAdapterVip.mViewhoder> {
 
     ArrayList<Countries> datalist = new ArrayList<>();
-
     private final Context context;
-    private final int AD_TYPE = 0;
-    private final int CONTENT_TYPE = 1;
-    public ServerListAdapterVip( Context ctx) {
-        this.context=ctx;
+
+    public ServerListAdapterVip(Context ctx) {
+        this.context = ctx;
     }
 
     @NonNull
     @Override
-    public ServerListAdapterVip.mViewhoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-    {
+    public ServerListAdapterVip.mViewhoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.region_list_item, parent, false);
         return new ServerListAdapterVip.mViewhoder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ServerListAdapterVip.mViewhoder holder, int position) {
-        if(getItemViewType(position) == CONTENT_TYPE){
-            Countries data = datalist.get(position);
+        Countries data = datalist.get(position);
+        if (data != null) {
             holder.app_name.setText(data.getCountry());
 
             Glide.with(context)
@@ -59,13 +56,8 @@ public class ServerListAdapterVip extends RecyclerView.Adapter<ServerListAdapter
     public int getItemCount() {
         return datalist.size();
     }
-    @Override
-    public int getItemViewType(int position) {
-        return CONTENT_TYPE;
-    }
 
-    public static class mViewhoder extends RecyclerView.ViewHolder
-    {
+    public static class mViewhoder extends RecyclerView.ViewHolder {
         TextView app_name;
         ImageView flag;
 
@@ -78,7 +70,11 @@ public class ServerListAdapterVip extends RecyclerView.Adapter<ServerListAdapter
 
     public void setData(List<Countries> servers) {
         datalist.clear();
-        datalist.addAll(servers);
+        for (Countries server : servers) {
+            if (server != null) {
+                datalist.add(server);
+            }
+        }
         notifyDataSetChanged();
     }
 }

@@ -31,12 +31,9 @@
 
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
-    <queries>
+        <queries>
         <package android:name="com.google.android.gms" />
         <package android:name="com.android.vending" />
-        <intent>
-            <action android:name="com.google.android.gms.ads.service.START" />
-        </intent>
     </queries>
 
     <application
@@ -72,25 +69,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3091157984447781~6792582877" />
 
-        <!-- Optimization flags to prevent SecurityExceptions in GoogleApiManager and reduce startup latency -->
-        <meta-data
-            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
-            android:value="true" />
-        <meta-data
-            android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
-            android:value="true" />
-        <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true" />
-
-        <property
-            android:name="android.adservices.AD_SERVICES_CONFIG"
-            android:resource="@xml/gma_ad_services_config"
-            tools:replace="android:resource" />
 
         <activity
             android:name="com.skysoftlk.vpnapp.Activities.IntroActivity"
@@ -109,7 +88,7 @@
             android:name="com.skysoftlk.vpnapp.Activities.Servers"
             android:parentActivityName="com.skysoftlk.vpnapp.Activities.MainActivity" />
         <activity android:name="com.skysoftlk.vpnapp.Activities.MainActivity" />
-        <activity android:name="com.facebook.ads.AudienceNetworkActivity" android:hardwareAccelerated="true" />
+
 
         <service
             android:name="top.oneconnectapi.app.core.OpenVPNService"

@@ -2,7 +2,6 @@ package com.skysoftlk.vpnapp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,34 +24,13 @@ import android.view.animation.OvershootInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.skysoftlk.vpnapp.Config;
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
-import com.facebook.ads.AdSettings;
-import com.facebook.ads.AdSize;
-import com.facebook.ads.AudienceNetworkAds;
-import com.facebook.ads.InterstitialAdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.skysoftlk.vpnapp.Apps;
 import com.skysoftlk.vpnapp.CPUApplications_Scanning;
 import com.skysoftlk.vpnapp.R;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.skyfishjy.library.RippleBackground;
-import com.zys.brokenview.BrokenTouchListener;
-import com.zys.brokenview.BrokenView;
-
-import net.grandcentrix.tray.AppPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,10 +41,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 public class ScannerCPU extends BaseActivity {
     private static final String TAG = "ScannerCPU";
 
-
     ImageView scanner, img_animation, cpu, ivCompltecheck, shadowCpu;
-    BrokenView brokenView;
-    BrokenTouchListener listener;
     CPUApplications_Scanning mAdapter;
     RecyclerView recyclerView;
     List<Apps> app = null;
@@ -75,9 +49,6 @@ public class ScannerCPU extends BaseActivity {
     List<ApplicationInfo> packages;
     TextView cooledcpu;
     RelativeLayout rel;
-    InterstitialAd mInterstitialAd;
-    com.facebook.ads.AdView facebookAdview;
-    public com.facebook.ads.InterstitialAd facebookInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,23 +57,13 @@ public class ScannerCPU extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarr);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
 
-        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
-        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
-        actionBar.setHomeAsUpIndicator(upArrow);
-
-        if(MainActivity.type.equals("ad")) {
-            AdView mAdMobAdView = findViewById(R.id.admob_adview);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdMobAdView.loadAd(adRequest);
-        }else{
-            facebookAdview = new com.facebook.ads.AdView(this,MainActivity.indratech_toto_27640849_fb_native_id, AdSize.BANNER_HEIGHT_50);
-            LinearLayout adContainer = (LinearLayout) findViewById(R.id.banner_container);
-            adContainer.addView(facebookAdview);
-            facebookAdview.loadAd();
-
+            final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
+            upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+            actionBar.setHomeAsUpIndicator(upArrow);
         }
 
         scanner = (ImageView) findViewById(R.id.scann);
@@ -113,107 +74,6 @@ public class ScannerCPU extends BaseActivity {
         ivCompltecheck = (ImageView) findViewById(R.id.iv_completecheck);
         shadowCpu = (ImageView) findViewById(R.id.shadowcpu);
         app = new ArrayList<>();
-
-        if (getResources().getBoolean(R.bool.ads_switch) &&
-                !Config.ads_subscription &&
-                !Config.all_subscription &&
-                !Config.vip_subscription) {
-
-            if(MainActivity.type.equals("ad")) {
-
-                AdRequest adRequest = new AdRequest.Builder().build();
-                        InterstitialAd.load(ScannerCPU.this, MainActivity.admob_interstitial_id, adRequest,
-                                new InterstitialAdLoadCallback() {
-                                    @Override
-                                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                                        // The mInterstitialAd reference will be null until
-                                        // an ad is loaded.
-                                        mInterstitialAd = interstitialAd;
-                                        Log.i("INTERSTITIAL", "onAdLoaded");
-
-                                        if (mInterstitialAd != null) {
-
-                                            mInterstitialAd.show(ScannerCPU.this);
-
-                                            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                                                @Override
-                                                public void onAdDismissedFullScreenContent() {
-                                                    // Called when fullscreen content is dismissed.
-                                                    Log.d("TAG", "The ad was dismissed.");
-                                                    Log.d("TESTAD", " dismissed update");
-                                                }
-
-                                                public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                                    // Called when fullscreen content failed to show.
-                                                    Log.d("TAG", "The ad failed to show.");
-                                                }
-
-                                                @Override
-                                                public void onAdShowedFullScreenContent() {
-                                                    // Called when fullscreen content is shown.
-                                                    // Make sure to set your reference to null so you don't
-                                                    // show it a second time.
-                                                    mInterstitialAd = null;
-                                                    Log.d("TAG", "The ad was shown.");
-                                                }
-                                            });
-
-                                        } else {
-                                            Log.d("TAG", "The interstitial ad wasn't ready yet.");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                        // Handle the error
-                                        Log.i("INTERSTITIAL", loadAdError.getMessage());
-                                        mInterstitialAd = null;
-                                    }
-                                });
-                    }else {
-                        AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
-
-
-                        AudienceNetworkAds.initialize(ScannerCPU.this);
-                        com.facebook.ads.InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
-                            @Override
-                            public void onInterstitialDisplayed(Ad ad) {
-
-                            }
-
-                            @Override
-                            public void onInterstitialDismissed(Ad ad) {
-
-                            }
-
-                            @Override
-                            public void onError(Ad ad, AdError adError) {
-                                Log.d("ADerror",adError.getErrorMessage());
-                            }
-
-                            @Override
-                            public void onAdLoaded(Ad ad) {
-                                facebookInterstitialAd.show();
-                            }
-
-                            @Override
-                            public void onAdClicked(Ad ad) {
-
-                            }
-
-                            @Override
-                            public void onLoggingImpression(Ad ad) {
-
-                            }
-                        };
-                        facebookInterstitialAd = new com.facebook.ads.InterstitialAd(ScannerCPU.this,MainActivity.indratech_toto_27640849_fb_interstitial_id);
-                        facebookInterstitialAd.loadAd(facebookInterstitialAd.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
-
-                    }
-
-
-                }
-
 
         RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(1500);
@@ -330,7 +190,6 @@ public class ScannerCPU extends BaseActivity {
                     remove(0);
 
                     final RippleBackground rippleBackground = (RippleBackground) findViewById(R.id.content);
-                    ImageView imageView = (ImageView) findViewById(R.id.centerImage);
                     rippleBackground.startRippleAnimation();
 
                     img_animation.setImageResource(0);
@@ -358,33 +217,15 @@ public class ScannerCPU extends BaseActivity {
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-
                             rippleBackground.stopRippleAnimation();
-
-
-                            AppPreferences preferences = new AppPreferences(ScannerCPU.this);
-
-
-                            Log.d(TAG, "onAnimationEnd: preferences.getBoolean(\"admob\",false)" + preferences.getBoolean("admob", false));
-                            if(MainActivity.type.equals("ad")) {
-                                if (preferences.getBoolean("admob", false))
-                                    if (mInterstitialAd != null)
-                                        mInterstitialAd.show(ScannerCPU.this);
-                            }else {
-                                facebookInterstitialAd.show();
-                            }
 
                             final Handler handler6 = new Handler();
                             handler6.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-
-
                                     finish();
-
                                 }
                             }, 1000);
-
                         }
 
                         @Override
@@ -409,8 +250,6 @@ public class ScannerCPU extends BaseActivity {
     }
 
     public void add(String text, int position) {
-
-
         try {
             mAdapter.notifyItemInserted(position);
         } catch (Exception e) {
@@ -419,7 +258,6 @@ public class ScannerCPU extends BaseActivity {
     }
 
     public void remove(int position) {
-
         mAdapter.notifyItemRemoved(position);
         try {
             CPUCoolerActivity.apps.remove(position);

@@ -23,26 +23,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.skysoftlk.vpnapp.Config;
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
-import com.facebook.ads.AdSettings;
-import com.facebook.ads.AudienceNetworkAds;
-import com.facebook.ads.InterstitialAdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
 import com.skysoftlk.vpnapp.R;
-
-import net.grandcentrix.tray.AppPreferences;
 
 public class NormalMode extends AppCompatActivity {
     DecoView arcView;
@@ -52,8 +36,6 @@ public class NormalMode extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
     int check = 0;
-    InterstitialAd mInterstitialAd;
-    public com.facebook.ads.InterstitialAd facebookInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,104 +60,6 @@ public class NormalMode extends AppCompatActivity {
         sharedpreferences = getSharedPreferences("was", Context.MODE_PRIVATE);
         editor = sharedpreferences.edit();
 
-        if (getResources().getBoolean(R.bool.ads_switch) &&
-                !Config.ads_subscription &&
-                !Config.all_subscription &&
-                !Config.vip_subscription) {
-                if (MainActivity.type.equals("ad")) {
-
-                    AdRequest adRequest = new AdRequest.Builder().build();
-                    InterstitialAd.load(NormalMode.this, MainActivity.admob_interstitial_id, adRequest,
-                            new InterstitialAdLoadCallback() {
-                                @Override
-                                public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                                    // The mInterstitialAd reference will be null until
-                                    // an ad is loaded.
-                                    mInterstitialAd = interstitialAd;
-                                    Log.i("INTERSTITIAL", "onAdLoaded");
-
-                                    if (mInterstitialAd != null) {
-
-                                        mInterstitialAd.show(NormalMode.this);
-
-                                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                                            @Override
-                                            public void onAdDismissedFullScreenContent() {
-                                                // Called when fullscreen content is dismissed.
-                                                Log.d("TAG", "The ad was dismissed.");
-                                                Log.d("TESTAD", " dismissed update");
-                                            }
-
-                                            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                                // Called when fullscreen content failed to show.
-                                                Log.d("TAG", "The ad failed to show.");
-                                            }
-
-                                            @Override
-                                            public void onAdShowedFullScreenContent() {
-                                                // Called when fullscreen content is shown.
-                                                // Make sure to set your reference to null so you don't
-                                                // show it a second time.
-                                                mInterstitialAd = null;
-                                                Log.d("TAG", "The ad was shown.");
-                                            }
-                                        });
-
-                                    } else {
-                                        Log.d("TAG", "The interstitial ad wasn't ready yet.");
-                                    }
-                                }
-
-                                @Override
-                                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                    // Handle the error
-                                    Log.i("INTERSTITIAL", loadAdError.getMessage());
-                                    mInterstitialAd = null;
-                                }
-                            });
-                } else {
-                    AdSettings.setIntegrationErrorMode(AdSettings.IntegrationErrorMode.INTEGRATION_ERROR_CALLBACK_MODE);
-
-
-                    AudienceNetworkAds.initialize(NormalMode.this);
-                    com.facebook.ads.InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
-                        @Override
-                        public void onInterstitialDisplayed(Ad ad) {
-
-                        }
-
-                        @Override
-                        public void onInterstitialDismissed(Ad ad) {
-
-                        }
-
-                        @Override
-                        public void onError(Ad ad, AdError adError) {
-                            Log.d("ADerror", adError.getErrorMessage());
-                        }
-
-                        @Override
-                        public void onAdLoaded(Ad ad) {
-                            facebookInterstitialAd.show();
-                        }
-
-                        @Override
-                        public void onAdClicked(Ad ad) {
-
-                        }
-
-                        @Override
-                        public void onLoggingImpression(Ad ad) {
-
-                        }
-                    };
-                    facebookInterstitialAd = new com.facebook.ads.InterstitialAd(NormalMode.this, MainActivity.indratech_toto_27640849_fb_interstitial_id);
-                    facebookInterstitialAd.loadAd(facebookInterstitialAd.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
-
-                }
-        }
-
-
         arcView = (DecoView) findViewById(R.id.dynamicArcView2);
 
 
@@ -185,11 +69,6 @@ public class NormalMode extends AppCompatActivity {
                 .setLineWidth(12f)
                 .build());
 
-
-        SeriesItem seriesItem1 = new SeriesItem.Builder(Color.parseColor("#FFFFFF"))
-                .setRange(0, 100, 0)
-                .setLineWidth(20f)
-                .build();
 
         SeriesItem seriesItem2 = new SeriesItem.Builder(Color.parseColor("#2a7af7"))
                 .setRange(0, 100, 0)
@@ -260,22 +139,6 @@ public class NormalMode extends AppCompatActivity {
 
             @Override
             public void onEventEnd(DecoEvent decoEvent) {
-                try {
-
-                    AppPreferences preferences = new AppPreferences(NormalMode.this);
-                    if(MainActivity.type.equals("ad")) {
-                        if (preferences.getBoolean("admob", false))
-                            if(mInterstitialAd != null)
-                                mInterstitialAd.show(NormalMode.this);
-                    }else {
-                        facebookInterstitialAd.show();
-                    }
-
-                } catch (Exception e) {
-
-                }
-
-
                 check = 1;
                 youDesirePermissionCode(NormalMode.this);
 
@@ -373,4 +236,3 @@ public class NormalMode extends AppCompatActivity {
         }
     }
 }
-
