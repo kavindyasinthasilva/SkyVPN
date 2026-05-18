@@ -57,12 +57,11 @@ abstract class ContentsActivity : NavigationActivity() {
     lateinit var sharedPreferences :SharedPreferences
 
     private var timer: Handler? = Handler(Looper.getMainLooper())
-    private var connectionStartTime = 0L
     private val updateTimerRunnable = object : Runnable {
         override fun run() {
             if (STATUS == "CONNECTED") {
                 val duration = System.currentTimeMillis() - connectionStartTime
-                timerTextView!!.text = formatMilliSecondsToTime(duration)
+                timerTextView?.text = formatMilliSecondsToTime(duration)
                 timer?.postDelayed(this, 1000)
             }
         }
@@ -131,14 +130,16 @@ abstract class ContentsActivity : NavigationActivity() {
     }
 
     protected fun addTimer() {
-        connectionStartTime = System.currentTimeMillis()
+        if (connectionStartTime == 0L) {
+            connectionStartTime = System.currentTimeMillis()
+        }
         timer?.removeCallbacks(updateTimerRunnable)
         timer?.post(updateTimerRunnable)
     }
 
     protected fun stopTimer() {
         timer?.removeCallbacks(updateTimerRunnable)
-        timerTextView!!.text = "00:00:00"
+        timerTextView?.text = "00:00:00"
     }
 
     private fun formatMilliSecondsToTime(milliseconds: Long): String? {
@@ -286,115 +287,124 @@ abstract class ContentsActivity : NavigationActivity() {
         
         // Only invalidate cache and fetch on actual connection/disconnection events
         // to avoid redundant network calls during intermediate states (AUTH, WAIT, etc.)
-        val isSignificantChange = (status == "CONNECTED" || status == "DISCONNECTED")
+        val isSignificantChange = (status.equals("CONNECTED", ignoreCase = true) || status.equals("DISCONNECTED", ignoreCase = true))
         if (isSignificantChange) {
             lastIpFetchTime = 0 
         }
 
-        when (status) {
+        when (status.uppercase()) {
             "CONNECTED" -> {
                 STATUS = "CONNECTED"
-                textDownloading!!.visibility = View.VISIBLE
-                textUploading!!.visibility = View.VISIBLE
-                connectBtnTextView!!.isEnabled = true
-                connectionStateTextView!!.setText(R.string.connected)
-                timerTextView!!.visibility = View.VISIBLE
+                textDownloading?.visibility = View.VISIBLE
+                textUploading?.visibility = View.VISIBLE
+                connectBtnTextView?.isEnabled = true
+                connectionStateTextView?.setText(R.string.connected)
+                timerTextView?.visibility = View.VISIBLE
                 hideConnectProgress()
                 
                 // Fetch IP only once when connected
                 showIP()
 
-                connectBtnTextView!!.visibility = View.VISIBLE
-                tvConnectionStatus!!.text = "Selected"
-                lottieAnimationView!!.visibility = View.GONE
+                connectBtnTextView?.visibility = View.VISIBLE
+                tvConnectionStatus?.text = "Selected"
+                lottieAnimationView?.visibility = View.GONE
                 Toasty.success(this@ContentsActivity, "Server Connected", Toast.LENGTH_SHORT).show()
 
                 addTimer()
             }
-            "AUTH" -> {
+            "AUTH", "AUTHENTICATIONCHECK" -> {
                 STATUS = "AUTHENTICATION"
-                connectBtnTextView!!.visibility = View.VISIBLE
-                lottieAnimationView!!.visibility = View.VISIBLE
+                connectBtnTextView?.visibility = View.VISIBLE
+                lottieAnimationView?.visibility = View.VISIBLE
 
-                connectionStateTextView!!.setText(R.string.auth)
-                connectBtnTextView!!.isEnabled = true
-                timerTextView!!.visibility = View.GONE
+                connectionStateTextView?.setText(R.string.auth)
+                connectBtnTextView?.isEnabled = true
+                timerTextView?.visibility = View.GONE
             }
             "WAIT" -> {
                 STATUS = "WAITING"
-                connectBtnTextView!!.visibility = View.VISIBLE
-                lottieAnimationView!!.visibility = View.VISIBLE
+                connectBtnTextView?.visibility = View.VISIBLE
+                lottieAnimationView?.visibility = View.VISIBLE
 
-                connectionStateTextView!!.setText(R.string.wait)
-                connectBtnTextView!!.isEnabled = true
-                timerTextView!!.visibility = View.GONE
+                connectionStateTextView?.setText(R.string.wait)
+                connectBtnTextView?.isEnabled = true
+                timerTextView?.visibility = View.GONE
             }
             "RECONNECTING" -> {
                 STATUS = "RECONNECTING"
-                connectBtnTextView!!.visibility = View.VISIBLE
-                lottieAnimationView!!.visibility = View.VISIBLE
+                connectBtnTextView?.visibility = View.VISIBLE
+                lottieAnimationView?.visibility = View.VISIBLE
 
-                connectionStateTextView!!.setText(R.string.recon)
-                connectBtnTextView!!.isEnabled = true
-                timerTextView!!.visibility = View.GONE
+                connectionStateTextView?.setText(R.string.recon)
+                connectBtnTextView?.isEnabled = true
+                timerTextView?.visibility = View.GONE
             }
-            "LOAD" -> {
+            "LOAD", "CONNECTING" -> {
                 STATUS = "LOAD"
-                connectBtnTextView!!.visibility = View.VISIBLE
-                lottieAnimationView!!.visibility = View.VISIBLE
+                connectBtnTextView?.visibility = View.VISIBLE
+                lottieAnimationView?.visibility = View.VISIBLE
 
-                connectionStateTextView!!.setText(R.string.connecting)
-                connectBtnTextView!!.isEnabled = true
-                timerTextView!!.visibility = View.GONE
+                connectionStateTextView?.setText(R.string.connecting)
+                connectBtnTextView?.isEnabled = true
+                timerTextView?.visibility = View.GONE
             }
             "ASSIGN_IP" -> {
                 STATUS = "LOAD"
-                connectBtnTextView!!.visibility = View.VISIBLE
-                lottieAnimationView!!.visibility = View.VISIBLE
+                connectBtnTextView?.visibility = View.VISIBLE
+                lottieAnimationView?.visibility = View.VISIBLE
 
-                connectionStateTextView!!.setText(R.string.assign_ip)
-                connectBtnTextView!!.isEnabled = true
-                timerTextView!!.visibility = View.GONE
+                connectionStateTextView?.setText(R.string.assign_ip)
+                connectBtnTextView?.isEnabled = true
+                timerTextView?.visibility = View.GONE
             }
             "GET_CONFIG" -> {
                 STATUS = "LOAD"
-                connectBtnTextView!!.visibility = View.VISIBLE
-                lottieAnimationView!!.visibility = View.VISIBLE
+                connectBtnTextView?.visibility = View.VISIBLE
+                lottieAnimationView?.visibility = View.VISIBLE
 
-                connectionStateTextView!!.setText(R.string.config)
-                connectBtnTextView!!.isEnabled = true
-                timerTextView!!.visibility = View.GONE
+                connectionStateTextView?.setText(R.string.config)
+                connectBtnTextView?.isEnabled = true
+                timerTextView?.visibility = View.GONE
             }
             "USERPAUSE" -> {
+                if (STATUS == "DISCONNECTED") return
                 STATUS = "DISCONNECTED"
-                tvConnectionStatus!!.text = "Not Selected"
+                tvConnectionStatus?.text = "Not Selected"
 
-                connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
-                tvConnectionStatus!!.text = "Not Selected"
-                connectionStateTextView!!.setText(R.string.paused)
+                connectBtnTextView?.setImageResource(R.drawable.ic_on_off)
+                tvConnectionStatus?.text = "Not Selected"
+                connectionStateTextView?.setText(R.string.paused)
                 stopTimer()
+                connectionStartTime = 0L
             }
             "NONETWORK" -> {
+                if (STATUS == "DISCONNECTED") return
                 STATUS = "DISCONNECTED"
-                tvConnectionStatus!!.text = "Not Selected"
+                tvConnectionStatus?.text = "Not Selected"
                 showIP()
 
-                connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
-                tvConnectionStatus!!.text = "Not Selected"
-                connectionStateTextView!!.setText(R.string.nonetwork)
+                connectBtnTextView?.setImageResource(R.drawable.ic_on_off)
+                tvConnectionStatus?.text = "Not Selected"
+                connectionStateTextView?.setText(R.string.nonetwork)
                 stopTimer()
+                connectionStartTime = 0L
             }
-            "DISCONNECTED" -> {
+            "DISCONNECTED", "EXITING" -> {
+                if (STATUS == "DISCONNECTED") return
                 STATUS = "DISCONNECTED"
-                tvConnectionStatus!!.text = "Not Selected"
-                timerTextView!!.visibility = View.INVISIBLE
+                tvConnectionStatus?.text = "Not Selected"
+                timerTextView?.visibility = View.INVISIBLE
                 hideConnectProgress()
                 showIP()
 
-                connectBtnTextView!!.setImageResource(R.drawable.ic_on_off)
-                tvConnectionStatus!!.text = "Not Selected"
-                connectionStateTextView!!.setText(R.string.disconnected)
+                connectBtnTextView?.setImageResource(R.drawable.ic_on_off)
+                tvConnectionStatus?.text = "Not Selected"
+                connectionStateTextView?.setText(R.string.disconnected)
                 stopTimer()
+                connectionStartTime = 0L
+                
+                textDownloading?.text = "0.0 kB/s"
+                textUploading?.text = "0.0 kB/s"
             }
         }
     }
@@ -438,6 +448,9 @@ abstract class ContentsActivity : NavigationActivity() {
         private var lastIpFetchTime: Long = 0
         @JvmStatic
         private var isFetchingIp = false
+
+        @JvmStatic
+        private var connectionStartTime = 0L
     }
 
     protected fun showMessage(msg: String?, type:String) {
