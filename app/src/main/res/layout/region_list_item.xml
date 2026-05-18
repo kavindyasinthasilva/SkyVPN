@@ -14,6 +14,7 @@
         android:background="@drawable/bg_server_item"
         android:padding="12dp">
 
+        <!-- Flag Icon -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_flag"
             android:layout_width="55dp"
@@ -32,19 +33,9 @@
                 android:src="@drawable/flag_default" />
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/region_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@+id/card_flag"
-            android:text="DEFAULT REGION"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
+        <!-- Right Side Container (Ping + Crown) -->
         <LinearLayout
+            android:id="@+id/right_info_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -52,35 +43,59 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <View
+                android:id="@+id/signal_dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_signal_dot" />
+
             <TextView
                 android:id="@+id/region_limit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="218ms"
+                android:layout_marginEnd="12dp"
+                android:minWidth="40dp"
+                android:gravity="center"
+                android:text="---"
                 android:textColor="@color/neon_green"
-                android:textSize="13sp"
-                android:visibility="gone" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/crown_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/upgrade"
+                android:src="@drawable/ic_crown"
+                app:tint="@color/text_color"
                 android:visibility="visible" />
 
         </LinearLayout>
 
+        <!-- Server Title (Centered between Flag and Right Info) -->
+        <TextView
+            android:id="@+id/region_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@id/right_info_container"
+            android:layout_toEndOf="@id/card_flag"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="India (Mumbai) Optimized"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
     </RelativeLayout>
 
-    <!-- Deprecated layout kept hidden to avoid code breaks if referenced by ID -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone">
+    <!-- Deprecated hidden layouts to prevent R file desync -->
+    <LinearLayout android:visibility="gone" android:layout_width="0dp" android:layout_height="0dp">
         <ImageView android:id="@+id/country_flag1" android:layout_width="0dp" android:layout_height="0dp" />
         <TextView android:id="@+id/region_title1" android:layout_width="0dp" android:layout_height="0dp" />
-        <TextView android:id="@+id/region_limit1" android:layout_width="0dp" android:layout_height="0dp" />
+        <ImageView android:id="@+id/region_limit1" android:layout_width="0dp" android:layout_height="0dp" />
     </LinearLayout>
 
 </RelativeLayout>

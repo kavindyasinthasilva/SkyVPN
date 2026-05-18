@@ -9,7 +9,7 @@ public class Countries implements Parcelable {
     private String ovpn;
     private String ovpnUserName;
     private String ovpnUserPassword;
-
+    private int ping = 0;
 
     public Countries() {
     }
@@ -68,6 +68,14 @@ public class Countries implements Parcelable {
         this.ovpnUserPassword = ovpnUserPassword;
     }
 
+    public int getPing() {
+        return ping;
+    }
+
+    public void setPing(int ping) {
+        this.ping = ping;
+    }
+
     public static final Creator<Countries> CREATOR
             = new Creator<Countries>() {
         public Countries createFromParcel(Parcel in) {
@@ -90,6 +98,7 @@ public class Countries implements Parcelable {
         dest.writeString(ovpn);
         dest.writeString(ovpnUserName);
         dest.writeString(ovpnUserPassword);
+        dest.writeInt(ping);
     }
 
     private Countries(Parcel in ) {
@@ -98,6 +107,21 @@ public class Countries implements Parcelable {
         ovpn = in.readString();
         ovpnUserName = in.readString();
         ovpnUserPassword = in.readString();
+        ping = in.readInt();
+    }
+
+    public String getServerHost() {
+        if (ovpn == null || ovpn.isEmpty()) return null;
+        String[] lines = ovpn.split("\n");
+        for (String line : lines) {
+            line = line.trim();
+            if (line.startsWith("remote ")) {
+                String[] parts = line.split("\\s+");
+                if (parts.length >= 2) {
+                    return parts[1];
+                }
+            }
+        }
+        return null;
     }
 }
-

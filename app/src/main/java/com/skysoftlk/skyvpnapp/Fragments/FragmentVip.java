@@ -32,6 +32,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class FragmentVip extends Fragment {
@@ -156,6 +159,46 @@ public class FragmentVip extends Fragment {
 
         adapter.setData(servers);
         animationHolder.setVisibility(View.GONE);
+        
+        startPinging(servers);
+    }
+
+    private void startPinging(ArrayList<Countries> servers) {
+        new Thread(() -> {
+            for (int i = 0; i < servers.size(); i++) {
+                Countries server = servers.get(i);
+                String host = server.getServerHost();
+                if (host != null) {
+                    int ping = getPing(host);
+                    server.setPing(ping);
+                    int finalI = i;
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> adapter.notifyItemChanged(finalI));
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private int getPing(String host) {
+        try {
+            long startTime = System.currentTimeMillis();
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(host, 443), 2000); // Try connecting to 443 (common for OVPN)
+            socket.close();
+            return (int) (System.currentTimeMillis() - startTime);
+        } catch (Exception e) {
+            try {
+                // Fallback to ICMP ping if socket fails
+                long startTime = System.currentTimeMillis();
+                if (InetAddress.getByName(host).isReachable(2000)) {
+                    return (int) (System.currentTimeMillis() - startTime);
+                }
+            } catch (Exception e2) {
+                return 0;
+            }
+        }
+        return 0;
     }
 
     public static void unblockServer() {
