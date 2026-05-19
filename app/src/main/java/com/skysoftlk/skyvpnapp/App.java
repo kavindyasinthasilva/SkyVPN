@@ -42,18 +42,16 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Security provider update (Conscrypt)
-        // We do this early to ensure all network calls use modern TLS.
-        try {
-            Security.insertProviderAt(Conscrypt.newProvider(), 1);
-            Log.i(TAG, "Security Provider updated via Conscrypt.");
-        } catch (Throwable e) {
-            Log.e(TAG, "Conscrypt initialization failed. Falling back to GMS.", e);
-            installGmsProvider();
-        }
-
-        // Initialize libraries that are safe for background or don't block main thread significantly
+        // Keep heavyweight networking/security startup work off the first UI frame.
         new Thread(() -> {
+            try {
+                Security.insertProviderAt(Conscrypt.newProvider(), 1);
+                Log.i(TAG, "Security Provider updated via Conscrypt.");
+            } catch (Throwable e) {
+                Log.e(TAG, "Conscrypt initialization failed. Falling back to GMS.", e);
+                installGmsProvider();
+            }
+
             // Fix: Failed to export logs. Increase OpenTelemetry export timeouts.
             System.setProperty("otel.exporter.otlp.timeout", "60000");
             System.setProperty("otel.exporter.otlp.logs.timeout", "60000");
