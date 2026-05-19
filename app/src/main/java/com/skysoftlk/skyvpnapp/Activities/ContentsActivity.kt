@@ -112,7 +112,12 @@ abstract class ContentsActivity : NavigationActivity() {
         }
 
         tvIpAddress = findViewById<TextView>(R.id.tv_ip_address)
-        showIP()
+        showCachedIpOrAppName()
+        handler.postDelayed({
+            if (!isFinishing && !isDestroyed && STATUS == "DISCONNECTED") {
+                showIP()
+            }
+        }, 1500)
 
 //        Lottie animation to show animation in the project
         lottieAnimationView = findViewById(R.id.animation_view)
@@ -193,6 +198,10 @@ abstract class ContentsActivity : NavigationActivity() {
         tryFetchIp(services, 0)
     }
 
+    private fun showCachedIpOrAppName() {
+        tvIpAddress?.text = cachedIp ?: getString(R.string.app_name)
+    }
+
     private fun tryFetchIp(services: List<String>, index: Int) {
         if (index >= services.size) {
             isFetchingIp = false
@@ -238,7 +247,7 @@ abstract class ContentsActivity : NavigationActivity() {
         }
 
         stringRequest.retryPolicy = DefaultRetryPolicy(
-            if (ChinaUtils.isLikelyInChina(this)) 4000 else 8000,
+            if (ChinaUtils.isLikelyInChina(this)) 3000 else 5000,
             0,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
@@ -302,7 +311,7 @@ abstract class ContentsActivity : NavigationActivity() {
         
         // Only invalidate cache and fetch on actual connection/disconnection events
         // to avoid redundant network calls during intermediate states (AUTH, WAIT, etc.)
-        val isSignificantChange = (status.equals("CONNECTED", ignoreCase = true) || status.equals("DISCONNECTED", ignoreCase = true))
+        val isSignificantChange = status.equals("CONNECTED", ignoreCase = true)
         if (isSignificantChange) {
             lastIpFetchTime = 0 
         }
@@ -396,7 +405,7 @@ abstract class ContentsActivity : NavigationActivity() {
                 if (STATUS == "DISCONNECTED") return
                 STATUS = "DISCONNECTED"
                 tvConnectionStatus?.text = "Not Selected"
-                showIP()
+                showCachedIpOrAppName()
 
                 connectBtnTextView?.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus?.text = "Not Selected"
@@ -410,7 +419,7 @@ abstract class ContentsActivity : NavigationActivity() {
                 tvConnectionStatus?.text = "Not Selected"
                 timerTextView?.visibility = View.INVISIBLE
                 hideConnectProgress()
-                showIP()
+                showCachedIpOrAppName()
 
                 connectBtnTextView?.setImageResource(R.drawable.ic_on_off)
                 tvConnectionStatus?.text = "Not Selected"

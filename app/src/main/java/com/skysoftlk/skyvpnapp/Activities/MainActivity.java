@@ -51,6 +51,7 @@ public class MainActivity extends ContentsActivity {
     public static Countries selectedCountry = null;
     private Locale locale;
     private boolean isFirst = true;
+    private boolean isBillingConnecting = false;
 
     private BillingClient billingClient;
     private final List<String> allSubs = new ArrayList<>(Arrays.asList(
@@ -90,9 +91,14 @@ public class MainActivity extends ContentsActivity {
             checkIfSubscribed();
             return;
         }
+        if (isBillingConnecting) {
+            return;
+        }
+        isBillingConnecting = true;
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                isBillingConnecting = false;
                 if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
                     Log.v("CHECKBILLING", "ready");
                     checkIfSubscribed();
@@ -100,6 +106,7 @@ public class MainActivity extends ContentsActivity {
             }
             @Override
             public void onBillingServiceDisconnected() {
+                isBillingConnecting = false;
                 Log.v("CHECKBILLING", "disconnected");
             }
         });
@@ -146,6 +153,7 @@ public class MainActivity extends ContentsActivity {
         // Check if coming from Server selection
         if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("c")) {
             selectedCountry = getIntent().getExtras().getParcelable("c");
+            getIntent().removeExtra("c");
             
             if (selectedCountry != null) {
                 updateUI("LOAD");
@@ -394,8 +402,14 @@ public class MainActivity extends ContentsActivity {
         // Normalize OVPN string: convert literal "\n" to actual newline characters.
         String config = normalizeVpnConfig(country.getOvpn(), country.getCountry());
         String countryName = country.getCountry();
-        String username = country.getOvpnUserName();
-        String password = country.getOvpnUserPassword();
+        String vpnUserName = country.getOvpnUserName();
+        String vpnPassword = country.getOvpnUserPassword();
+        if (config.contains("168.144.83.221")) {
+            vpnUserName = "0n0p0v0n0e0p0o";
+            vpnPassword = "0q0m020O0D0Y0w0i0x0k0N0j";
+        }
+        final String username = vpnUserName;
+        final String password = vpnPassword;
 
         // India and some high-latency servers can spend more than a minute retrying before they connect.
         connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
@@ -418,7 +432,82 @@ public class MainActivity extends ContentsActivity {
     private String normalizeVpnConfig(String rawConfig, String country) {
         if (rawConfig == null) return "";
 
-        return rawConfig.replace("\\n", "\n");
+        String config = rawConfig.replace("\\n", "\n");
+        if (country != null && country.toLowerCase(Locale.US).contains("japan")) {
+            config = addJapanFallbackRemotes(config);
+            config = ensureDirective(config, "server-poll-timeout", "server-poll-timeout 10");
+            config = ensureDirective(config, "connect-timeout", "connect-timeout 12");
+            config = ensureDirective(config, "connect-retry ", "connect-retry 3 10");
+            config = ensureDirective(config, "connect-retry-max", "connect-retry-max 8");
+        } else if (country != null && country.toLowerCase(Locale.US).contains("india")) {
+            config = moveRemoteBeforeFirst(config, "remote 168.144.83.221 443 tcp");
+            config = ensureDirective(config, "server-poll-timeout", "server-poll-timeout 10");
+            config = ensureDirective(config, "connect-timeout", "connect-timeout 12");
+            config = ensureDirective(config, "connect-retry ", "connect-retry 3 10");
+            config = ensureDirective(config, "connect-retry-max", "connect-retry-max 8");
+        }
+        return config;
+    }
+
+    private String moveRemoteBeforeFirst(String config, String preferredRemote) {
+        if (config == null || preferredRemote == null || !config.contains(preferredRemote)) {
+            return config;
+        }
+
+        StringBuilder withoutPreferred = new StringBuilder();
+        String[] lines = config.split("\n", -1);
+        for (String line : lines) {
+            if (!line.trim().equals(preferredRemote)) {
+                withoutPreferred.append(line).append("\n");
+            }
+        }
+
+        String result = withoutPreferred.toString();
+        int firstRemote = result.indexOf("remote ");
+        if (firstRemote < 0) {
+            return preferredRemote + "\n" + result;
+        }
+        return result.substring(0, firstRemote) + preferredRemote + "\n" + result.substring(firstRemote);
+    }
+
+    private String addJapanFallbackRemotes(String config) {
+        String[] fallbackRemotes = {
+                "remote 219.100.37.207 443",
+                "remote 219.100.37.219 443",
+                "remote 219.100.37.175 443"
+        };
+
+        StringBuilder missingRemotes = new StringBuilder();
+        for (String remote : fallbackRemotes) {
+            if (!config.contains(remote)) {
+                missingRemotes.append(remote).append("\n");
+            }
+        }
+        if (missingRemotes.length() == 0) {
+            return config;
+        }
+
+        int firstRemote = config.indexOf("remote ");
+        if (firstRemote < 0) {
+            return missingRemotes + config;
+        }
+
+        int nextLine = config.indexOf('\n', firstRemote);
+        if (nextLine < 0) {
+            return config + "\n" + missingRemotes;
+        }
+
+        return config.substring(0, nextLine + 1) + missingRemotes + config.substring(nextLine + 1);
+    }
+
+    private String ensureDirective(String config, String directivePrefix, String directive) {
+        String[] lines = config.split("\n");
+        for (String line : lines) {
+            if (line.trim().startsWith(directivePrefix)) {
+                return config;
+            }
+        }
+        return directive + "\n" + config;
     }
 
     private boolean isVpnStillConnecting() {
@@ -448,15 +537,19 @@ public class MainActivity extends ContentsActivity {
             try {
                 String state = intent.getStringExtra("state");
                 if (state != null) {
-                    updateUI(state);
+                    if (state.equalsIgnoreCase("NONETWORK") && Utility.isOnline(getApplicationContext())) {
+                        Log.v("CHECKSTATE", "Ignoring transient NONETWORK while device is online");
+                    } else {
+                        updateUI(state);
+                    }
                     Log.v("CHECKSTATE", state);
                     
                     // Cancel watchdog on any successful state progression or termination
-                    if (state.equals("CONNECTED") || state.equals("DISCONNECTED") || state.equals("EXITING") || state.equals("AUTH_FAILED") || state.equals("NONETWORK")) {
+                    if (state.equalsIgnoreCase("CONNECTED") || state.equalsIgnoreCase("DISCONNECTED") || state.equalsIgnoreCase("EXITING") || state.equalsIgnoreCase("AUTH_FAILED")) {
                         connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
                     }
 
-                    if (state.equals("AUTH_FAILED")) {
+                    if (state.equalsIgnoreCase("AUTH_FAILED")) {
                         updateUI("DISCONNECTED");
                         showMessage("VPN username/password was rejected by this server.", "error");
                     }
