@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/neon_blue">
+    android:color="@color/accent_teal">
     <item>
         <shape android:shape="oval">
             <gradient
                 android:angle="45"
-                android:endColor="#1A202C"
-                android:startColor="#2D3748"
+                android:endColor="@color/accent_teal"
+                android:startColor="#46E0BE"
                 android:type="linear" />
             <stroke
-                android:width="2dp"
-                android:color="@color/neon_blue" />
+                android:width="6dp"
+                android:color="#33FFFFFF" />
             <size
                 android:width="150dp"
                 android:height="150dp" />

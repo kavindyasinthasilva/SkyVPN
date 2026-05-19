@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#E5C07B</color>
-    <color name="primary_dark">#0F140A</color>
-    <color name="colorAccent">#E5C07B</color>
+    <color name="primary">#2DBE9F</color>
+    <color name="primary_dark">#111827</color>
+    <color name="colorAccent">#F0B429</color>
     <color name="white">#FFFFFF</color>
 
     <color name="colorwhite">#FFFFFF</color>
-    <color name="textcolor">#E0E0E0</color>
-    <color name="greyLight">#4B5D3F</color>
-    <color name="splashscreencolor">#0F140A</color>
-    <color name="colorPrimary">#E5C07B</color>
-    <color name="colorPrimaryDark">#0A0D07</color>
-    <color name="popUpBg">#1B2414</color>
+    <color name="textcolor">#AEB8C5</color>
+    <color name="greyLight">#667085</color>
+    <color name="splashscreencolor">#111827</color>
+    <color name="colorPrimary">#2DBE9F</color>
+    <color name="colorPrimaryDark">#111827</color>
+    <color name="popUpBg">#172033</color>
     <color name="primary_white_text">@android:color/white</color>
     <color name="colorview">#32FFFFFF</color>
-    <color name="text_color">#E5C07B</color>
-    <color name="tab_background_selected">#E5C07B</color>
+    <color name="text_color">#F0B429</color>
+    <color name="tab_background_selected">#2DBE9F</color>
     <color name="colorlightgrey">#848585</color>
-    <color name="toolbarTitle">#E5C07B</color>
-    <color name="txt_blue">#D4AF37</color>
+    <color name="toolbarTitle">#F7FAFC</color>
+    <color name="txt_blue">#2DBE9F</color>
     <color name="red">#F63030</color>
 
-    <!-- Futuristic Colors -->
-    <color name="futuristic_bg_start">#0F140A</color>
-    <color name="futuristic_bg_end">#050704</color>
-    <color name="neon_blue">#00F2FF</color>
-    <color name="neon_purple">#BC00FF</color>
-    <color name="neon_green">#39FF14</color>
-    <color name="glass_white">#1AFFFFFF</color>
-    <color name="glass_white_border">#33FFFFFF</color>
+    <!-- Product UI Colors -->
+    <color name="futuristic_bg_start">#111827</color>
+    <color name="futuristic_bg_end">#0B1020</color>
+    <color name="surface_primary">#172033</color>
+    <color name="surface_secondary">#1F2937</color>
+    <color name="surface_elevated">#263244</color>
+    <color name="text_primary">#F7FAFC</color>
+    <color name="text_secondary">#AEB8C5</color>
+    <color name="accent_teal">#2DBE9F</color>
+    <color name="accent_gold">#F0B429</color>
+    <color name="accent_coral">#FF6B6B</color>
+    <color name="neon_blue">#2DBE9F</color>
+    <color name="neon_purple">#F0B429</color>
+    <color name="neon_green">#30D158</color>
+    <color name="glass_white">#14FFFFFF</color>
+    <color name="glass_white_border">#24FFFFFF</color>
                </resources>

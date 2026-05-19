@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.skysoftlk.skyvpnapp.Fragments.FragmentVip;
 import com.skysoftlk.skyvpnapp.R;
 import com.skysoftlk.skyvpnapp.model.Countries;
 
@@ -24,6 +23,11 @@ public class ServerListAdapterVip extends RecyclerView.Adapter<ServerListAdapter
 
     ArrayList<Countries> datalist = new ArrayList<>();
     private final Context context;
+    private OnServerClickListener clickListener;
+
+    public interface OnServerClickListener {
+        void onServerClick(Countries country);
+    }
 
     public ServerListAdapterVip(Context ctx) {
         this.context = ctx;
@@ -53,7 +57,9 @@ public class ServerListAdapterVip extends RecyclerView.Adapter<ServerListAdapter
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentVip.onItemClick(data);
+                    if (clickListener != null) {
+                        clickListener.onServerClick(data);
+                    }
                 }
             });
         }
@@ -107,5 +113,9 @@ public class ServerListAdapterVip extends RecyclerView.Adapter<ServerListAdapter
             }
         }
         notifyDataSetChanged();
+    }
+
+    public void setOnServerClickListener(OnServerClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 }

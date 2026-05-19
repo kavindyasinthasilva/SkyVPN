@@ -68,7 +68,7 @@ public class UnlockAllActivity extends BaseActivity {
 
                     if (purchases.get(0) != null) {
                         Log.v("CHECKBILLING", purchases.get(0).toString());
-                        handlePurchase(purchases.get(0).getPurchaseToken());
+                        handlePurchase(purchases.get(0));
                     }
                 } else {
                     Toast.makeText(UnlockAllActivity.this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
@@ -294,11 +294,20 @@ public class UnlockAllActivity extends BaseActivity {
         }
     }
 
-    private void handlePurchase(String purchaseToken) {
+    private void handlePurchase(Purchase purchase) {
+        if (purchase == null || purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) {
+            Toast.makeText(UnlockAllActivity.this, "Purchase is not completed yet", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (purchase.isAcknowledged()) {
+            unlockPremium();
+            return;
+        }
 
         AcknowledgePurchaseParams acknowledgePurchaseParams =
                 AcknowledgePurchaseParams.newBuilder()
-                        .setPurchaseToken(purchaseToken)
+                        .setPurchaseToken(purchase.getPurchaseToken())
                         .build();
 
         AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
@@ -308,18 +317,25 @@ public class UnlockAllActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.v("CHECKBILLING", "acknowledged");
-                        Config.vip_subscription = true;
-                        Config.all_subscription = true;
-
-                        Toast.makeText(UnlockAllActivity.this, "Successfully subscribed!", Toast.LENGTH_LONG).show();
-                        finish();
+                        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                            Log.v("CHECKBILLING", "acknowledged");
+                            unlockPremium();
+                        } else {
+                            Toast.makeText(UnlockAllActivity.this, "Could not confirm subscription. Please try again.", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
             }
         };
 
         billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+    }
+
+    private void unlockPremium() {
+        Config.vip_subscription = true;
+        Config.all_subscription = true;
+        Toast.makeText(UnlockAllActivity.this, "Successfully subscribed!", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     @OnClick(R.id.all_pur)

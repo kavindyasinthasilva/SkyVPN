@@ -45,6 +45,9 @@ import top.oneconnectapi.app.OpenVpnApi;
 
 public class MainActivity extends ContentsActivity {
 
+    private static final int REQUEST_APP_UPDATE = 11;
+    private static final int REQUEST_VPN_PERMISSION = 1001;
+    private static final long VPN_CONNECTION_TIMEOUT_MS = 150000L;
     public static Countries selectedCountry = null;
     private Locale locale;
     private boolean isFirst = true;
@@ -251,10 +254,8 @@ public class MainActivity extends ContentsActivity {
                 .enablePendingPurchases()
                 .build();
 
-        new Thread(() -> {
-            inAppUpdate();
-            billingSetup();
-        }).start();
+        inAppUpdate();
+        billingSetup();
 
         findViewById(R.id.btnLanguage).setOnClickListener(v -> showLanguageDialog());
     }
@@ -318,7 +319,7 @@ public class MainActivity extends ContentsActivity {
                         // For a flexible update, use AppUpdateType.FLEXIBLE
                         && result.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                     try {
-                        appUpdateManager.startUpdateFlowForResult(result, AppUpdateType.IMMEDIATE, MainActivity.this, 11);
+                        appUpdateManager.startUpdateFlowForResult(result, AppUpdateType.IMMEDIATE, MainActivity.this, REQUEST_APP_UPDATE);
                     } catch (IntentSender.SendIntentException e) {
                         e.printStackTrace();
                     }
@@ -332,16 +333,17 @@ public class MainActivity extends ContentsActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 11) {
-            Toast.makeText(this, "Start Downloand", Toast.LENGTH_SHORT).show();
+        if (requestCode == REQUEST_APP_UPDATE) {
+            Toast.makeText(this, "Start Download", Toast.LENGTH_SHORT).show();
             if (resultCode != RESULT_OK) {
                 Log.d("Update", "Update failed" + resultCode);
             }
+            return;
         }
 
-        if (resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_VPN_PERMISSION && resultCode == RESULT_OK) {
             startVpn();
-        } else {
+        } else if (requestCode == REQUEST_VPN_PERMISSION) {
             showMessage("Permission Denied", "error");
         }
     }
@@ -360,7 +362,7 @@ public class MainActivity extends ContentsActivity {
                 Log.v("CHECKSTATE", "start");
 
                 if (intent != null) {
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, REQUEST_VPN_PERMISSION);
                 } else
                     startVpn(); //have already permission
             } else {
@@ -374,31 +376,68 @@ public class MainActivity extends ContentsActivity {
 
     private final Handler connectionWatchdog = new Handler(Looper.getMainLooper());
     private final Runnable connectionTimeoutRunnable = () -> {
-        if (getVpnStatus() != null && (getVpnStatus().equals("LOAD") || getVpnStatus().equals("AUTHENTICATION"))) {
-            updateUI("DISCONNECTED");
-            showMessage("Connection timed out. Please try another server.", "error");
+        if (isVpnStillConnecting()) {
+            disconnectFromVpn();
+            showMessage("Server is not responding. Please try another server.", "error");
         }
     };
 
     public void startVpn() {
-        try {
-            ActiveServer.saveServer(MainActivity.selectedCountry, MainActivity.this);
-            if (selectedCountry != null && selectedCountry.getOvpn() != null) {
-                // Normalize OVPN string: convert literal "\n" to actual newline characters
-                String config = selectedCountry.getOvpn().replace("\\n", "\n");
-                
-                OpenVpnApi.startVpn(this, config, selectedCountry.getCountry(), selectedCountry.getOvpnUserName(), selectedCountry.getOvpnUserPassword());
-                
-                // Start watchdog timer (60 seconds) to detect hung connections
-                connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
-                connectionWatchdog.postDelayed(connectionTimeoutRunnable, 60000);
-            } else {
-                showMessage("Invalid server configuration", "error");
-            }
+        Countries country = selectedCountry;
+        if (country == null || country.getOvpn() == null) {
+            showMessage("Invalid server configuration", "error");
+            return;
+        }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            showMessage("Error starting VPN: " + e.getMessage(), "error");
+        ActiveServer.saveServer(country, MainActivity.this);
+
+        // Normalize OVPN string: convert literal "\n" to actual newline characters.
+        String config = normalizeVpnConfig(country.getOvpn(), country.getCountry());
+        String countryName = country.getCountry();
+        String username = country.getOvpnUserName();
+        String password = country.getOvpnUserPassword();
+
+        // India and some high-latency servers can spend more than a minute retrying before they connect.
+        connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
+        connectionWatchdog.postDelayed(connectionTimeoutRunnable, VPN_CONNECTION_TIMEOUT_MS);
+
+        new Thread(() -> {
+            try {
+                OpenVpnApi.startVpn(MainActivity.this, config, countryName, username, password);
+            } catch (Exception e) {
+                Log.e("CHECKSTATE", "Error starting VPN", e);
+                runOnUiThread(() -> {
+                    connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
+                    updateUI("DISCONNECTED");
+                    showMessage("Error starting VPN: " + e.getMessage(), "error");
+                });
+            }
+        }, "openvpn-start").start();
+    }
+
+    private String normalizeVpnConfig(String rawConfig, String country) {
+        if (rawConfig == null) return "";
+
+        return rawConfig.replace("\\n", "\n");
+    }
+
+    private boolean isVpnStillConnecting() {
+        String status = getVpnStatus();
+        if (status == null) return false;
+
+        switch (status.toUpperCase(Locale.US)) {
+            case "LOAD":
+            case "CONNECTING":
+            case "AUTHENTICATION":
+            case "WAIT":
+            case "WAITING":
+            case "RECONNECTING":
+            case "CONNECTRETRY":
+            case "TCP_CONNECT":
+            case "VPN_GENERATE_CONFIG":
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -413,8 +452,13 @@ public class MainActivity extends ContentsActivity {
                     Log.v("CHECKSTATE", state);
                     
                     // Cancel watchdog on any successful state progression or termination
-                    if (state.equals("CONNECTED") || state.equals("DISCONNECTED")) {
+                    if (state.equals("CONNECTED") || state.equals("DISCONNECTED") || state.equals("EXITING") || state.equals("AUTH_FAILED") || state.equals("NONETWORK")) {
                         connectionWatchdog.removeCallbacks(connectionTimeoutRunnable);
+                    }
+
+                    if (state.equals("AUTH_FAILED")) {
+                        updateUI("DISCONNECTED");
+                        showMessage("VPN username/password was rejected by this server.", "error");
                     }
                 }
 

@@ -128,4 +128,64 @@ public class Countries implements Parcelable {
         }
         return null;
     }
+
+    public String getTcpServerHost() {
+        RemoteEndpoint endpoint = getTcpEndpoint();
+        return endpoint != null ? endpoint.host : null;
+    }
+
+    public int getTcpServerPort() {
+        RemoteEndpoint endpoint = getTcpEndpoint();
+        return endpoint != null ? endpoint.port : 443;
+    }
+
+    private RemoteEndpoint getTcpEndpoint() {
+        if (ovpn == null || ovpn.isEmpty()) return null;
+
+        String[] lines = ovpn.split("\\\\n|\\n");
+        boolean profileUsesTcp = false;
+        RemoteEndpoint firstRemote = null;
+
+        for (String line : lines) {
+            String trimmed = line.trim();
+            if (trimmed.startsWith("proto ")) {
+                String[] parts = trimmed.split("\\s+");
+                profileUsesTcp = parts.length > 1 && parts[1].toLowerCase().startsWith("tcp");
+            }
+
+            if (!trimmed.startsWith("remote ")) continue;
+
+            String[] parts = trimmed.split("\\s+");
+            if (parts.length < 3) continue;
+
+            String host = parts[1];
+            int port;
+            try {
+                port = Integer.parseInt(parts[2]);
+            } catch (NumberFormatException e) {
+                continue;
+            }
+
+            RemoteEndpoint endpoint = new RemoteEndpoint(host, port);
+            if (firstRemote == null) {
+                firstRemote = endpoint;
+            }
+
+            if ((parts.length > 3 && parts[3].equalsIgnoreCase("tcp")) || profileUsesTcp) {
+                return endpoint;
+            }
+        }
+
+        return firstRemote;
+    }
+
+    private static class RemoteEndpoint {
+        final String host;
+        final int port;
+
+        RemoteEndpoint(String host, int port) {
+            this.host = host;
+            this.port = port;
+        }
+    }
 }

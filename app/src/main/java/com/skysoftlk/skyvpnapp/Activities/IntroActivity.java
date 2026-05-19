@@ -28,18 +28,18 @@ public class IntroActivity extends MaterialIntroActivity {
             onFinish();
         } else {
             addSlide(IntroSlideFragment.newInstance(
-                    "Ultra Fast Speed",
-                    "Connect to high-speed servers across the globe with zero latency.",
+                    "Fast VPN locations",
+                    "Choose a server, connect quickly, and keep your session easy to monitor.",
                     R.raw.homel
             ));
             addSlide(IntroSlideFragment.newInstance(
-                    "Maximum Security",
-                    "Military-grade encryption keeps your data safe from prying eyes.",
+                    "Privacy when you need it",
+                    "Protect your connection on Wi-Fi and browse with a cleaner sense of control.",
                     R.raw.homel
             ));
             addSlide(IntroSlideFragment.newInstance(
-                    "Privacy First",
-                    "We follow a strict no-logs policy to ensure your anonymity online.",
+                    "Useful phone tools",
+                    "Boost memory, cool busy apps, and manage battery modes from one place.",
                     R.raw.homel
             ));
         }
@@ -54,4 +54,3 @@ public class IntroActivity extends MaterialIntroActivity {
         super.onFinish();
     }
 }
-

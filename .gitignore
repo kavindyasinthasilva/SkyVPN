@@ -50,6 +50,13 @@ captures/
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 
+# Backend secrets and local runtime files
+backend/.env
+backend/node_modules/
+backend/data/users.json
+backend/data/servers.json
+backend/*.log
+
 # Freeline
 freeline.py
 freeline/

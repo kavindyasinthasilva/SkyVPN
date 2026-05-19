@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="8dp">
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="7dp">
 
     <RelativeLayout
         android:id="@+id/flag_image_r"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="76dp"
         android:background="@drawable/bg_server_item"
         android:padding="12dp">
 
@@ -85,7 +85,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="India (Mumbai) Optimized"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 

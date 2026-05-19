@@ -55,7 +55,7 @@ public class IntroSlideFragment extends SlideFragment {
 
     @Override
     public int buttonsColor() {
-        return R.color.neon_blue;
+        return R.color.accent_teal;
     }
 
     @Override

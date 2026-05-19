@@ -9,7 +9,7 @@
         android:id="@+id/animation_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/futuristic_bg_start"
+        android:background="@drawable/bg_app_gradient"
         android:elevation="10dp">
 
         <com.airbnb.lottie.LottieAnimationView
@@ -17,17 +17,17 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_centerInParent="true"
-            app:lottie_rawRes="@raw/homel"
+            app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_autoPlay="true" />
-
+            app:lottie_rawRes="@raw/homel" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/region_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="8dp"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:paddingTop="4dp"
+        android:paddingBottom="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

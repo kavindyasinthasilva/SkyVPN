@@ -3,6 +3,7 @@ package com.skysoftlk.skyvpnapp.Utils;
 import android.content.Context;
 import android.os.Build;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class ChinaUtils {
 
@@ -10,13 +11,22 @@ public class ChinaUtils {
      * Checks if the device is likely in China based on locale or manufacturer.
      */
     public static boolean isLikelyInChina(Context context) {
-        // Check Locale
         String country = Locale.getDefault().getCountry();
         if ("CN".equalsIgnoreCase(country)) {
             return true;
         }
 
-        // Check Manufacturer (common in China)
+        String language = Locale.getDefault().getLanguage();
+        String timezone = TimeZone.getDefault().getID();
+        if ("zh".equalsIgnoreCase(language) && timezone != null && timezone.startsWith("Asia/Shanghai")) {
+            return true;
+        }
+
+        if (!"Asia/Shanghai".equals(timezone)) {
+            return false;
+        }
+
+        // Manufacturer is only a weak signal, so use it after locale/timezone checks.
         String manufacturer = Build.MANUFACTURER.toLowerCase();
         if (manufacturer.contains("huawei") || 
             manufacturer.contains("xiaomi") || 

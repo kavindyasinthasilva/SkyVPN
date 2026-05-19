@@ -166,29 +166,15 @@ public class NormalMode extends AppCompatActivity {
 
 
     public void youDesirePermissionCode(Activity context) {
-
-
-        boolean permission;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            permission = Settings.System.canWrite(context);
-        } else {
-            permission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
-
-
-        }
-        if (permission) {
+        if (Settings.System.canWrite(context)) {
 
             enablesall();
 
             finish();
         } else {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                intent.setData(Uri.parse("package:" + context.getPackageName()));
-                context.startActivityForResult(intent, 1);
-            } else {
-                ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_SETTINGS}, 1);
-            }
+            Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            intent.setData(Uri.parse("package:" + context.getPackageName()));
+            context.startActivityForResult(intent, 1);
         }
     }
 
@@ -210,14 +196,6 @@ public class NormalMode extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-            enablesall();
-
-            finish();
-        }
-
     }
 
 

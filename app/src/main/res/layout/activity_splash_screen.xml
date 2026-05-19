@@ -1,83 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cordi"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/futuristic_bg_start">
+    android:background="@drawable/bg_app_gradient">
 
-    <!-- Background Decoration -->
     <View
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:alpha="0.1"
+        android:layout_width="360dp"
+        android:layout_height="360dp"
+        android:alpha="0.7"
         android:background="@drawable/bg_glow_circle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Logo Section -->
     <FrameLayout
         android:id="@+id/logo_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="204dp"
+        android:layout_height="204dp"
+        android:background="@drawable/bg_feature_header"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45">
+        app:layout_constraintVertical_bias="0.42">
 
         <View
             android:id="@+id/logo_glow"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
             android:layout_gravity="center"
-            android:alpha="0.3"
+            android:alpha="0.45"
             android:background="@drawable/bg_glow_circle" />
 
         <ImageView
             android:id="@+id/logo_img"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="138dp"
+            android:layout_height="138dp"
             android:layout_gravity="center"
             android:src="@drawable/logo" />
     </FrameLayout>
 
-    <!-- App Name or Slogan (Optional, but helps attraction) -->
     <TextView
-        android:id="@+id/app_slogan"
+        android:id="@+id/app_name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="SECURE • FAST • UNLIMITED"
-        android:textColor="@color/neon_blue"
-        android:textSize="14sp"
+        android:layout_marginTop="22dp"
+        android:text="@string/app_name"
+        android:textColor="@color/text_primary"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:letterSpacing="0.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo_container" />
 
-    <!-- Loading Indicator -->
+    <TextView
+        android:id="@+id/app_slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="PRIVATE  FAST  RELIABLE"
+        android:textColor="@color/accent_teal"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_name_text" />
+
+    <TextView
+        android:id="@+id/app_splash_hint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="40dp"
+        android:gravity="center"
+        android:text="Preparing your secure VPN workspace"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_slogan" />
+
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="200dp"
+        android:layout_width="210dp"
         android:layout_height="4dp"
         android:layout_marginBottom="100dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/neon_blue"
+        android:indeterminateTint="@color/accent_teal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Footer -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="38dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,10 +116,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/created_by"
-            android:textColor="@color/textcolor"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.1" />
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

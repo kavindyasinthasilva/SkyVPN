@@ -3,46 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/futuristic_bg_start">
+    android:background="@drawable/bg_app_gradient"
+    android:paddingStart="20dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="20dp">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarr"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/transparent"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/bg_glass_card"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/cpu_title_group"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Cooling CPU"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:visibility="gone"
+        android:layout_marginStart="14dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@id/toolbarr"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/toolbarr" />
+        app:layout_constraintStart_toEndOf="@id/toolbarr"
+        app:layout_constraintTop_toTopOf="@id/toolbarr">
 
-    <!-- Animation Area -->
+        <com.skysoftlk.skyvpnapp.Utils.CustomTxTRegular
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CPU Cooler"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Find heavy apps and cool performance"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/anim_container"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="300dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/bg_feature_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbarr">
 
         <com.skyfishjy.library.RippleBackground
             android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:rb_color="@color/neon_blue"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:layout_gravity="center"
+            app:rb_color="@color/accent_teal"
             app:rb_duration="3000"
             app:rb_radius="32dp"
             app:rb_rippleAmount="4"
@@ -56,29 +78,38 @@
                 android:clickable="true" />
         </com.skyfishjy.library.RippleBackground>
 
+        <View
+            android:layout_width="246dp"
+            android:layout_height="246dp"
+            android:layout_gravity="center"
+            android:alpha="0.8"
+            android:background="@drawable/bg_glow_circle" />
+
         <ImageView
             android:id="@+id/shadowcpu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:alpha="0.3"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:alpha="0.18"
             android:src="@mipmap/ic_rounded_shadow" />
 
         <ImageView
             android:id="@+id/cpu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="50dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:padding="45dp"
             android:src="@drawable/ic_cpu_cooling_icon"
-            app:tint="@color/neon_blue" />
+            app:tint="@color/accent_teal" />
 
         <ImageView
             android:id="@+id/scann"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="40dp"
+            android:layout_width="232dp"
+            android:layout_height="232dp"
+            android:layout_gravity="center"
+            android:padding="36dp"
             android:src="@drawable/ic_cpu_cooling_redar"
-            app:tint="@color/neon_blue" />
+            app:tint="@color/accent_teal" />
 
         <ImageView
             android:id="@+id/iv_completecheck"
@@ -88,49 +119,45 @@
             android:src="@drawable/ic_cooling_complete_check"
             android:visibility="gone"
             app:tint="@color/neon_green" />
-
     </FrameLayout>
 
-    <!-- Status Text -->
     <com.skysoftlk.skyvpnapp.Utils.CustomTxtSemibold
         android:id="@+id/cpucooler"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_status_pill"
         android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="Scanning Apps..."
-        android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textColor="@color/accent_teal"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/anim_container" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/glass_white_border"
-        app:layout_constraintTop_toBottomOf="@id/cpucooler" />
-
-    <!-- Apps List Area -->
     <RelativeLayout
         android:id="@+id/rel"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="14dp"
         android:background="@drawable/bg_glass_card"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cpucooler">
 
         <ImageView
             android:id="@+id/heart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.2"
-            android:scaleType="fitXY"
+            android:alpha="0.12"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_cpu_cooling_redar"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:tint="@color/accent_teal" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -138,7 +165,6 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:padding="10dp" />
-
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

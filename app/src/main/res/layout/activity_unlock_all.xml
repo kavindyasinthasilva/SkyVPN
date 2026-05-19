@@ -4,324 +4,287 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/futuristic_bg_start">
+    android:background="@drawable/bg_app_gradient"
+    tools:context=".Activities.UnlockAllActivity">
 
-    <!-- Header Section -->
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:paddingStart="20dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="14dp">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/close"
+            android:background="@drawable/bg_close_button"
             android:onClick="MainActivity"
-            app:tint="@color/white" />
+            android:padding="12dp"
+            android:src="@drawable/close"
+            app:tint="@color/text_primary" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="58dp"
+            android:background="@drawable/bg_feature_header"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="22dp">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
                 android:src="@drawable/premium"
-                app:tint="@color/neon_blue" />
+                app:tint="@color/accent_gold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
                 android:text="Unlock Premium Servers"
-                android:textColor="@color/white"
+                android:textColor="@color/text_primary"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="With No Ads"
-                android:textColor="@color/neon_blue"
-                android:textSize="18sp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_premium_pill"
+                android:paddingStart="14dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="5dp"
+                android:text="No ads, faster locations"
+                android:textColor="@color/accent_gold"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 
-    <!-- Subscription Plans -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_bar"
         android:layout_below="@id/header"
-        android:layout_marginTop="10dp"
-        android:paddingHorizontal="20dp"
+        android:clipToPadding="false"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="20dp">
+            android:paddingBottom="18dp">
 
-            <!-- 1 Month Card -->
-            <androidx.cardview.widget.CardView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="78dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                android:background="@drawable/bg_metric_card"
+                android:padding="16dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <RadioButton
+                    android:id="@+id/one_month"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_card"
-                    android:padding="16dp">
+                    android:layout_centerVertical="true"
+                    android:button="@drawable/bg_checkbox" />
 
-                    <RadioButton
-                        android:id="@+id/one_month"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:button="@drawable/bg_checkbox" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="12dp"
-                        android:layout_toEndOf="@id/one_month"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Monthly"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvPrice1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tech_one_month"
-                            android:textColor="@color/neon_green"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <pl.droidsonroids.gif.GifImageView
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/upgrade" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- 3 Month Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_card"
-                    android:padding="16dp">
-
-                    <RadioButton
-                        android:id="@+id/three_month"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:button="@drawable/bg_checkbox" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="12dp"
-                        android:layout_toEndOf="@id/three_month"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="3 Months"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvPrice2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tech_three_months"
-                            android:textColor="@color/neon_green"
-                            android:textSize="16sp" />
-                    </LinearLayout>
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@id/one_month"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:background="@drawable/btn_bg"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="4dp"
-                        android:text="POPULAR"
-                        android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:text="Monthly"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp"
                         android:textStyle="bold" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
 
-            <!-- 6 Month Card -->
-            <androidx.cardview.widget.CardView
+                    <TextView
+                        android:id="@+id/tvPrice1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tech_one_month"
+                        android:textColor="@color/accent_teal"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="78dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                android:background="@drawable/bg_metric_card"
+                android:padding="16dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <RadioButton
+                    android:id="@+id/three_month"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_card"
-                    android:padding="16dp">
+                    android:layout_centerVertical="true"
+                    android:button="@drawable/bg_checkbox" />
 
-                    <RadioButton
-                        android:id="@+id/six_month"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@id/three_month"
+                    android:orientation="vertical">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:button="@drawable/bg_checkbox" />
+                        android:text="3 Months"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvPrice2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="12dp"
-                        android:layout_toEndOf="@id/six_month"
-                        android:orientation="vertical">
+                        android:text="@string/tech_three_months"
+                        android:textColor="@color/accent_teal"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="6 Months"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_status_pill"
+                    android:paddingStart="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="4dp"
+                    android:text="POPULAR"
+                    android:textColor="@color/accent_teal"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/tvPrice3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tech_six_months"
-                            android:textColor="@color/neon_green"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <pl.droidsonroids.gif.GifImageView
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/upgrade" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- 1 Year Card -->
-            <androidx.cardview.widget.CardView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="78dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                android:background="@drawable/bg_metric_card"
+                android:padding="16dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <RadioButton
+                    android:id="@+id/six_month"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_card"
-                    android:padding="16dp"
-                    android:alpha="1.0">
+                    android:layout_centerVertical="true"
+                    android:button="@drawable/bg_checkbox" />
 
-                    <RadioButton
-                        android:id="@+id/one_year"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@id/six_month"
+                    android:orientation="vertical">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:button="@drawable/bg_checkbox" />
+                        android:text="6 Months"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvPrice3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="12dp"
-                        android:layout_toEndOf="@id/one_year"
-                        android:orientation="vertical">
+                        android:text="@string/tech_six_months"
+                        android:textColor="@color/accent_teal"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="12 Months"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_metric_card"
+                android:padding="16dp">
 
-                        <TextView
-                            android:id="@+id/tvPrice4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tech_twelve_months"
-                            android:textColor="@color/neon_green"
-                            android:textSize="16sp" />
-                    </LinearLayout>
+                <RadioButton
+                    android:id="@+id/one_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:button="@drawable/bg_checkbox" />
 
-                    <LinearLayout
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@id/one_year"
+                    android:orientation="vertical">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="end"
-                        android:orientation="vertical">
+                        android:text="12 Months"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_connect_button"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="4dp"
-                            android:text="BEST VALUE"
-                            android:textColor="@color/neon_blue"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tvPrice4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tech_twelve_months"
+                        android:textColor="@color/accent_teal"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-                    </LinearLayout>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_premium_pill"
+                    android:paddingStart="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="4dp"
+                    android:text="BEST VALUE"
+                    android:textColor="@color/accent_gold"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Bar -->
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/futuristic_bg_end"
+        android:background="@color/surface_primary"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -341,9 +304,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="center"
-            android:text="Recurring Billing, Cancel Anytime on Play Store"
-            android:textColor="@color/colorlightgrey"
+            android:text="Recurring billing. Cancel anytime on Google Play."
+            android:textColor="@color/text_secondary"
             android:textSize="12sp" />
     </LinearLayout>
-
 </RelativeLayout>

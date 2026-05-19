@@ -5,7 +5,8 @@
     android:id="@+id/main_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/futuristic_bg_start"
+    android:background="@drawable/bg_app_gradient"
+    android:clipToPadding="false"
     android:fillViewport="true"
     android:scrollbars="none"
     tools:context="com.skysoftlk.skyvpnapp.Activities.MainActivity">
@@ -13,82 +14,106 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="80dp">
+        android:paddingStart="20dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="96dp">
 
-        <!-- Top Header -->
         <ImageView
             android:id="@+id/category"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:padding="8dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="@drawable/bg_glass_card"
+            android:contentDescription="@string/app_name"
+            android:padding="11dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_menu"
-            app:tint="@color/white" />
+            app:tint="@color/text_primary" />
 
         <TextView
             android:id="@+id/app_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/category"
             app:layout_constraintEnd_toStartOf="@id/btnServerList"
             app:layout_constraintStart_toEndOf="@id/category"
             app:layout_constraintTop_toTopOf="@id/category" />
 
+        <TextView
+            android:id="@+id/app_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/vpn_privacy_tagline"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/btnServerList"
+            app:layout_constraintStart_toEndOf="@id/category"
+            app:layout_constraintTop_toBottomOf="@id/app_title" />
+
         <RelativeLayout
             android:id="@+id/btnServerList"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_glass_card"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_premium_pill"
+            android:contentDescription="@string/go_premium"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toStartOf="@id/btnLanguage"
             app:layout_constraintTop_toTopOf="parent">
 
             <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/ic_crown"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/upgrade" />
         </RelativeLayout>
 
         <ImageView
             android:id="@+id/btnLanguage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:padding="8dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/bg_glass_card"
-            app:layout_constraintEnd_toEndOf="@id/btnServerList"
-            app:layout_constraintTop_toBottomOf="@id/btnServerList"
+            android:contentDescription="@string/change_language"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/settings"
-            app:tint="@color/white" />
+            app:tint="@color/text_primary" />
 
-        <!-- Connection Circle Area -->
         <FrameLayout
             android:id="@+id/connection_container"
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:layout_marginTop="40dp"
+            android:layout_width="286dp"
+            android:layout_height="286dp"
+            android:layout_marginTop="34dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/app_title">
+            app:layout_constraintTop_toBottomOf="@id/category">
 
-            <!-- Outer Glow Circles -->
             <View
-                android:layout_width="260dp"
-                android:layout_height="260dp"
+                android:layout_width="286dp"
+                android:layout_height="286dp"
                 android:layout_gravity="center"
-                android:background="@drawable/bg_glow_circle"
-                android:alpha="0.05" />
+                android:alpha="0.8"
+                android:background="@drawable/bg_glow_circle" />
+
+            <View
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_connect_ring" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animation_view"
@@ -101,11 +126,11 @@
 
             <RelativeLayout
                 android:id="@+id/connect_btn_container"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_width="158dp"
+                android:layout_height="158dp"
                 android:layout_gravity="center"
                 android:background="@drawable/bg_connect_button"
-                android:elevation="10dp">
+                android:elevation="12dp">
 
                 <ImageView
                     android:id="@+id/connect_btn"
@@ -113,7 +138,7 @@
                     android:layout_height="60dp"
                     android:layout_centerInParent="true"
                     app:srcCompat="@drawable/ic_on_off"
-                    app:tint="@color/neon_blue" />
+                    app:tint="@color/white" />
             </RelativeLayout>
         </FrameLayout>
 
@@ -121,76 +146,113 @@
             android:id="@+id/connection_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_status_pill"
+            android:paddingStart="18dp"
+            android:paddingTop="7dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="7dp"
             android:text="@string/disconnected"
-            android:textColor="@color/neon_blue"
-            android:textSize="18sp"
+            android:textColor="@color/accent_teal"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/connection_container" />
 
-        <LinearLayout
-            android:id="@+id/status_time_layout"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/connect_hint"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/connection_hint"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/connection_state">
+            app:layout_constraintTop_toBottomOf="@id/connection_state" />
+
+        <LinearLayout
+            android:id="@+id/status_time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_glass_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="18dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="14dp"
+            app:layout_constraintTop_toBottomOf="@id/connect_hint">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_clock"
+                app:tint="@color/accent_gold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/session_time"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tv_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00:00"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textColor="@color/text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Speed Cards -->
         <LinearLayout
             android:id="@+id/speed_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:paddingHorizontal="20dp"
+            android:layout_marginTop="14dp"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/status_time_layout">
 
-            <!-- Download Card -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="116dp"
+                android:layout_marginEnd="7dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/bg_glass_card"
-                android:gravity="center"
+                android:background="@drawable/bg_metric_card"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_back_black_24dp"
                     android:rotation="270"
-                    app:tint="@color/neon_green" />
+                    android:src="@drawable/ic_arrow_back_black_24dp"
+                    app:tint="@color/accent_teal" />
 
                 <TextView
                     android:id="@+id/downloading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="12dp"
                     android:text="@string/default_speed"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Download"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
                 <pl.droidsonroids.gif.GifImageView
@@ -200,39 +262,38 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!-- Upload Card -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="116dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/bg_glass_card"
-                android:gravity="center"
+                android:background="@drawable/bg_metric_card"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:padding="15dp">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_back_black_24dp"
                     android:rotation="90"
-                    app:tint="@color/neon_purple" />
+                    android:src="@drawable/ic_arrow_back_black_24dp"
+                    app:tint="@color/accent_gold" />
 
                 <TextView
                     android:id="@+id/uploading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="12dp"
                     android:text="@string/default_speed"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Upload"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
                 <pl.droidsonroids.gif.GifImageView
@@ -243,17 +304,13 @@
             </LinearLayout>
         </LinearLayout>
 
-
-
-        <!-- Location Selector -->
         <RelativeLayout
             android:id="@+id/vpn_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="14dp"
             android:background="@drawable/bg_glass_card"
-            android:padding="15dp"
+            android:padding="18dp"
             app:layout_constraintTop_toBottomOf="@id/speed_layout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -263,38 +320,56 @@
 
                 <ImageView
                     android:id="@+id/flag_image"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_status_pill"
+                    android:padding="5dp"
                     android:src="@drawable/flag_image"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/server_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="@string/server_location"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@id/vpn_details"
+                    app:layout_constraintStart_toEndOf="@id/flag_image"
+                    app:layout_constraintTop_toTopOf="@id/flag_image" />
+
+                <TextView
                     android:id="@+id/flag_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="@string/select_country"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/vpn_details"
                     app:layout_constraintStart_toEndOf="@id/flag_image"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/server_label" />
 
                 <ImageView
                     android:id="@+id/vpn_details"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_back_black_24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_metric_card"
+                    android:padding="7dp"
                     android:rotation="180"
+                    android:src="@drawable/ic_arrow_back_black_24dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/text_primary" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -319,7 +394,7 @@
                     android:layout_below="@id/separator"
                     android:layout_marginTop="10dp"
                     android:text="@string/optimal_server"
-                    android:textColor="@color/textcolor"
+                    android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
 
                 <TextView
@@ -330,44 +405,50 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="10dp"
                     android:text="@string/upgrade_plan"
-                    android:textColor="@color/neon_blue"
+                    android:textColor="@color/accent_gold"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </RelativeLayout>
         </RelativeLayout>
 
-        <!-- IP Address -->
         <LinearLayout
             android:id="@+id/ip_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="14dp"
             android:background="@drawable/bg_glass_card"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:paddingStart="18dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="14dp"
             app:layout_constraintTop_toBottomOf="@id/vpn_location">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="12dp"
                 android:src="@drawable/ic_locations"
-                app:tint="@color/neon_blue" />
+                app:tint="@color/accent_teal" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/your_ip_address"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tv_ip_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/default_ip"
-                android:textColor="@color/textcolor"
-                android:textSize="14sp" />
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -245,20 +245,21 @@ public class SpeedBoosterActivity extends NavigationActivity {
                 Random ran2 = new Random();
                 int proc = ran2.nextInt(10) + 5;
 
-                centree.setText(getUsedMemorySize() - x + " MB");
+                long optimizedMemory = Math.max(0, getUsedMemorySize() - x);
+                centree.setText(optimizedMemory + " MB");
 
                 editor = sharedpreferences.edit();
-                editor.putString("value", getUsedMemorySize() - x + " MB");
+                editor.putString("value", optimizedMemory + " MB");
                 editor.apply();
 
                 Log.e("used mem", getUsedMemorySize() + " MB");
                 Log.e("used mem", getTotalRAM());
 
                 totalram.setText(getTotalRAM());
-                usedram.setText(getUsedMemorySize() - x + " MB/ ");
+                usedram.setText(optimizedMemory + " MB/ ");
 
                 appsfreed.setText(getTotalRAM());
-                appused.setText(Math.abs(getUsedMemorySize() - x - 30) + " MB/ ");
+                appused.setText(Math.max(0, optimizedMemory - 30) + " MB/ ");
 
                 processes.setText(y - proc + "");
 
@@ -412,7 +413,7 @@ public class SpeedBoosterActivity extends NavigationActivity {
         totalram.setText(getTotalRAM());
         usedram.setText(getUsedMemorySize() + " MB/ ");
         appsfreed.setText(getTotalRAM());
-        appused.setText(getUsedMemorySize() - x - 30 + " MB/ ");
+        appused.setText(Math.max(0, getUsedMemorySize() - x - 30) + " MB/ ");
 
         Random ran = new Random();
         y = ran.nextInt(50) + 15;
@@ -483,7 +484,7 @@ public class SpeedBoosterActivity extends NavigationActivity {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             if (activityManager != null) {
                 activityManager.getMemoryInfo(mi);
-                return mi.availMem / 1048576L;
+                return Math.max(0, (mi.totalMem - mi.availMem) / 1048576L);
             }
             return 200;
         } catch (Exception e) {

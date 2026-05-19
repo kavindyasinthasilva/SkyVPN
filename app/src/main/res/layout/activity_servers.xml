@@ -3,39 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/futuristic_bg_start">
+    android:background="@drawable/bg_app_gradient"
+    android:paddingStart="20dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="20dp">
 
-    <!-- Header / Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarold"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/bg_glass_card"
+        android:gravity="center_vertical"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="@color/white"
-        android:gravity="center_vertical" />
+        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+        app:titleTextColor="@color/text_primary" />
+
+    <LinearLayout
+        android:id="@+id/server_title_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/toolbarold"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@id/toolbarold"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/server_list"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose the best VPN location for your session"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_below="@+id/toolbarold"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_glass_card"
-        app:tabIndicatorColor="@color/neon_blue"
-        app:tabIndicatorHeight="3dp"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/colorlightgrey"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/bg_metric_card"
         app:tabGravity="fill"
+        app:tabIndicatorColor="@color/accent_teal"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
         app:tabMode="fixed"
-        app:tabIndicatorFullWidth="false" />
+        app:tabSelectedTextColor="@color/text_primary"
+        app:tabTextColor="@color/text_secondary" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tabLayout"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp" />
 
 </RelativeLayout>

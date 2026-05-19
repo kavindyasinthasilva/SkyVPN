@@ -19,6 +19,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.skysoftlk.skyvpnapp.R
+import com.skysoftlk.skyvpnapp.Utils.ChinaUtils
 import com.skysoftlk.skyvpnapp.speed.Speed
 import es.dmoral.toasty.Toasty
 
@@ -173,13 +174,21 @@ abstract class ContentsActivity : NavigationActivity() {
         if (isFetchingIp) return
 
         // IP check services
-        val services = listOf(
-            "https://api.ipify.org",
-            "https://checkip.amazonaws.com/",
-            "https://ipv4.icanhazip.com/",
-            "https://ifconfig.me/ip",
-            "https://1.1.1.1/cdn-cgi/trace"
-        )
+        val services = if (ChinaUtils.isLikelyInChina(this)) {
+            listOf(
+                "https://myip.ipip.net",
+                "https://checkip.amazonaws.com/",
+                "https://api.ipify.org"
+            )
+        } else {
+            listOf(
+                "https://api.ipify.org",
+                "https://checkip.amazonaws.com/",
+                "https://ipv4.icanhazip.com/",
+                "https://ifconfig.me/ip",
+                "https://1.1.1.1/cdn-cgi/trace"
+            )
+        }
         
         tryFetchIp(services, 0)
     }
@@ -207,6 +216,11 @@ abstract class ContentsActivity : NavigationActivity() {
                         break
                     }
                 }
+            } else if (urlip.contains("myip.ipip.net")) {
+                val match = Regex("""\b(?:\d{1,3}\.){3}\d{1,3}\b""").find(ip)
+                if (match != null) {
+                    ip = match.value
+                }
             }
             
             if (ip.isNotEmpty()) {
@@ -224,7 +238,7 @@ abstract class ContentsActivity : NavigationActivity() {
         }
 
         stringRequest.retryPolicy = DefaultRetryPolicy(
-            8000, // Shorter timeout per service
+            if (ChinaUtils.isLikelyInChina(this)) 4000 else 8000,
             0,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )

@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/futuristic_bg_start"
+    android:background="@drawable/bg_app_gradient"
     android:fitsSystemWindows="true">
 
     <RelativeLayout
@@ -21,79 +21,106 @@
                 android:id="@+id/main_root_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="60dp"
-                android:scrollbars="none"
-                android:fillViewport="true">
+                android:layout_marginBottom="70dp"
+                android:background="@drawable/bg_app_gradient"
+                android:fillViewport="true"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingStart="20dp"
+                    android:paddingTop="18dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="26dp">
 
-                    <!-- Toolbar -->
                     <RelativeLayout
                         android:id="@+id/toolbar_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:paddingHorizontal="20dp">
+                        android:layout_height="64dp">
 
                         <ImageView
                             android:id="@+id/category"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
                             android:layout_centerVertical="true"
                             android:background="@drawable/bg_glass_card"
-                            android:padding="8dp"
+                            android:contentDescription="@string/app_name"
+                            android:padding="11dp"
                             app:srcCompat="@drawable/ic_menu"
-                            app:tint="@color/white" />
+                            app:tint="@color/text_primary" />
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="Speed Booster"
-                            android:textColor="@color/white"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="14dp"
+                            android:layout_toEndOf="@id/category"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Speed Booster"
+                                android:textColor="@color/text_primary"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Clean memory and keep performance steady"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
                     </RelativeLayout>
 
-                    <!-- Main Booster Circle -->
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="20dp"
-                        android:gravity="center">
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_feature_header"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingTop="26dp"
+                        android:paddingBottom="24dp">
 
                         <FrameLayout
                             android:id="@+id/rl_main_booster"
                             android:layout_width="260dp"
-                            android:layout_height="260dp"
-                            android:layout_centerHorizontal="true">
+                            android:layout_height="260dp">
 
                             <View
-                                android:layout_width="240dp"
-                                android:layout_height="240dp"
+                                android:layout_width="250dp"
+                                android:layout_height="250dp"
                                 android:layout_gravity="center"
-                                android:alpha="0.1"
+                                android:alpha="0.75"
                                 android:background="@drawable/bg_glow_circle" />
+
+                            <View
+                                android:layout_width="214dp"
+                                android:layout_height="214dp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/bg_connect_ring" />
 
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:alpha="0.18"
                                 android:src="@drawable/meter"
-                                android:alpha="0.3"
-                                app:tint="@color/neon_blue" />
+                                app:tint="@color/accent_teal" />
 
                             <com.hookedonplay.decoviewlib.DecoView
                                 android:id="@+id/dynamicArcView2"
-                                android:layout_width="200dp"
-                                android:layout_height="200dp"
+                                android:layout_width="204dp"
+                                android:layout_height="204dp"
                                 android:layout_gravity="center" />
 
                             <com.hookedonplay.decoviewlib.DecoView
                                 android:id="@+id/dynamicArcView3"
-                                android:layout_width="200dp"
-                                android:layout_height="200dp"
+                                android:layout_width="204dp"
+                                android:layout_height="204dp"
                                 android:layout_gravity="center"
                                 android:visibility="gone" />
 
@@ -114,7 +141,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Storage"
-                                    android:textColor="@color/neon_blue"
+                                    android:textColor="@color/accent_teal"
                                     android:textSize="12sp"
                                     android:visibility="gone" />
 
@@ -123,17 +150,23 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="100 MB"
-                                    android:textColor="@color/white"
-                                    android:textSize="28sp"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="30sp"
                                     android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/bottom"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_coral_pill"
+                                    android:paddingStart="12dp"
+                                    android:paddingTop="4dp"
+                                    android:paddingEnd="12dp"
+                                    android:paddingBottom="4dp"
                                     android:text="Found"
-                                    android:textColor="@color/red"
-                                    android:textSize="12sp" />
+                                    android:textColor="@color/accent_coral"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </FrameLayout>
 
@@ -141,170 +174,172 @@
                             android:id="@+id/scanlay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/rl_main_booster"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="6dp"
+                            android:background="@drawable/bg_status_pill"
+                            android:paddingStart="16dp"
+                            android:paddingTop="7dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="7dp"
                             android:visibility="gone">
+
                             <TextView
                                 android:id="@+id/scanning"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Scanning..."
-                                android:textColor="@color/neon_blue" />
+                                android:textColor="@color/accent_teal"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/optimizelay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/rl_main_booster"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="20dp">
+                            android:layout_marginTop="16dp">
 
                             <RelativeLayout
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
-                                android:background="@drawable/bg_connect_button">
+                                android:background="@drawable/bg_action_circle">
 
                                 <ImageView
                                     android:id="@+id/optbutton"
-                                    android:layout_width="35dp"
-                                    android:layout_height="35dp"
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
                                     android:layout_centerInParent="true"
                                     android:src="@drawable/ic_on_off"
-                                    app:tint="@color/neon_blue" />
-
+                                    app:tint="@color/white" />
                             </RelativeLayout>
                         </LinearLayout>
-                    </RelativeLayout>
+                    </LinearLayout>
 
-                    <!-- Stats Cards -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="15dp"
-                        android:weightSum="2">
+                        android:layout_marginTop="14dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="130dp"
-                            android:layout_margin="5dp"
+                            android:layout_height="132dp"
+                            android:layout_marginEnd="7dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_glass_card"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:background="@drawable/bg_metric_card"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/processes"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="13"
-                                android:textColor="@color/white"
-                                android:textSize="26sp"
+                                android:textColor="@color/text_primary"
+                                android:textSize="28sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Running Processes"
-                                android:textColor="@color/colorlightgrey"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="4dp">
+                                android:layout_marginTop="8dp"
+                                android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/appsused"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="1.24 GB / "
-                                    android:textColor="@color/neon_green"
-                                    android:textSize="11sp" />
+                                    android:textColor="@color/accent_teal"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/appsfreed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="2.67 GB"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/text_primary"
                                     android:textSize="11sp" />
                             </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="130dp"
-                            android:layout_margin="5dp"
+                            android:layout_height="132dp"
+                            android:layout_marginStart="7dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_glass_card"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:background="@drawable/bg_metric_card"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/ramperct"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="48%"
-                                android:textColor="@color/white"
-                                android:textSize="26sp"
+                                android:textColor="@color/text_primary"
+                                android:textSize="28sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ram Usage"
-                                android:textColor="@color/colorlightgrey"
+                                android:text="RAM Usage"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="4dp">
+                                android:layout_marginTop="8dp"
+                                android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/usedram"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="1.24 GB / "
-                                    android:textColor="@color/neon_green"
-                                    android:textSize="11sp" />
+                                    android:textColor="@color/accent_teal"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/totalram"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="2.67 GB"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/text_primary"
                                     android:textSize="11sp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-
-
-
                 </LinearLayout>
             </ScrollView>
 
-            <!-- Bottom Navigation -->
             <com.etebarian.meowbottomnavigation.MeowBottomNavigation
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:mbn_circleColor="@color/neon_blue"
-                app:mbn_backgroundBottomColor="@color/futuristic_bg_end"
+                app:mbn_backgroundBottomColor="@color/surface_primary"
+                app:mbn_circleColor="@color/accent_teal"
                 app:mbn_countBackgroundColor="@color/red"
                 app:mbn_countTextColor="@color/white"
-                app:mbn_defaultIconColor="#90a4ae"
+                app:mbn_defaultIconColor="@color/text_secondary"
                 app:mbn_rippleColor="@color/glass_white_border"
                 app:mbn_selectedIconColor="@color/white"
-                app:mbn_shadowColor="@color/futuristic_bg_end"/>
-
+                app:mbn_shadowColor="@color/futuristic_bg_end" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>
 
-    <include
-        layout="@layout/drawer_navigation_view" />
-
+    <include layout="@layout/drawer_navigation_view" />
 </androidx.drawerlayout.widget.DrawerLayout>

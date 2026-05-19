@@ -1,114 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    >
-
-
-    <androidx.cardview.widget.CardView
-        android:layout_margin="@dimen/_5sdp"
-        android:layout_width="match_parent"
-        app:cardCornerRadius="10dp"
-        android:layout_height="wrap_content"
-        app:cardElevation="20dp">
+    android:background="@android:color/transparent"
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="7dp">
 
     <RelativeLayout
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="6dp"
         android:id="@+id/flag_image_r"
-        >
-        <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:background="@drawable/bg_server_item"
+        android:padding="12dp">
 
-            android:src="@drawable/flag_default"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_flag"
+            android:layout_width="54dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:id="@+id/country_flag"
-            android:layout_marginRight="15dp"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/flag_default"/>
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/glass_white_border"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:id="@+id/country_flag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/flag_default"
+                app:srcCompat="@drawable/flag_default" />
+        </com.google.android.material.card.MaterialCardView>
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:id="@+id/region_title"
-            android:layout_toRightOf="@+id/country_flag"
-            android:textSize="18dp"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/colorPrimary"
-            android:text="DEFAULT REGION"
-
-            />
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:text="218ms"
-            android:visibility="gone"
-            android:textSize="16dp"
-            android:layout_marginRight="20dp"
-            />
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="12dp"
+            android:layout_toStartOf="@id/region_limit"
+            android:layout_toEndOf="@id/card_flag"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="DEFAULT REGION"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/region_limit"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_weight="0.5"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/server_signal_3"
             android:visibility="visible" />
-
     </RelativeLayout>
 
-
     <LinearLayout
-        android:padding="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:paddingLeft="5dp">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/country_flag1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/flag_default" />
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <TextView
             android:id="@+id/region_title1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:paddingLeft="20dp"
-            android:text="DEFAULT REGION"
-            android:textColor="@android:color/white"
-            android:textSize="12dp" />
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <ImageView
             android:id="@+id/region_limit1"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:paddingRight="10dp"
-            android:scaleType="fitEnd"
-            android:src="@drawable/server_signal_3"
-            android:visibility="visible" />
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
     </LinearLayout>
-
-
-</androidx.cardview.widget.CardView>
 </RelativeLayout>

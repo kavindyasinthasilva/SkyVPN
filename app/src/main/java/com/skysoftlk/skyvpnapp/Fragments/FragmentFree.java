@@ -68,7 +68,7 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
             JSONArray manualArray = new JSONArray(Constants.MANUAL_SERVERS_JSON);
             for (int i = 0; i < manualArray.length(); i++) {
                 JSONObject obj = manualArray.getJSONObject(i);
-                servers.add(new Countries(
+                addIfAvailable(servers, new Countries(
                         obj.getString("serverName"),
                         obj.getString("flagUrl"),
                         obj.getString("ovpnConfig"),
@@ -96,7 +96,7 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
                     JSONArray jsonArray = new JSONArray(Constants.FREE_SERVERS);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = (JSONObject) jsonArray.get(i);
-                        servers.add(new Countries(object.getString("serverName"),
+                        addIfAvailable(servers, new Countries(object.getString("serverName"),
                                 object.getString("flag_url"),
                                 object.getString("ovpnConfiguration"),
                                 object.getString("vpnUserName"),
@@ -114,6 +114,11 @@ public class FragmentFree extends Fragment implements ServerListAdapterFree.Regi
         countryArrayList.clear();
         countryArrayList.addAll(servers);
         adapter.setData(servers);
+    }
+
+    private void addIfAvailable(ArrayList<Countries> servers, Countries country) {
+        if (country == null) return;
+        servers.add(country);
     }
 
     @Override

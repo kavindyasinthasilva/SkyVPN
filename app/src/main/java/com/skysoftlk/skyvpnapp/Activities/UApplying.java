@@ -177,10 +177,8 @@ public class UApplying extends AppCompatActivity {
 
 
                 check=1;
-                youDesirePermissionCode(UApplying.this);
-
-
                 enablesall();
+                youDesirePermissionCode(UApplying.this);
 
 
             }
@@ -241,15 +239,7 @@ public class UApplying extends AppCompatActivity {
     }
 
     public void youDesirePermissionCode(Activity context){
-        boolean permission;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            permission = Settings.System.canWrite(context);
-        } else {
-            permission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
-
-
-        }
-        if (permission) {
+        if (Settings.System.canWrite(context)) {
 
             Saving_Power_Comp.setAutoOrientationEnabled(getApplicationContext(), false);
 
@@ -263,13 +253,9 @@ public class UApplying extends AppCompatActivity {
             finish();
 
         }  else {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                intent.setData(Uri.parse("package:" + context.getPackageName()));
-                context.startActivityForResult(intent, 1);
-            } else {
-                ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_SETTINGS}, 1);
-            }
+            Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            intent.setData(Uri.parse("package:" + context.getPackageName()));
+            context.startActivityForResult(intent, 1);
         }
     }
 
@@ -278,22 +264,6 @@ public class UApplying extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-
-
-            Saving_Power_Comp.setAutoOrientationEnabled(getApplicationContext(), false);
-
-            Settings.System.putInt(this.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, 20);
-
-            ContentResolver.setMasterSyncAutomatically(false);
-
-
-            Intent i=new Intent(UApplying.this,Black_Battery_Saver.class);
-            startActivity(i);
-            finish();
-        }
 
     }
 
